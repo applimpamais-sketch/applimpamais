@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.77.0";
 import { renderTemplateWithFallback } from "../_shared/templateRenderer.ts";
 import { enviarWhatsApp } from "../_shared/whatsappSender.ts";
+import { SITE_DOMAIN } from "../_shared/siteConfig.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -27,6 +28,8 @@ interface CarrinhoAbandonado {
   tentativas_contato: number;
   tipo_ultima_mensagem: string | null;
 }
+
+const PLATFORM_NAME = Deno.env.get('PLATFORM_NAME') ?? 'Limpamais';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -304,7 +307,7 @@ Vi que você estava escolhendo serviços de limpeza mas não finalizou. Posso te
 💰 *Valor total: ${variaveis.valor}*
 💳 Pode ser pago no PIX ou em 12x no cartão
 
-📱 Continue por aqui: https://rclimpamais.com.br
+📱 Continue por aqui: ${SITE_DOMAIN}
 
 Ou me chame que te ajudo! 💬`,
 
@@ -320,9 +323,9 @@ Notamos que você ainda não finalizou seu pedido. Que tal um incentivo? 😊
 
 ⏰ Cupom válido por 24h!
 
-📱 Finalize agora: https://rclimpamais.com.br
+📱 Finalize agora: ${SITE_DOMAIN}
 
-💙 Equipe RC Limpa+`,
+💙 Equipe ${PLATFORM_NAME}`,
 
     'oferta_final': `${nome}, última chance! 🚨
 
@@ -334,7 +337,7 @@ Seu carrinho ainda está aqui, mas por pouco tempo...
 
 Esta é nossa última tentativa de contato. Se não responder, vamos liberar sua vaga para outro cliente.
 
-📱 Finalize agora: https://rclimpamais.com.br
+📱 Finalize agora: ${SITE_DOMAIN}
 
 Estamos aqui para ajudar! 💙`
   };

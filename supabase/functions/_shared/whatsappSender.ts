@@ -115,4 +115,4 @@ export async function enviarWhatsAppLote(
  * Telefone da empresa para notificações internas
  */
 export const EMPRESA_TELEFONE = '5531994103135';
-export const EMPRESA_NOME = 'RC Limpa+';
+export const EMPRESA_NOME = Deno.env.get('PLATFORM_NAME') ?? 'Limpamais';

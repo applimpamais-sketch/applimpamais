@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import MobileCartDrawer from './MobileCartDrawer';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 interface CartItem {
   id: string;
@@ -53,8 +54,8 @@ const Header = ({
           <SheetHeader>
             <SheetTitle>
               <img 
-                src="/logo-rc-limpa-mais.png" 
-                alt="RC Limpa+" 
+                src="/icon-192x192.png" 
+                alt={PLATFORM_NAME} 
                 className="h-8 w-auto object-contain"
               />
             </SheetTitle>
@@ -89,8 +90,8 @@ const Header = ({
         
         <div className="hidden lg:flex items-center">
           <img 
-            src="/logo-rc-limpa-mais.png" 
-            alt="RC Limpa+ - Soluções para Estofados" 
+            src="/icon-192x192.png" 
+            alt={`${PLATFORM_NAME} - Soluções para Estofados`} 
             className="h-8 sm:h-10 w-auto object-contain"
           />
         </div>
@@ -99,8 +100,8 @@ const Header = ({
       {/* Mobile centered logo */}
       <div className="flex items-center lg:hidden">
         <img 
-          src="/logo-rc-limpa-mais.png" 
-          alt="RC Limpa+ - Soluções para Estofados" 
+          src="/icon-192x192.png" 
+          alt={`${PLATFORM_NAME} - Soluções para Estofados`} 
           className="h-8 sm:h-10 w-auto object-contain"
         />
       </div>

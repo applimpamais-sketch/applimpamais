@@ -12,6 +12,7 @@ import previewReceitas from "@/assets/guia-pet-preview-receitas.jpg";
 import previewManchas from "@/assets/guia-pet-preview-manchas.jpg";
 import previewCronograma from "@/assets/guia-pet-preview-cronograma.jpg";
 import { trackInitiateCheckout, trackViewContent } from "@/utils/facebookPixel";
+import { PLATFORM_NAME, SITE_DOMAIN } from "@/lib/constants";
 
 const C = {
   navy: "#2F3C7E",
@@ -90,10 +91,10 @@ export default function GuiaPet() {
   return (
     <div style={{ background: C.cream, color: C.dark, fontFamily: "Inter, system-ui, sans-serif" }}>
       <Helmet>
-        <title>Guia Pet — Higienização da Casa com Cachorro e Gato | RC Limpa Mais</title>
+        <title>Guia Pet — Higienização da Casa com Cachorro e Gato | {PLATFORM_NAME}</title>
         <meta name="description" content="Tenha pet sem ter casa que cheira a pet. PDF prático com produtos seguros, 8 receitas anti-cheiro, técnicas de remoção de pelo e protocolo de xixi/vômito por tecido. R$ 17." />
-        <link rel="canonical" href="https://rclimpamais.com.br/guia-pet" />
-        <meta property="og:title" content="Guia Pet — Higienização da Casa com Pet | RC Limpa Mais" />
+        <link rel="canonical" href={`${SITE_DOMAIN}/guia-pet`} />
+        <meta property="og:title" content={`Guia Pet — Higienização da Casa com Pet | ${PLATFORM_NAME}`} />
         <meta property="og:description" content="O guia completo de higienização para quem ama animal. PDF imediato por R$ 17." />
         <meta property="og:type" content="product" />
       </Helmet>
@@ -314,7 +315,7 @@ export default function GuiaPet() {
         <div className="max-w-5xl mx-auto">
           <motion.div {...fadeUp} className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-3" style={{ color: C.navy }}>
-              O método do RC Limpa Mais — agora na sua mão
+              O método da {PLATFORM_NAME} — agora na sua mão
             </h2>
             <p className="text-lg" style={{ color: C.soft }}>
               Anos de experiência higienizando estofados de quem ama pet, condensados em um PDF
@@ -493,7 +494,7 @@ export default function GuiaPet() {
 
       {/* RODAPÉ */}
       <footer className="py-8 px-4 text-center text-xs" style={{ background: C.dark, color: "#9aa0c5" }}>
-        © {new Date().getFullYear()} RC Limpa Mais — Higienização profissional de estofados.
+        © {new Date().getFullYear()} {PLATFORM_NAME} — Higienização profissional de estofados.
         <div className="mt-2">
           <a href="/privacidade" className="hover:underline" style={{ color: C.gold }}>Política de Privacidade</a>
         </div>

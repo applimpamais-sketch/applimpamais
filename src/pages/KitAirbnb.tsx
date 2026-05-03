@@ -6,6 +6,7 @@ import {
   CheckCircle2, XCircle, Sparkles, Building2, Timer, MessageSquare,
 } from "lucide-react";
 import { trackInitiateCheckout, trackViewContent } from "@/utils/facebookPixel";
+import { PLATFORM_NAME, SITE_DOMAIN } from "@/lib/constants";
 
 /* Identidade visual: premium dark hospitality (preto + dourado) */
 const C = {
@@ -108,10 +109,10 @@ export default function KitAirbnb() {
   return (
     <div style={{ background: C.bg, color: C.text, fontFamily: "Inter, system-ui, sans-serif" }}>
       <Helmet>
-        <title>Kit Anfitrião Airbnb — Sistema 5 Estrelas em 30 min | RC Limpa Mais</title>
+        <title>Kit Anfitrião Airbnb — Sistema 5 Estrelas em 30 min | {PLATFORM_NAME}</title>
         <meta name="description" content="Sistema operacional para superhosts: checklists por cômodo (30 min), 8 receitas express, 5 templates de comunicação e cronograma de manutenção. PDF imediato R$ 47." />
-        <link rel="canonical" href="https://rclimpamais.com.br/kit-airbnb" />
-        <meta property="og:title" content="Kit Anfitrião Airbnb — RC Limpa Mais" />
+        <link rel="canonical" href={`${SITE_DOMAIN}/kit-airbnb`} />
+        <meta property="og:title" content={`Kit Anfitrião Airbnb — ${PLATFORM_NAME}`} />
         <meta property="og:description" content="O método dos superhosts em PDF. Checklists, receitas e templates por R$ 47." />
         <meta property="og:type" content="product" />
       </Helmet>
@@ -400,9 +401,9 @@ export default function KitAirbnb() {
       {/* Footer */}
       <footer className="py-8 px-4 border-t" style={{ borderColor: C.border, background: "#000" }}>
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs" style={{ color: C.muted }}>
-          <div>© {new Date().getFullYear()} RC Limpa Mais · Edição Hospitality</div>
+          <div>© {new Date().getFullYear()} {PLATFORM_NAME} · Edição Hospitality</div>
           <div className="flex gap-6">
-            <a href="https://rclimpamais.com.br" style={{ color: C.gold }}>rclimpamais.com.br</a>
+            <a href={SITE_DOMAIN} style={{ color: C.gold }}>{SITE_DOMAIN.replace(/^https?:\/\//, '')}</a>
             <a href="/privacidade">Privacidade</a>
           </div>
         </div>

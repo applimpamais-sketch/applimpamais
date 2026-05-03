@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Shield, ArrowLeft, Mail, Phone, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { PLATFORM_NAME, PRIVACY_EMAIL, SUPPORT_PHONE } from '@/lib/constants';
 
 export default function Privacidade() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export default function Privacidade() {
             <section>
               <h2 className="text-xl font-semibold mb-4">1. Introdução</h2>
               <p className="text-muted-foreground leading-relaxed">
-                A <strong>RC Limpa Mais</strong> está comprometida com a proteção da privacidade e dos dados pessoais de seus clientes, em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
+                A <strong>{PLATFORM_NAME}</strong> está comprometida com a proteção da privacidade e dos dados pessoais de seus clientes, em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018).
               </p>
               <p className="text-muted-foreground leading-relaxed mt-2">
                 Esta Política de Privacidade descreve como coletamos, usamos, armazenamos e protegemos suas informações pessoais ao utilizar nossos serviços de limpeza residencial e comercial.
@@ -104,7 +105,7 @@ export default function Privacidade() {
                 Seus dados podem ser compartilhados apenas com:
               </p>
               <ul className="list-disc pl-6 space-y-1 text-muted-foreground">
-                <li>Técnicos da RC Limpa Mais responsáveis pelo seu atendimento</li>
+                <li>Técnicos da {PLATFORM_NAME} responsáveis pelo seu atendimento</li>
                 <li>Prestadores de serviços (processamento de pagamentos, hospedagem)</li>
                 <li>Autoridades públicas quando exigido por lei</li>
               </ul>
@@ -197,14 +198,14 @@ export default function Privacidade() {
                   <Mail className="h-5 w-5 text-primary mt-0.5" />
                   <div>
                     <p className="font-semibold">Email</p>
-                    <p className="text-muted-foreground">privacidade@rclimpamais.com.br</p>
+                    <p className="text-muted-foreground">{PRIVACY_EMAIL}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Phone className="h-5 w-5 text-primary mt-0.5" />
                   <div>
                     <p className="font-semibold">Telefone</p>
-                    <p className="text-muted-foreground">(11) 98765-4321</p>
+                    <p className="text-muted-foreground">{SUPPORT_PHONE || 'Telefone não configurado'}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

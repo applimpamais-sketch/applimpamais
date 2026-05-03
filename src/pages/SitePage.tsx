@@ -9,12 +9,13 @@ import SitePricing from "@/components/site/SitePricing";
 import SiteNewsletter from "@/components/site/SiteNewsletter";
 import SiteFAQ from "@/components/site/SiteFAQ";
 import SiteFooter from "@/components/site/SiteFooter";
+import { PLATFORM_NAME } from "@/lib/constants";
 
 const SitePage = () => {
   return (
     <>
       <Helmet>
-        <title>RC Limpa Mais | Limpeza de Estofados em BH</title>
+        <title>{PLATFORM_NAME} | Limpeza de Estofados em BH</title>
         <meta
           name="description"
           content="Higienização e impermeabilização profissional de sofás, colchões, tapetes e bancos de carro em Belo Horizonte. 500+ clientes satisfeitos. Agende agora!"

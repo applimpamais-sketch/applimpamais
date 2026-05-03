@@ -42,6 +42,7 @@ import preview05 from "@/assets/preview-05-kit.jpg";
 import preview06 from "@/assets/preview-06-checklist.jpg";
 import bonus3Img from "@/assets/bonus-3-cinco-erros.png";
 import { trackInitiateCheckout, trackViewContent } from "@/utils/facebookPixel";
+import { PLATFORM_NAME, SITE_DOMAIN, WHATSAPP_BOT } from "@/lib/constants";
 
 /* ============================================================
    Design tokens locais (página standalone, fora do design system global)
@@ -226,14 +227,14 @@ export default function GuiaSalveSeuSofa() {
     name: "Guia Definitivo: Salve seu Sofá em 30 Minutos",
     description:
       "Guia visual passo a passo para remover manchas comuns do sofá em 30 minutos, sem danificar o tecido.",
-    brand: { "@type": "Brand", name: "RC Limpa+" },
+    brand: { "@type": "Brand", name: PLATFORM_NAME },
     aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "1247" },
     offers: {
       "@type": "Offer",
       price: "17.00",
       priceCurrency: "BRL",
       availability: "https://schema.org/InStock",
-      url: "https://rclimpamais.com.br/guia-salve-seu-sofa",
+      url: `${SITE_DOMAIN}/guia-salve-seu-sofa`,
     },
   };
 
@@ -243,12 +244,12 @@ export default function GuiaSalveSeuSofa() {
       style={{ background: C.cream, color: C.gray, fontFamily: "Inter, system-ui, sans-serif" }}
     >
       <Helmet>
-        <title>Guia Salve Seu Sofá em 30 Minutos | Por R$ 17 — RC Limpa+</title>
+        <title>Guia Salve Seu Sofá em 30 Minutos | Por R$ 17 — {PLATFORM_NAME}</title>
         <meta
           name="description"
           content="Salve seu sofá manchado em 30 min. PDF visual passo a passo, qualquer tecido, sem danificar. Apenas R$ 17. Garantia 7 dias."
         />
-        <link rel="canonical" href="https://rclimpamais.com.br/guia-salve-seu-sofa" />
+        <link rel="canonical" href={`${SITE_DOMAIN}/guia-salve-seu-sofa`} />
         <meta property="og:title" content="Salve Seu Sofá em 30 Minutos — R$ 17" />
         <meta
           property="og:description"
@@ -1257,7 +1258,7 @@ export default function GuiaSalveSeuSofa() {
         style={{ background: C.deep, color: "rgba(255,255,255,0.6)" }}
       >
         <div className="max-w-5xl mx-auto">
-          <p className="font-black text-white text-lg mb-2">RC Limpa+</p>
+          <p className="font-black text-white text-lg mb-2">{PLATFORM_NAME}</p>
           <p className="mb-4">CNPJ 00.000.000/0001-00 · Belo Horizonte / MG</p>
           <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 mb-4">
             <a href="/privacidade" className="hover:text-white transition">
@@ -1267,7 +1268,7 @@ export default function GuiaSalveSeuSofa() {
               Termos de Uso
             </a>
             <a
-              href="https://wa.me/5531999999999"
+              href={WHATSAPP_BOT.waLink()}
               target="_blank"
               rel="noreferrer"
               className="hover:text-white transition inline-flex items-center gap-1"
@@ -1276,7 +1277,7 @@ export default function GuiaSalveSeuSofa() {
             </a>
           </div>
           <p className="text-[11px] opacity-60">
-            © {new Date().getFullYear()} RC Limpa+. Este produto não substitui higienização
+            © {new Date().getFullYear()} {PLATFORM_NAME}. Este produto não substitui higienização
             profissional para casos extremos. Resultados podem variar conforme tipo de tecido e
             tempo da mancha.
           </p>

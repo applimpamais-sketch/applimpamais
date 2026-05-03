@@ -115,7 +115,7 @@ export default function Auth() {
     queryFn: async () => {
       const hostname = window.location.hostname;
       
-      // DomÃ­nios principais da plataforma - usar branding padrÃ£o (RC Limpa Mais)
+      // DomÃ­nios principais da plataforma - usar branding padrÃ£o
       const mainDomains = [
         'localhost',
         '127.0.0.1'

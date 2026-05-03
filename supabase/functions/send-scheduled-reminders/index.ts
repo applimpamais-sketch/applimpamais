@@ -9,6 +9,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const PLATFORM_NAME = Deno.env.get('PLATFORM_NAME') ?? 'Limpamais';
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -188,7 +190,7 @@ Amanhã temos agendado seu serviço de higienização:
 ✅ Responda *OK* para confirmar sua presença
 ❌ Responda *CANCELAR* se precisar reagendar
 
-💙 *Equipe RC Limpa+*`;
+💙 *Equipe ${PLATFORM_NAME}*`;
 
     case 'dia_do_servico':
       return `✨ *Dia do Serviço!* ✨
@@ -204,7 +206,7 @@ Hoje é o dia do seu serviço de higienização:
 
 Em breve você terá seus estofados limpos e higienizados. ✨
 
-💙 *RC Limpa+ - Higienização Profissional*`;
+💙 *${PLATFORM_NAME} - Higienização Profissional*`;
 
     case 'pos_venda':
       return `💙 *Pesquisa de Satisfação* 💙
@@ -221,7 +223,7 @@ Seu feedback é muito importante para nós! 😊
 
 🎁 E não esqueça: você tem *10% de desconto* na próxima contratação!
 
-💙 *Equipe RC Limpa+*
+💙 *Equipe ${PLATFORM_NAME}*
 📞 Entre em contato se precisar de qualquer coisa!`;
 
     default:

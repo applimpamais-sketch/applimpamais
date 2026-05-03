@@ -87,7 +87,7 @@ export default function ParceiroLayout({ children }: ParceiroLayoutProps) {
     staleTime: Infinity,
   });
   
-  // Verificar se Ã© tenant master (RC Limpa Mais)
+  // Verificar tenant master
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate('/parceiro/auth', { replace: true });

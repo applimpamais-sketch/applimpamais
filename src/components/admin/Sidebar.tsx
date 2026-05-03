@@ -279,8 +279,8 @@ export default function Sidebar({ className }: SidebarProps) {
     window.location.href = '/auth';
   };
 
-  // Detectar se Ã© RC Limpa Mais (master)  
-  // Logo dinÃ¢mico: RC Limpa Mais usa logo estÃ¡tico, outros usam white_label + logo_url
+  // Detectar tenant master
+  // Logo dinÃ¢mico: tenant com white_label usa logo_url
   const showTenantLogo = hasModule('white_label') && tenant?.logo_url;
 
   return (

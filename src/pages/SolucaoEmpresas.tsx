@@ -9,6 +9,7 @@ import DiferenciaisSection from '@/components/landing/DiferenciaisSection';
 import TestimonialsSection from '@/components/landing/TestimonialsSection';
 import CTASection from '@/components/landing/CTASection';
 import LandingFooter from '@/components/landing/LandingFooter';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 export default function SolucaoEmpresas() {
   useEffect(() => {
@@ -21,7 +22,7 @@ export default function SolucaoEmpresas() {
     }
 
     // SEO
-    document.title = 'Sistema de Gestão para Empresas de Limpeza de Estofados | RC Limpa Mais';
+    document.title = `Sistema de Gestão para Empresas de Limpeza de Estofados | ${PLATFORM_NAME}`;
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute('content', 'Sistema completo de gestão para empresas de limpeza de estofados. Agendamento online, financeiro integrado, WhatsApp automatizado e muito mais. Teste 14 dias grátis.');

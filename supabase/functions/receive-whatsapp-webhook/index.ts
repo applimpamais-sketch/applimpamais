@@ -87,6 +87,8 @@ import {
 } from "../_shared/whatsappBotSessaoAgendamento.ts";
 import { SITE_DOMAIN } from "../_shared/siteConfig.ts";
 
+const PLATFORM_NAME = Deno.env.get("PLATFORM_NAME") ?? "Limpamais";
+
 interface Msg { id: string; type: string; body?: string; from: string; fromName: string; image?: { url: string; caption?: string }; audio?: { url: string }; }
 
 const sendMsg = async (url: string, token: string, to: string, body: string) => {
@@ -446,7 +448,7 @@ Deno.serve(async (req) => {
         const primeiroNome = ag.nome_cliente.split(" ")[0];
         const tecPrimeiroNome = tec.nome.split(" ")[0];
         
-        await sendMsg(ultramsgUrl, ultramsgToken, ag.telefone, `🚗 *Técnico a caminho!*\n\nOlá ${primeiroNome}! Nosso técnico ${tecPrimeiroNome} está a caminho do seu endereço.\n\n📍 *Acompanhe em tempo real:*\n${trackingUrl}\n\n⏱️ Em breve estaremos aí!\n\n_RC Limpa Mais_`);
+        await sendMsg(ultramsgUrl, ultramsgToken, ag.telefone, `🚗 *Técnico a caminho!*\n\nOlá ${primeiroNome}! Nosso técnico ${tecPrimeiroNome} está a caminho do seu endereço.\n\n📍 *Acompanhe em tempo real:*\n${trackingUrl}\n\n⏱️ Em breve estaremos aí!\n\n_${PLATFORM_NAME}_`);
         
         // Confirmar para o técnico
         await sendMsg(ultramsgUrl, ultramsgToken, msg.from, `✅ *Trajeto iniciado!*\n\n👤 Cliente: ${ag.nome_cliente}\n📍 ${ag.endereco}${ag.bairro ? `, ${ag.bairro}` : ''}\n\n📱 Cliente notificado com link de rastreamento.\n\n🗺️ *Abrir no Maps:*\nhttps://www.google.com/maps/dir/?api=1&destination=${ag.latitude && ag.longitude ? `${ag.latitude},${ag.longitude}` : encodeURIComponent(`${ag.endereco}, ${ag.bairro || ''}, ${ag.cidade || ''}`)}\n\n_Use @cheguei quando chegar no local._`);

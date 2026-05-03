@@ -2,6 +2,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import type { OrcamentoData } from './types';
 import { formatCurrency, formatDate, loadLogoAsBase64 } from './helpers';
+import { PLATFORM_NAME, SITE_DOMAIN, SUPPORT_EMAIL, SUPPORT_PHONE } from '@/lib/constants';
 
 // Constants - Optimized for single page
 const MARGIN = 15;
@@ -55,7 +56,7 @@ export const generateModernPdf = async (orcamento: OrcamentoData): Promise<jsPDF
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(11);
       doc.setFont('helvetica', 'bold');
-      doc.text('RC LIMPA MAIS', MARGIN + 6, yPos + 6);
+      doc.text(PLATFORM_NAME.toUpperCase(), MARGIN + 6, yPos + 6);
     }
   } else {
     doc.setFillColor(...PRIMARY_COLOR);
@@ -63,7 +64,7 @@ export const generateModernPdf = async (orcamento: OrcamentoData): Promise<jsPDF
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
-    doc.text('RC LIMPA MAIS', MARGIN + 6, yPos + 6);
+    doc.text(PLATFORM_NAME.toUpperCase(), MARGIN + 6, yPos + 6);
   }
 
   // Quotation number and dates (right side)
@@ -115,12 +116,12 @@ export const generateModernPdf = async (orcamento: OrcamentoData): Promise<jsPDF
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
   doc.setTextColor(40, 40, 40);
-  doc.text('RC Limpa Mais - Higienização Profissional', MARGIN + 10, yPos + 14);
+  doc.text(`${PLATFORM_NAME} - Higienização Profissional`, MARGIN + 10, yPos + 14);
   
   doc.setFontSize(8);
   doc.setTextColor(...GRAY_TEXT);
   doc.text('CNPJ: 00.000.000/0001-00 | Belo Horizonte - MG', MARGIN + 10, yPos + 21);
-  doc.text('(31) 99999-9999 | contato@rclimpamais.com.br', MARGIN + 10, yPos + 28);
+  doc.text(`${SUPPORT_PHONE || 'Telefone não configurado'} | ${SUPPORT_EMAIL}`, MARGIN + 10, yPos + 28);
 
   yPos += companyBlockHeight + 8;
 
@@ -313,7 +314,7 @@ export const generateModernPdf = async (orcamento: OrcamentoData): Promise<jsPDF
   // Company signature
   const rightSignatureX = pageWidth - MARGIN - signatureWidth;
   doc.line(rightSignatureX, signatureY, pageWidth - MARGIN, signatureY);
-  doc.text('RC Limpa Mais', rightSignatureX + signatureWidth / 2, signatureY + 5, { align: 'center' });
+  doc.text(PLATFORM_NAME, rightSignatureX + signatureWidth / 2, signatureY + 5, { align: 'center' });
 
   // ========== FOOTER (Compact) ==========
   doc.setFillColor(...PRIMARY_COLOR);
@@ -327,7 +328,7 @@ export const generateModernPdf = async (orcamento: OrcamentoData): Promise<jsPDF
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
   doc.text(
-    'RC Limpa Mais - Higienização Profissional | www.rclimpamais.com.br | (31) 99999-9999',
+    `${PLATFORM_NAME} - Higienização Profissional | ${SITE_DOMAIN.replace(/^https?:\/\//, '')} | ${SUPPORT_PHONE || 'Telefone não configurado'}`,
     pageWidth / 2,
     pageHeight - 5,
     { align: 'center' }

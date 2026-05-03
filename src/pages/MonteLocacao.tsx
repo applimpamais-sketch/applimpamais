@@ -16,6 +16,7 @@ import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { PERIODO_INFO } from '@/data/periodo-info';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 const PERIOD_COLORS = [
   { border: 'border-blue-500', bg: 'bg-blue-500/10', ring: 'ring-blue-500/50', text: 'text-blue-400' },
@@ -164,7 +165,7 @@ const MonteLocacao = () => {
   return (
     <>
       <Helmet>
-        <title>Monte Sua Locação | RC Limpa+</title>
+        <title>Monte Sua Locação | {PLATFORM_NAME}</title>
         <meta name="description" content="Personalize sua locação de extratora. Escolha o período e adicione extras como shampoo, neutralizador e perfume." />
       </Helmet>
 

@@ -10,6 +10,7 @@ import FAQSection from '@/components/landing/FAQSection';
 import CTASection from '@/components/landing/CTASection';
 import LandingFooter from '@/components/landing/LandingFooter';
 import { useEffect } from 'react';
+import { SITE_DOMAIN } from '@/lib/constants';
 
 export default function LandingPage2() {
   // Track ViewContent on mount
@@ -33,7 +34,7 @@ export default function LandingPage2() {
         <meta property="og:title" content="Plataforma SaaS para Empresas de Limpeza" />
         <meta property="og:description" content="12 módulos integrados para transformar sua operação em uma máquina de vendas." />
         <meta property="og:type" content="website" />
-        <link rel="canonical" href="https://rclimpamais.lovable.app/lp2" />
+        <link rel="canonical" href={`${SITE_DOMAIN}/lp2`} />
       </Helmet>
 
       <main className="bg-black min-h-screen">

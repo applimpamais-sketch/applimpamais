@@ -9,7 +9,7 @@ export const landingColors = {
   surface: '#0a0a0a',           // Preto suave
   surfaceElevated: '#1a1a1a',   // Cards/elevados
   
-  // Azul Principal (RC Limpa Mais)
+  // Azul principal da plataforma
   blue: {
     50: '#E6F2FF',
     100: '#BAE0FF',

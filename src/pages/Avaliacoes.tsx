@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { Star, Quote, MapPin, Filter, X, Sparkles, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { PLATFORM_NAME } from "@/lib/constants";
 import {
   Select,
   SelectContent,
@@ -19,7 +20,7 @@ const avaliacoes = [
     cidade: "Belo Horizonte",
     bairro: "Savassi",
     rating: 5,
-    comentario: "Atendimento espetacular em 2025! Continuo cliente fiel da RC Limpa Mais. Limparam todo o sofá em menos de 2 horas.",
+    comentario: "Atendimento espetacular em 2025! Continuo cliente fiel da plataforma. Limparam todo o sofá em menos de 2 horas.",
     servico: "Limpeza de Sofá",
     data: "Dezembro 2025"
   },
@@ -99,7 +100,7 @@ const avaliacoes = [
     cidade: "Belo Horizonte",
     bairro: "Santo Antônio",
     rating: 5,
-    comentario: "Sempre pontual e profissional. A RC Limpa Mais cuida dos meus estofados há 3 anos.",
+    comentario: "Sempre pontual e profissional. A plataforma cuida dos meus estofados há 3 anos.",
     servico: "Limpeza de Sofá",
     data: "Abril 2025"
   },
@@ -373,7 +374,7 @@ const avaliacoes = [
     cidade: "Contagem",
     bairro: "Centro",
     rating: 5,
-    comentario: "Desde 2021 só contrato a RC Limpa Mais. Serviço sempre perfeito!",
+    comentario: "Desde 2021 só contrato a plataforma. Serviço sempre perfeito!",
     servico: "Limpeza de Sofá",
     data: "Outubro 2021"
   },
@@ -444,7 +445,7 @@ const avaliacoes = [
     cidade: "Belo Horizonte",
     bairro: "Prado",
     rating: 5,
-    comentario: "Descobri a RC Limpa Mais no início e nunca mais troquei. Qualidade garantida!",
+    comentario: "Descobri a plataforma no início e nunca mais troquei. Qualidade garantida!",
     servico: "Limpeza de Sofá",
     data: "Janeiro 2020"
   }
@@ -548,8 +549,8 @@ const Avaliacoes = () => {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <img 
-              src="/logo-rc-limpa-mais.png" 
-              alt="RC Limpa Mais" 
+              src="/icon-192x192.png" 
+              alt={PLATFORM_NAME} 
               className="h-10 w-auto"
             />
           </Link>
@@ -703,7 +704,7 @@ const Avaliacoes = () => {
       {/* Footer simples */}
       <footer className="py-8 border-t border-border/50">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} RC Limpa Mais. Todos os direitos reservados.
+          © {new Date().getFullYear()} {PLATFORM_NAME}. Todos os direitos reservados.
         </div>
       </footer>
     </div>

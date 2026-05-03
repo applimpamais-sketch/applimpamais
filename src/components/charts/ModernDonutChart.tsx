@@ -20,7 +20,7 @@ interface ModernDonutChartProps {
   formatValue?: (value: number) => string;
 }
 
-// Paletas de cores RC Limpa+
+// Paletas de cores da plataforma
 const COLOR_SCHEMES = {
   blue: [
     { start: 'hsl(220, 91%, 85%)', end: 'hsl(220, 91%, 75%)' },

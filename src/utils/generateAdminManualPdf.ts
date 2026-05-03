@@ -6,6 +6,7 @@ import {
   MANUAL_BEST_PRACTICES, 
   MANUAL_COMMON_ERRORS 
 } from './adminManualContent';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 const COLORS = {
   primary: [7, 79, 213] as [number, number, number],      // #074FD5
@@ -50,7 +51,7 @@ export const generateAdminManualPdf = async (): Promise<jsPDF> => {
         { align: 'center' }
       );
       doc.text(
-        'RC Limpa Mais - Manual do Administrador',
+        `${PLATFORM_NAME} - Manual do Administrador`,
         margin,
         pageHeight - 10
       );
@@ -73,7 +74,7 @@ export const generateAdminManualPdf = async (): Promise<jsPDF> => {
   doc.setTextColor(...COLORS.primary);
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  doc.text('RC LIMPA MAIS', pageWidth / 2, 58, { align: 'center' });
+  doc.text(PLATFORM_NAME.toUpperCase(), pageWidth / 2, 58, { align: 'center' });
 
   // Título principal
   doc.setTextColor(...COLORS.white);
@@ -464,7 +465,7 @@ export const generateAdminManualPdf = async (): Promise<jsPDF> => {
   doc.setTextColor(...COLORS.white);
   doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
-  doc.text('RC Limpa Mais', pageWidth / 2, pageHeight / 2 - 20, { align: 'center' });
+  doc.text(PLATFORM_NAME, pageWidth / 2, pageHeight / 2 - 20, { align: 'center' });
 
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
@@ -482,5 +483,6 @@ export const generateAdminManualPdf = async (): Promise<jsPDF> => {
 
 export const downloadAdminManualPdf = async (): Promise<void> => {
   const doc = await generateAdminManualPdf();
-  doc.save(`manual-administrador-rc-limpa-mais-v${MANUAL_INTRO.version}.pdf`);
+  const safePlatformName = PLATFORM_NAME.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  doc.save(`manual-administrador-${safePlatformName}-v${MANUAL_INTRO.version}.pdf`);
 };

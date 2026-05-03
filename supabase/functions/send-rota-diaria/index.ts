@@ -9,6 +9,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const PLATFORM_NAME = Deno.env.get('PLATFORM_NAME') ?? 'Limpamais';
+
 /**
  * Edge Function: send-rota-diaria
  * Envia resumo diário da rota de serviços para cada técnico às 07:00
@@ -136,7 +138,7 @@ ${variaveis.lista_servicos}
 
 Bom trabalho! 💪
 
-💙 *RC Limpa+*`;
+💙 *${PLATFORM_NAME}*`;
 
         const mensagem = await renderTemplateWithFallback(
           supabase,

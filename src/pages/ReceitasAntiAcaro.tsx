@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import mockupReceitas from "@/assets/mockup-receitas-acaro.png";
 import { trackInitiateCheckout, trackViewContent } from "@/utils/facebookPixel";
+import { PLATFORM_NAME, SITE_DOMAIN, SUPPORT_PHONE } from "@/lib/constants";
 
 /* Design tokens locais (fora do design system global) */
 const C = {
@@ -79,10 +80,10 @@ export default function ReceitasAntiAcaro() {
   return (
     <div style={{ background: C.cream, color: C.dark, fontFamily: "Inter, system-ui, sans-serif" }}>
       <Helmet>
-        <title>30 Receitas Anti-Ácaro Caseiras — Pets, Crianças e Alérgicos | RC Limpa Mais</title>
+        <title>30 Receitas Anti-Ácaro Caseiras — Pets, Crianças e Alérgicos | {PLATFORM_NAME}</title>
         <meta name="description" content="Elimine ácaros do colchão, sofá, cortinas e tapete com 30 receitas testadas. Seguras pra crianças e pets, custo médio de R$ 5 por receita. PDF + lista de compras." />
-        <link rel="canonical" href="https://rclimpamais.com.br/receitas-anti-acaro" />
-        <meta property="og:title" content="30 Receitas Anti-Ácaro Caseiras — RC Limpa Mais" />
+        <link rel="canonical" href={`${SITE_DOMAIN}/receitas-anti-acaro`} />
+        <meta property="og:title" content={`30 Receitas Anti-Ácaro Caseiras — ${PLATFORM_NAME}`} />
         <meta property="og:description" content="PDF prático com 30 receitas testadas para eliminar ácaro de forma natural, barata e segura. R$ 19." />
         <meta property="og:type" content="product" />
       </Helmet>
@@ -394,9 +395,9 @@ export default function ReceitasAntiAcaro() {
 
       {/* Footer */}
       <footer className="py-10 px-4 text-center text-sm" style={{ background: C.dark, color: "#9aa0c5" }}>
-        <p className="mb-2"><b style={{ color: "white" }}>RC Limpa Mais</b> • Higienização profissional em BH e região</p>
-        <p>WhatsApp (31) 9 4678-3826 • rclimpamais.com.br</p>
-        <p className="mt-3 text-xs">© 2026 RC Limpa Mais — Todos os direitos reservados</p>
+        <p className="mb-2"><b style={{ color: "white" }}>{PLATFORM_NAME}</b> • Higienização profissional em BH e região</p>
+        <p>WhatsApp {SUPPORT_PHONE || 'não configurado'} • {SITE_DOMAIN.replace(/^https?:\/\//, '')}</p>
+        <p className="mt-3 text-xs">© {new Date().getFullYear()} {PLATFORM_NAME} — Todos os direitos reservados</p>
       </footer>
     </div>
   );

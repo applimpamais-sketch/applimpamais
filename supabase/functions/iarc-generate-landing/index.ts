@@ -47,6 +47,8 @@ interface GenerateLandingRequest {
   subheadline?: string;
 }
 
+const PLATFORM_NAME = Deno.env.get('PLATFORM_NAME') ?? 'Limpamais';
+
 function generateSlug(nome: string): string {
   return nome
     .toLowerCase()
@@ -165,7 +167,7 @@ Retorne EXATAMENTE este JSON (sem markdown, sem explicações):
     }
   },
   "bio": {
-    "name": "RC Limpa Mais",
+    "name": "${PLATFORM_NAME}",
     "role": "Especialista em Higienização",
     "paragraphs": [
       "Parágrafo sobre a empresa/especialista",
@@ -186,7 +188,7 @@ Retorne EXATAMENTE este JSON (sem markdown, sem explicações):
   },
   "footer": {
     "smallPrint": "Todos os direitos reservados.",
-    "copyright": "© ${new Date().getFullYear()} RC Limpa Mais"
+    "copyright": "© ${new Date().getFullYear()} ${PLATFORM_NAME}"
   },
   "meta": {
     "title": "título SEO (max 60 chars)",
@@ -258,7 +260,7 @@ Retorne EXATAMENTE este JSON (sem markdown):
     ]
   },
   "specialist": {
-    "title": "Conheça a RC Limpa Mais",
+    "title": "Conheça a ${PLATFORM_NAME}",
     "subtitle": "Referência em Higienização",
     "paragraphs": ["Sobre a empresa parágrafo 1", "Parágrafo 2"],
     "credentials": ["Credencial 1", "Credencial 2", "Credencial 3"]
@@ -384,10 +386,10 @@ function getDefaultLP12DCopy(servico: any, precos: any, destino_cta: string): an
       },
     },
     bio: {
-      name: 'RC Limpa Mais',
+      name: PLATFORM_NAME,
       role: 'Referência em Higienização em BH',
       paragraphs: [
-        'Desde 2018, a RC Limpa Mais tem transformado ambientes em toda Belo Horizonte e região metropolitana.',
+        `Desde 2018, a ${PLATFORM_NAME} tem transformado ambientes em toda Belo Horizonte e região metropolitana.`,
         'Com uma equipe treinada e equipamentos de última geração, garantimos uma higienização profunda que você pode ver e sentir.',
       ],
       credentials: [
@@ -410,7 +412,7 @@ function getDefaultLP12DCopy(servico: any, precos: any, destino_cta: string): an
     },
     footer: {
       smallPrint: 'Todos os direitos reservados.',
-      copyright: `© ${new Date().getFullYear()} RC Limpa Mais`,
+      copyright: `© ${new Date().getFullYear()} ${PLATFORM_NAME}`,
     },
     meta: {
       title: `Limpeza de ${servico.subcategoria} em BH | Agende Agora`,

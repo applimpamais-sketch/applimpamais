@@ -1,6 +1,7 @@
 import * as XLSX from 'xlsx';
 import catalogoData from '../../CATALOGO_SERVICOS_BOT.json';
 import { formatCurrencyForExport } from './exportHelpers';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 export const exportCatalogoToExcel = () => {
   // Preparar dados dos serviços
@@ -73,7 +74,7 @@ export const exportCatalogoToExcel = () => {
   
   // Sheet 3: Resumo
   const resumoData = [
-    ['Catálogo de Serviços - RC Limpa Mais'],
+    [`Catálogo de Serviços - ${PLATFORM_NAME}`],
     [''],
     ['Exportado em:', new Date().toLocaleString('pt-BR')],
     ['Total de Serviços:', catalogoData.meta.total_servicos],
@@ -91,7 +92,8 @@ export const exportCatalogoToExcel = () => {
   XLSX.utils.book_append_sheet(wb, wsResumo, 'Resumo');
   
   // Salvar arquivo
-  const fileName = `catalogo-rc-limpa-mais-${new Date().toISOString().split('T')[0]}.xlsx`;
+  const safePlatformName = PLATFORM_NAME.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const fileName = `catalogo-${safePlatformName}-${new Date().toISOString().split('T')[0]}.xlsx`;
   XLSX.writeFile(wb, fileName);
   
   return fileName;

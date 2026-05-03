@@ -8,6 +8,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const PLATFORM_NAME = Deno.env.get('PLATFORM_NAME') ?? 'Limpamais';
+
 /**
  * Edge Function: send-tecnico-notification
  * Processa a fila de notificações para técnicos e envia via WhatsApp
@@ -216,7 +218,7 @@ ${vars.servicos}
 
 ✅ Confirme recebimento respondendo OK
 
-💙 *RC Limpa+*`;
+💙 *${PLATFORM_NAME}*`;
 
     case 'reatribuicao':
       return `🔄 *Serviço Reatribuído*
@@ -234,7 +236,7 @@ Um serviço foi reatribuído para você:
 
 ✅ Confirme recebimento respondendo OK
 
-💙 *RC Limpa+*`;
+💙 *${PLATFORM_NAME}*`;
 
     case 'rota_diaria':
       return `📋 *Rota do Dia - ${vars.data}*
@@ -247,7 +249,7 @@ ${vars.servicos}
 
 Bom trabalho! 💪
 
-💙 *RC Limpa+*`;
+💙 *${PLATFORM_NAME}*`;
 
     default:
       return `Olá ${vars.nome_tecnico}, você tem uma nova notificação!`;

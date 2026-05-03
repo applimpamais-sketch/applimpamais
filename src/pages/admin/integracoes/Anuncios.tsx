@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Facebook, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useIntegracoes } from '@/hooks/useIntegracoes';
 import { Badge } from '@/components/ui/badge';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 export default function IntegracoesAnuncios() {
   const { integracoes, isLoading } = useIntegracoes('facebook');
@@ -107,7 +108,7 @@ export default function IntegracoesAnuncios() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Nome:</span>
-                      <span className="font-medium">RC Limpa Mais - Anúncios</span>
+                      <span className="font-medium">{PLATFORM_NAME} - Anúncios</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Moeda:</span>

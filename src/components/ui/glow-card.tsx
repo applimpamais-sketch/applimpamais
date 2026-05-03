@@ -11,7 +11,7 @@ interface GlowCardProps {
 }
 
 const glowColorMap = {
-  blue: { base: 210, spread: 180 }, // Azul vibrante RC Limpa Mais
+  blue: { base: 210, spread: 180 }, // Azul vibrante da plataforma
   purple: { base: 280, spread: 300 },
   green: { base: 120, spread: 200 },
   red: { base: 0, spread: 200 },

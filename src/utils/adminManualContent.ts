@@ -1,4 +1,6 @@
-// Conteúdo completo do Manual do Administrador RC Limpa Mais
+// Conteudo completo do Manual do Administrador da plataforma
+
+import { PLATFORM_NAME } from '@/lib/constants';
 
 export interface ManualSection {
   id: string;
@@ -21,11 +23,11 @@ export interface ManualContent {
 
 export const MANUAL_INTRO = {
   title: "Manual do Administrador",
-  subtitle: "RC Limpa Mais - Sistema de Gestão",
+  subtitle: `${PLATFORM_NAME} - Sistema de Gestao`,
   version: "1.0",
   date: new Date().toLocaleDateString('pt-BR'),
   description: `
-Este manual foi desenvolvido para capacitar os administradores da plataforma RC Limpa Mais a utilizarem todas as funcionalidades do sistema de forma eficiente e segura.
+Este manual foi desenvolvido para capacitar os administradores da plataforma ${PLATFORM_NAME} a utilizarem todas as funcionalidades do sistema de forma eficiente e segura.
 
 Como administrador, você tem acesso completo a todas as áreas do sistema, incluindo:
 • Gestão de agendamentos e técnicos
@@ -1295,7 +1297,7 @@ export const MANUAL_SECTIONS: ManualSection[] = [
         howToUse: [
           { step: "No Android (Chrome)", description: "Menu (⋮) → 'Adicionar à tela inicial'" },
           { step: "No iPhone (Safari)", description: "Compartilhar (↑) → 'Adicionar à Tela de Início'" },
-          { step: "No Desktop (Chrome)", description: "Menu → 'Instalar RC Limpa Mais'" },
+          { step: "No Desktop (Chrome)", description: `Menu → 'Instalar ${PLATFORM_NAME}'` },
           { step: "Confirme instalação", description: "Clique em 'Instalar' ou 'Adicionar'" }
         ],
         whatHappensAfter: [

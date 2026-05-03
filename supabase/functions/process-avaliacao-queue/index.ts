@@ -8,6 +8,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const PLATFORM_NAME = Deno.env.get('PLATFORM_NAME') ?? 'Limpamais';
+
 /**
  * Edge Function: process-avaliacao-queue
  * Processa a fila de avaliações pós-venda e envia pesquisa de satisfação
@@ -111,7 +113,7 @@ Seu feedback é muito importante para nós! 😊
 
 🎁 E não esqueça: você tem *10% de desconto* na próxima contratação usando o cupom *VOLTA10*!
 
-💙 *Equipe RC Limpa+*`;
+💙 *Equipe ${PLATFORM_NAME}*`;
 
         const fallbackLocacao = `💙 *Pesquisa de Satisfação* 💙
 
@@ -132,7 +134,7 @@ Seu feedback é muito importante para nós! 😊
 
 🎁 E não esqueça: você tem *10% de desconto* na próxima locação ou higienização com o cupom *VOLTA10*!
 
-💙 *Equipe RC Limpa+*`;
+💙 *Equipe ${PLATFORM_NAME}*`;
 
         const fallbackMensagem = isLocacao ? fallbackLocacao : fallbackHigienizacao;
         const templateName = isLocacao ? 'avaliacao-pos-locacao' : 'avaliacao-pos-venda';
