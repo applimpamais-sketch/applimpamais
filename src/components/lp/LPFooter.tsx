@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { LPTheme, getTheme } from '@/styles/lp-themes';
 import { Phone, Mail, MapPin, Instagram, Facebook, MessageCircle } from 'lucide-react';
+import { PLATFORM_NAME, SUPPORT_EMAIL, SUPPORT_PHONE_DIGITS, WHATSAPP_BOT } from '@/lib/constants';
 
 interface LPFooterProps {
   empresaNome?: string;
@@ -14,11 +15,11 @@ interface LPFooterProps {
 }
 
 const LPFooter = ({
-  empresaNome = 'RC Limpa Mais',
-  telefone = '(31) 99999-9999',
-  email = 'contato@rclimpamais.com.br',
+  empresaNome = PLATFORM_NAME,
+  telefone = SUPPORT_PHONE_DIGITS ? SUPPORT_PHONE_DIGITS : '(31) 99999-9999',
+  email = SUPPORT_EMAIL,
   endereco = 'Belo Horizonte - MG',
-  whatsapp = '5531999999999',
+  whatsapp = WHATSAPP_BOT.numero || '5531999999999',
   instagram,
   facebook,
   theme = 'midnight',

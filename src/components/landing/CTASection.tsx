@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { CheckCircle2, Phone, Mail, MessageSquare, ArrowRight, Loader2, Shield, Clock, Headphones } from 'lucide-react';
 import DOMPurify from 'dompurify';
+import { SUPPORT_EMAIL, SUPPORT_PHONE, SUPPORT_PHONE_DIGITS, WHATSAPP_BOT } from '@/lib/constants';
 
 export default function CTASection() {
   const [formData, setFormData] = useState({
@@ -101,7 +102,7 @@ export default function CTASection() {
                 <Button 
                   variant="outline" 
                   className="border-gray-700 text-white hover:bg-gray-800"
-                  onClick={() => window.open('https://wa.me/5531999999999', '_blank')}
+                  onClick={() => window.open(WHATSAPP_BOT.waLink(), '_blank')}
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   WhatsApp Direto
@@ -170,13 +171,13 @@ export default function CTASection() {
 
             {/* Contact info */}
             <div className="flex flex-col sm:flex-row flex-wrap gap-4 pt-4">
-              <a href="tel:+5531999999999" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              <a href={SUPPORT_PHONE_DIGITS ? `tel:+${SUPPORT_PHONE_DIGITS}` : '#'} className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                 <Phone className="w-5 h-5 flex-shrink-0" />
-                <span>(31) 99999-9999</span>
+                <span>{SUPPORT_PHONE || 'Telefone não configurado'}</span>
               </a>
-              <a href="mailto:comercial@rclimpamais.com.br" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+              <a href={`mailto:${SUPPORT_EMAIL}`} className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
                 <Mail className="w-5 h-5 flex-shrink-0" />
-                <span className="break-all">comercial@rclimpamais.com.br</span>
+                <span className="break-all">{SUPPORT_EMAIL}</span>
               </a>
             </div>
           </div>

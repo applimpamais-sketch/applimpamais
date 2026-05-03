@@ -1,4 +1,5 @@
 import { Facebook, Instagram, Mail, Phone } from 'lucide-react';
+import { PLATFORM_NAME, SUPPORT_EMAIL, SUPPORT_PHONE, SUPPORT_PHONE_DIGITS } from '@/lib/constants';
 
 export default function LandingFooter() {
   return (
@@ -8,8 +9,8 @@ export default function LandingFooter() {
           {/* Company Info */}
           <div className="space-y-4">
             <img
-              src="/logo-rc-limpa-sidebar.png"
-              alt="RC Limpa Mais"
+              src="/icon-512x512.png"
+              alt={PLATFORM_NAME}
               className="h-12 w-auto"
             />
             <p className="text-gray-400 text-sm leading-relaxed">
@@ -76,15 +77,15 @@ export default function LandingFooter() {
             <h4 className="font-semibold text-lg mb-4">Contato</h4>
             <ul className="space-y-3 text-gray-400">
               <li>
-                <a href="mailto:contato@rclimpamais.com.br" className="flex items-center gap-2 hover:text-cyan-400 transition-colors">
+                <a href={`mailto:${SUPPORT_EMAIL}`} className="flex items-center gap-2 hover:text-cyan-400 transition-colors">
                   <Mail className="w-4 h-4" />
-                  <span className="text-sm">contato@rclimpamais.com.br</span>
+                  <span className="text-sm">{SUPPORT_EMAIL}</span>
                 </a>
               </li>
               <li>
-                <a href="tel:+5531999999999" className="flex items-center gap-2 hover:text-cyan-400 transition-colors">
+                <a href={SUPPORT_PHONE_DIGITS ? `tel:+${SUPPORT_PHONE_DIGITS}` : '#'} className="flex items-center gap-2 hover:text-cyan-400 transition-colors">
                   <Phone className="w-4 h-4" />
-                  <span className="text-sm">(31) 99999-9999</span>
+                  <span className="text-sm">{SUPPORT_PHONE || 'Telefone não configurado'}</span>
                 </a>
               </li>
             </ul>
@@ -113,7 +114,7 @@ export default function LandingFooter() {
         <div className="border-t border-white/10 pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-400">
             <p>
-              © {new Date().getFullYear()} RC Limpa Mais. Todos os direitos reservados.
+              © {new Date().getFullYear()} {PLATFORM_NAME}. Todos os direitos reservados.
             </p>
             <div className="flex gap-6">
               <a href="#" className="hover:text-accent transition-colors">

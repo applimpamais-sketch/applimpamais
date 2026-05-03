@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Shield, Droplets, Wind, Bug, Clock, ThumbsUp } from 'lucide-react';
 import { BorderBeam } from '@/components/ui/border-beam';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 const benefits = [
   {
@@ -47,7 +48,7 @@ const PromoBenefits = () => {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Por que escolher a <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">RC Limpa Mais</span>?
+            Por que escolher a <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">{PLATFORM_NAME}</span>?
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             Mais de 500 clientes satisfeitos em BH e região

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
-import { LPTheme, getTheme, getAnimationVariants } from '@/styles/lp-themes';
 import { Check, Award, Shield, Users, Star } from 'lucide-react';
+import { LPTheme, getTheme, getAnimationVariants } from '@/styles/lp-themes';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 interface LPSpecialistProps {
   titulo?: string;
@@ -14,9 +15,9 @@ interface LPSpecialistProps {
 const credencialIcons = [Award, Shield, Users, Star, Check];
 
 const LPSpecialist = ({
-  titulo = 'Conheça a RC Limpa Mais',
+  titulo = `Conheça a ${PLATFORM_NAME}`,
   subtitulo = 'Referência em Higienização de Estofados em BH',
-  texto = 'Desde 2018, a RC Limpa Mais tem transformado ambientes em toda Belo Horizonte e região metropolitana. Nossa missão é simples: entregar resultados que superam expectativas.\n\nCom uma equipe treinada e equipamentos de última geração, garantimos uma higienização profunda que você pode ver e sentir. Cada serviço é executado com carinho e profissionalismo, porque sabemos que seu lar merece o melhor.',
+  texto = `Desde 2018, a ${PLATFORM_NAME} tem transformado ambientes em toda Belo Horizonte e região metropolitana. Nossa missão é simples: entregar resultados que superam expectativas.\n\nCom uma equipe treinada e equipamentos de última geração, garantimos uma higienização profunda que você pode ver e sentir. Cada serviço é executado com carinho e profissionalismo, porque sabemos que seu lar merece o melhor.`,
   credenciais = [
     '+5.000 clientes atendidos',
     'Equipe certificada e treinada',
@@ -29,14 +30,11 @@ const LPSpecialist = ({
 }: LPSpecialistProps) => {
   const t = getTheme(theme);
   const variants = getAnimationVariants(theme);
-
-  // Parse texto em parágrafos
   const paragrafos = texto.split('\n\n').filter(Boolean);
 
   return (
     <section className={`${t.bgPrimary} py-16 md:py-24`}>
       <div className="max-w-6xl mx-auto px-4">
-        {/* Header */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -44,16 +42,11 @@ const LPSpecialist = ({
           variants={variants}
           className="text-center mb-12"
         >
-          <h2 className={`text-3xl md:text-4xl font-bold ${t.textPrimary} mb-4`}>
-            {titulo}
-          </h2>
-          <p className={`text-xl ${t.accent}`}>
-            {subtitulo}
-          </p>
+          <h2 className={`text-3xl md:text-4xl font-bold ${t.textPrimary} mb-4`}>{titulo}</h2>
+          <p className={`text-xl ${t.accent}`}>{subtitulo}</p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Conteúdo */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -69,7 +62,6 @@ const LPSpecialist = ({
               ))}
             </div>
 
-            {/* Credenciais */}
             <div className="space-y-3 pt-4">
               {credenciais.map((credencial, index) => {
                 const Icon = credencialIcons[index % credencialIcons.length];
@@ -82,19 +74,18 @@ const LPSpecialist = ({
                     transition={{ delay: index * 0.1 }}
                     className="flex items-center gap-3"
                   >
-                    <div className={`flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br ${t.gradientIcon} flex items-center justify-center`}>
+                    <div
+                      className={`flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br ${t.gradientIcon} flex items-center justify-center`}
+                    >
                       <Icon className="w-4 h-4 text-white" />
                     </div>
-                    <span className={`text-lg ${t.textPrimary}`}>
-                      {credencial}
-                    </span>
+                    <span className={`text-lg ${t.textPrimary}`}>{credencial}</span>
                   </motion.div>
                 );
               })}
             </div>
           </motion.div>
 
-          {/* Imagem */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -104,13 +95,11 @@ const LPSpecialist = ({
           >
             <div className={`relative rounded-2xl overflow-hidden ${t.border} border`}>
               {imagemUrl ? (
-                <img 
-                  src={imagemUrl} 
-                  alt="Equipe profissional" 
-                  className="w-full h-80 lg:h-[450px] object-cover"
-                />
+                <img src={imagemUrl} alt="Equipe profissional" className="w-full h-80 lg:h-[450px] object-cover" />
               ) : (
-                <div className={`w-full h-80 lg:h-[450px] bg-gradient-to-br ${t.gradientIcon} flex items-center justify-center`}>
+                <div
+                  className={`w-full h-80 lg:h-[450px] bg-gradient-to-br ${t.gradientIcon} flex items-center justify-center`}
+                >
                   <div className="text-center text-white/80">
                     <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
                       <Users className="w-12 h-12" />
@@ -120,7 +109,6 @@ const LPSpecialist = ({
                 </div>
               )}
 
-              {/* Badge flutuante */}
               <motion.div
                 initial={{ scale: 0 }}
                 whileInView={{ scale: 1 }}
@@ -138,9 +126,12 @@ const LPSpecialist = ({
               </motion.div>
             </div>
 
-            {/* Decorative elements */}
-            <div className={`absolute -top-6 -right-6 w-40 h-40 bg-gradient-to-br ${t.gradientPrimary} rounded-full opacity-10 blur-3xl`} />
-            <div className={`absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-br ${t.gradientPrimary} rounded-full opacity-10 blur-3xl`} />
+            <div
+              className={`absolute -top-6 -right-6 w-40 h-40 bg-gradient-to-br ${t.gradientPrimary} rounded-full opacity-10 blur-3xl`}
+            />
+            <div
+              className={`absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-br ${t.gradientPrimary} rounded-full opacity-10 blur-3xl`}
+            />
           </motion.div>
         </div>
       </div>

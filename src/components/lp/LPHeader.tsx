@@ -3,6 +3,7 @@ import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import CountdownTimer from './CountdownTimer';
 import { LPTheme, getTheme } from '@/styles/lp-themes';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 interface LPHeaderProps {
   showTimer?: boolean;
@@ -29,9 +30,9 @@ const LPHeader = ({
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.gradientPrimary} flex items-center justify-center`}>
-            <span className="text-white font-bold text-lg">RC</span>
+            <span className="text-white font-bold text-lg">{PLATFORM_NAME.slice(0, 2).toUpperCase()}</span>
           </div>
-          <span className={`hidden sm:block ${t.textPrimary} font-semibold`}>RC Limpa Mais</span>
+          <span className={`hidden sm:block ${t.textPrimary} font-semibold`}>{PLATFORM_NAME}</span>
         </div>
 
         {/* Timer */}

@@ -1,5 +1,6 @@
 import { Shield, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 const PromoFooter = () => {
   return (
@@ -8,7 +9,7 @@ const PromoFooter = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
           <div className="flex items-center gap-2 text-gray-500 text-sm">
             <Shield className="w-4 h-4 text-cyan-400" />
-            <span>RC Limpa Mais • CNPJ: XX.XXX.XXX/0001-XX</span>
+            <span>{PLATFORM_NAME} • CNPJ: XX.XXX.XXX/0001-XX</span>
           </div>
           
           <div className="flex items-center gap-4 text-sm">

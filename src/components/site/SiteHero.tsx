@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Star, ArrowRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { WHATSAPP_BOT } from "@/lib/constants";
+import { PLATFORM_NAME, WHATSAPP_BOT } from "@/lib/constants";
 import { Link } from "react-router-dom";
 
 const SiteHero = () => {
@@ -31,7 +31,7 @@ const SiteHero = () => {
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              <span className="text-primary-foreground">RC Limpa Mais</span>
+              <span className="text-primary-foreground">{PLATFORM_NAME}</span>
               <br />
               <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
                 Especialistas em Estofados

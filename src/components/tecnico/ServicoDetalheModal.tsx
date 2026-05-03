@@ -44,6 +44,7 @@ import {
 import { formatCurrency, formatDate } from '@/utils/format';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 interface Servico {
   id: string;
@@ -196,7 +197,7 @@ export default function ServicoDetalheModal({
   const handleWhatsApp = () => {
     const telefoneFormatado = servico.telefone.replace(/\D/g, '');
     const mensagem = encodeURIComponent(
-      `Olá ${servico.nome_cliente.split(' ')[0]}! Aqui é o técnico da RC Limpa Mais. Estou a caminho para o serviço agendado.`
+      `Olá ${servico.nome_cliente.split(' ')[0]}! Aqui é o técnico da ${PLATFORM_NAME}. Estou a caminho para o serviço agendado.`
     );
     window.open(`https://wa.me/55${telefoneFormatado}?text=${mensagem}`, '_blank');
   };

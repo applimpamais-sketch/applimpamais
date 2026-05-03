@@ -1,4 +1,4 @@
-import { WHATSAPP_BOT } from "@/lib/constants";
+import { PLATFORM_NAME, SUPPORT_PHONE, WHATSAPP_BOT } from "@/lib/constants";
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail } from "lucide-react";
 
@@ -9,7 +9,7 @@ const SiteFooter = () => {
         <div className="grid md:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="md:col-span-1">
-            <h3 className="text-xl font-bold text-primary-foreground mb-3">RC Limpa Mais</h3>
+            <h3 className="text-xl font-bold text-primary-foreground mb-3">{PLATFORM_NAME}</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
               Serviço profissional de higienização e impermeabilização de estofados em BH e região.
             </p>
@@ -47,7 +47,7 @@ const SiteFooter = () => {
               <li>
                 <a href={WHATSAPP_BOT.waLink()} className="flex items-center gap-2 text-gray-400 hover:text-primary transition-colors">
                   <Phone className="w-4 h-4 text-primary flex-shrink-0" />
-                  (31) 9 4678-382
+                  {SUPPORT_PHONE || 'WhatsApp'}
                 </a>
               </li>
             </ul>
@@ -56,7 +56,7 @@ const SiteFooter = () => {
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-center">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} RC Limpa Mais. Todos os direitos reservados.
+            © {new Date().getFullYear()} {PLATFORM_NAME}. Todos os direitos reservados.
           </p>
         </div>
       </div>

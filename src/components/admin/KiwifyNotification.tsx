@@ -1,6 +1,7 @@
 import { toast } from 'sonner';
 import { X } from 'lucide-react';
 import { formatCurrency } from '@/utils/format';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 export function showKiwifyToast(agendamento: any) {
   const timeAgo = 'há 1m';
@@ -12,7 +13,7 @@ export function showKiwifyToast(agendamento: any) {
         <div className="flex-shrink-0">
           <img 
             src="/icon-512x512.png" 
-            alt="RC Limpa Mais"
+            alt={PLATFORM_NAME}
             className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20"
           />
         </div>

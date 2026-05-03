@@ -2,6 +2,7 @@
  import { Badge } from '@/components/ui/badge';
  import { ArrowRight, TrendingUp, Users, Wallet } from 'lucide-react';
  import { motion } from 'framer-motion';
+ import { PLATFORM_NAME } from '@/lib/constants';
  
  const SejaParceiroHero = () => {
    const scrollToForm = () => {
@@ -18,7 +19,7 @@
            transition={{ duration: 0.5 }}
          >
            <Badge className="mb-6 bg-primary/20 text-primary border-primary/30 px-4 py-2 text-sm">
-             🚀 Programa de Parceiros RC Limpa Mais
+             🚀 Programa de Parceiros {PLATFORM_NAME}
            </Badge>
          </motion.div>
  
