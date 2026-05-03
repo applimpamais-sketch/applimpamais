@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,11 +15,11 @@ import { Loader2, RefreshCw, ChevronDown, AlertTriangle, LayoutDashboard } from 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { toast } from '@/components/ui/use-toast';
 import { AlertTitle } from '@/components/ui/alert';
-import { RC_LIMPA_MAIS_TENANT_ID } from '@/constants/tenant';
+
 
 const authSchema = z.object({
-  email: z.string().email('Email inválido'),
-  password: z.string().min(6, 'Senha deve ter no mínimo 6 caracteres'),
+  email: z.string().email('Email invÃ¡lido'),
+  password: z.string().min(6, 'Senha deve ter no mÃ­nimo 6 caracteres'),
 });
 
 type AuthFormValues = z.infer<typeof authSchema>;
@@ -31,7 +31,7 @@ type AuthFormValues = z.infer<typeof authSchema>;
    
    if (msg.includes('failed to fetch') || msg.includes('networkerror') || name === 'FetchError') {
      return {
-       message: 'Falha de conexão com o servidor. Verifique sua internet ou clique em "Limpar dados locais".',
+       message: 'Falha de conexÃ£o com o servidor. Verifique sua internet ou clique em "Limpar dados locais".',
        details: `Network: ${error?.message || 'Failed to fetch'}`,
        showRepair: true,
      };
@@ -39,7 +39,7 @@ type AuthFormValues = z.infer<typeof authSchema>;
    
    if (msg.includes('refresh token') || msg.includes('invalid refresh') || msg.includes('token not found')) {
      return {
-       message: 'Sessão local corrompida. Clique em "Limpar dados locais" para resolver.',
+       message: 'SessÃ£o local corrompida. Clique em "Limpar dados locais" para resolver.',
        details: `Token: ${error?.message}`,
        showRepair: true,
      };
@@ -47,7 +47,7 @@ type AuthFormValues = z.infer<typeof authSchema>;
    
    if (msg.includes('jwt') || msg.includes('token expired') || msg.includes('invalid token')) {
      return {
-       message: 'Sessão expirada. Clique em "Limpar dados locais" e tente novamente.',
+       message: 'SessÃ£o expirada. Clique em "Limpar dados locais" e tente novamente.',
        details: `JWT: ${error?.message}`,
        showRepair: true,
      };
@@ -63,7 +63,7 @@ type AuthFormValues = z.infer<typeof authSchema>;
    
    if (msg.includes('email not confirmed') || msg.includes('confirm')) {
      return {
-       message: 'Email não confirmado. Verifique sua caixa de entrada.',
+       message: 'Email nÃ£o confirmado. Verifique sua caixa de entrada.',
        details: `Confirmation: ${error?.message}`,
        showRepair: false,
      };
@@ -99,7 +99,7 @@ export default function Auth() {
   const [hasUrlError, setHasUrlError] = useState(false);
   const [showForceContinue, setShowForceContinue] = useState(false);
 
-  // Mostrar botão "Continuar mesmo assim" se sessão demorar mais de 5s
+  // Mostrar botÃ£o "Continuar mesmo assim" se sessÃ£o demorar mais de 5s
   useEffect(() => {
     if (!isCheckingSession) {
       setShowForceContinue(false);
@@ -109,34 +109,24 @@ export default function Auth() {
     return () => clearTimeout(t);
   }, [isCheckingSession]);
 
-  // Detectar tenant pelo hostname para branding dinâmico
+  // Detectar tenant pelo hostname para branding dinÃ¢mico
   const { data: tenantBranding, isLoading: isLoadingBranding } = useQuery({
     queryKey: ['login-branding', typeof window !== 'undefined' ? window.location.hostname : ''],
     queryFn: async () => {
       const hostname = window.location.hostname;
       
-      // Domínios principais da plataforma - usar branding padrão (RC Limpa Mais)
-      const mainDomains = [
-        'rclimpamais.lovable.app',
-        'rclimpamais.com.br',
-        'localhost',
+      // DomÃ­nios principais da plataforma - usar branding padrÃ£o (RC Limpa Mais)
+      const mainDomains = [\r\n        'localhost',
         '127.0.0.1'
       ];
       
       const isMainDomain = mainDomains.some(domain => hostname.includes(domain));
       
       if (isMainDomain) {
-        // Buscar dados da RC Limpa Mais para manter compatibilidade
-        const { data } = await supabase
-          .from('saas_tenants')
-          .select('nome_fantasia, nome_empresa, logo_url')
-          .eq('id', RC_LIMPA_MAIS_TENANT_ID)
-          .single();
-        
-        return data;
+        return null;
       }
       
-      // Tentar buscar tenant por domínio customizado
+      // Tentar buscar tenant por domÃ­nio customizado
       const { data: tenantByDomain } = await supabase
         .from('saas_tenants')
         .select('nome_fantasia, nome_empresa, logo_url')
@@ -147,7 +137,7 @@ export default function Auth() {
         return tenantByDomain;
       }
       
-      // Fallback: sem tenant específico, usar branding genérico
+      // Fallback: sem tenant especÃ­fico, usar branding genÃ©rico
       return null;
     },
     staleTime: Infinity,
@@ -159,8 +149,8 @@ export default function Auth() {
     if (hash.includes('error=access_denied')) {
       const isExpired = hash.includes('otp_expired');
       const errorMsg = isExpired 
-        ? 'Link de convite expirado. Solicite um novo link ao administrador ou faça login com suas credenciais.'
-        : 'Erro de autenticação. Tente fazer login manualmente.';
+        ? 'Link de convite expirado. Solicite um novo link ao administrador ou faÃ§a login com suas credenciais.'
+        : 'Erro de autenticaÃ§Ã£o. Tente fazer login manualmente.';
       
       // Mark that we have a URL error to prevent checkAuth from redirecting
       setHasUrlError(true);
@@ -182,7 +172,7 @@ export default function Auth() {
  
   useEffect(() => {
     async function checkAuth() {
-      // Se há erro de URL (magic link expirado), não verificar sessão
+      // Se hÃ¡ erro de URL (magic link expirado), nÃ£o verificar sessÃ£o
       if (hasUrlError) return;
       
       // Aguardar loading do useAuth finalizar
@@ -194,7 +184,7 @@ export default function Auth() {
       }
       
       try {
-        // Polling reduzido: 2 tentativas x 300ms (600ms máx)
+        // Polling reduzido: 2 tentativas x 300ms (600ms mÃ¡x)
         let attempts = 0;
         let profileData = null;
         let lastError = null;
@@ -240,7 +230,7 @@ export default function Auth() {
           return;
         }
         
-        // Não é SaaS - verificar roles master
+        // NÃ£o Ã© SaaS - verificar roles master
         const isTecnico = await hasRole('tecnico');
         const isAdmin = await hasRole('admin');
         const isOperador = await hasRole('operador');
@@ -253,7 +243,7 @@ export default function Auth() {
           setIsCheckingSession(false);
         }
       } catch (error) {
-        console.error('Erro ao verificar sessão:', error);
+        console.error('Erro ao verificar sessÃ£o:', error);
         setIsCheckingSession(false);
       }
     }
@@ -299,7 +289,7 @@ export default function Auth() {
     const email = form.getValues('email');
     
     if (!email || !email.includes('@')) {
-      toast({ variant: 'destructive', title: 'Email inválido', description: 'Digite seu email no campo acima.' });
+      toast({ variant: 'destructive', title: 'Email invÃ¡lido', description: 'Digite seu email no campo acima.' });
       return;
     }
     
@@ -322,7 +312,7 @@ export default function Auth() {
       } else {
         toast({ 
           title: 'Verifique seu email!', 
-          description: 'Se o email estiver cadastrado, você receberá um link de recuperação. Verifique também a pasta de spam.' 
+          description: 'Se o email estiver cadastrado, vocÃª receberÃ¡ um link de recuperaÃ§Ã£o. Verifique tambÃ©m a pasta de spam.' 
         });
         setShowForgotPassword(false);
       }
@@ -364,7 +354,7 @@ export default function Auth() {
     const { data: { user: currentUser } } = await supabase.auth.getUser();
     
     if (!currentUser) {
-      setError('Erro ao carregar dados do usuário');
+      setError('Erro ao carregar dados do usuÃ¡rio');
       setIsLoading(false);
       return;
     }
@@ -372,17 +362,17 @@ export default function Auth() {
     const isFirstLogin = currentUser?.user_metadata?.is_first_login !== false;
     
     if (isFirstLogin) {
-      // Marcar como não-primeiro-login em background, sem bloquear navegação
+      // Marcar como nÃ£o-primeiro-login em background, sem bloquear navegaÃ§Ã£o
       supabase.auth.updateUser({ data: { is_first_login: false } }).catch((e) => {
-        console.warn('[Auth.onSubmit] Falha ao atualizar is_first_login (não-bloqueante):', e);
+        console.warn('[Auth.onSubmit] Falha ao atualizar is_first_login (nÃ£o-bloqueante):', e);
       });
       try {
         sessionStorage.setItem('show_welcome_banner', '1');
       } catch { /* ignore */ }
-      console.log('[Auth.onSubmit] Primeiro login detectado, prosseguindo com navegação');
+      console.log('[Auth.onSubmit] Primeiro login detectado, prosseguindo com navegaÃ§Ã£o');
     }
 
-    // Verificar se o usuário pertence a um tenant SaaS
+    // Verificar se o usuÃ¡rio pertence a um tenant SaaS
     console.log('[Auth.onSubmit] Buscando profile para user:', currentUser.id);
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
@@ -398,20 +388,20 @@ export default function Auth() {
 
     console.log('[Auth.onSubmit] Profile:', profile);
 
-    // Se tem tenant_id, é um cliente SaaS - redirecionar direto para /admin (layout unificado)
+    // Se tem tenant_id, Ã© um cliente SaaS - redirecionar direto para /admin (layout unificado)
     if (profile?.tenant_id) {
       console.log('[Auth.onSubmit] Cliente SaaS, indo para /admin');
       navigate('/admin');
       return;
     }
 
-    // Se não tem tenant_id, verificar roles para acesso master
+    // Se nÃ£o tem tenant_id, verificar roles para acesso master
     const isTecnico = await hasRole('tecnico');
     const isAdmin = await hasRole('admin');
     const isOperador = await hasRole('operador');
 
     if (isTecnico && !isAdmin && !isOperador) {
-      setError('Técnicos devem usar o portal em /tecnico/auth');
+      setError('TÃ©cnicos devem usar o portal em /tecnico/auth');
       setIsLoading(false);
       setTimeout(() => navigate('/tecnico/auth'), 2000);
       return;
@@ -420,7 +410,7 @@ export default function Auth() {
     if (isAdmin || isOperador) {
       navigate('/admin');
     } else {
-      setError('Você não tem permissão para acessar o sistema');
+      setError('VocÃª nÃ£o tem permissÃ£o para acessar o sistema');
       setIsLoading(false);
     }
   };
@@ -431,7 +421,7 @@ export default function Auth() {
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
         {showForceContinue && (
           <div className="flex flex-col items-center gap-2 text-center">
-            <p className="text-sm text-muted-foreground">Está demorando mais que o esperado...</p>
+            <p className="text-sm text-muted-foreground">EstÃ¡ demorando mais que o esperado...</p>
             <Button variant="outline" size="sm" onClick={() => navigate('/admin', { replace: true })}>
               Continuar mesmo assim
             </Button>
@@ -441,7 +431,7 @@ export default function Auth() {
     );
   }
 
-  // Branding dinâmico baseado no tenant detectado
+  // Branding dinÃ¢mico baseado no tenant detectado
   const logoUrl = tenantBranding?.logo_url;
   const nomeEmpresa = tenantBranding?.nome_fantasia || tenantBranding?.nome_empresa;
 
@@ -460,13 +450,13 @@ export default function Auth() {
            </div>
            <CardTitle className="text-2xl">Dashboard Admin</CardTitle>
            <CardDescription>
-             {nomeEmpresa ? `${nomeEmpresa} - Área Administrativa` : 'Área Administrativa'}
+             {nomeEmpresa ? `${nomeEmpresa} - Ãrea Administrativa` : 'Ãrea Administrativa'}
            </CardDescription>
 
            {showWelcomeBanner && (
              <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 mt-4 text-left">
-               <p className="text-sm font-medium text-primary mb-2">🎉 Bem-vindo à equipe!</p>
-               <p className="text-xs text-muted-foreground mb-3">Por segurança, recomendamos que você altere sua senha após o primeiro acesso.</p>
+               <p className="text-sm font-medium text-primary mb-2">ðŸŽ‰ Bem-vindo Ã  equipe!</p>
+               <p className="text-xs text-muted-foreground mb-3">Por seguranÃ§a, recomendamos que vocÃª altere sua senha apÃ³s o primeiro acesso.</p>
                <Button variant="outline" size="sm" onClick={() => navigate('/change-password')} className="w-full">
                  Alterar Senha Agora
                </Button>
@@ -527,9 +517,9 @@ export default function Auth() {
                     <AlertTitle className="text-amber-800 ml-2">Seu link de acesso expirou</AlertTitle>
                     <AlertDescription className="text-amber-700 ml-6 mt-1">
                       <p className="text-sm">
-                        Links são válidos por apenas 1 hora. Entre em contato com 
-                        o administrador para receber um novo link ou faça login 
-                        com email e senha se já tiver credenciais cadastradas.
+                        Links sÃ£o vÃ¡lidos por apenas 1 hora. Entre em contato com 
+                        o administrador para receber um novo link ou faÃ§a login 
+                        com email e senha se jÃ¡ tiver credenciais cadastradas.
                       </p>
                     </AlertDescription>
                   </Alert>
@@ -549,9 +539,9 @@ export default function Auth() {
  
            {showForgotPassword && (
              <div className="mt-2 p-3 bg-muted/50 rounded-lg space-y-2">
-               <p className="text-xs text-muted-foreground">Digite seu email acima e clique no botão para receber um link de recuperação.</p>
+               <p className="text-xs text-muted-foreground">Digite seu email acima e clique no botÃ£o para receber um link de recuperaÃ§Ã£o.</p>
                <Button type="button" variant="outline" size="sm" className="w-full" onClick={handleForgotPassword} disabled={isSendingRecovery}>
-                 {isSendingRecovery ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />Enviando...</>) : 'Enviar link de recuperação'}
+                 {isSendingRecovery ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />Enviando...</>) : 'Enviar link de recuperaÃ§Ã£o'}
                </Button>
              </div>
            )}
@@ -565,7 +555,7 @@ export default function Auth() {
                </Button>
              </CollapsibleTrigger>
              <CollapsibleContent className="mt-2 space-y-2">
-               <p className="text-xs text-muted-foreground text-center">Se o login não funciona mesmo com dados corretos, limpe os dados locais do app.</p>
+               <p className="text-xs text-muted-foreground text-center">Se o login nÃ£o funciona mesmo com dados corretos, limpe os dados locais do app.</p>
                <Button type="button" variant="outline" size="sm" onClick={repairConnection} className="w-full">
                  <RefreshCw className="mr-2 h-4 w-4" />
                  Limpar dados locais / Atualizar app
@@ -575,8 +565,8 @@ export default function Auth() {
  
            <div className="mt-4 text-center text-sm text-muted-foreground">
              <p>
-               Técnico?{' '}
-               <a href="/tecnico/auth" className="text-primary hover:underline">Acessar área do técnico</a>
+               TÃ©cnico?{' '}
+               <a href="/tecnico/auth" className="text-primary hover:underline">Acessar Ã¡rea do tÃ©cnico</a>
              </p>
            </div>
          </CardContent>
@@ -584,3 +574,4 @@ export default function Auth() {
      </div>
    );
  }
+

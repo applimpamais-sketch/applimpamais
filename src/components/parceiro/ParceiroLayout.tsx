@@ -1,4 +1,4 @@
-import { ReactNode, useState, useEffect } from 'react';
+﻿import { ReactNode, useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -19,7 +19,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { TenantLogo } from '@/components/branding/TenantLogo';
-import { isRCLimpaMaisTenant, isMasterFallbackTenant } from '@/constants/tenant';
+
 
 interface ParceiroLayoutProps {
   children: ReactNode;
@@ -38,7 +38,7 @@ const menuItems = [
   { title: 'Dashboard', path: '/parceiro/dashboard', icon: LayoutDashboard },
   { title: 'Meus Links', path: '/parceiro/links', icon: Link2 },
   { title: 'Materiais', path: '/parceiro/materiais', icon: Package },
-  { title: 'Conversões', path: '/parceiro/conversoes', icon: TrendingUp },
+  { title: 'ConversÃµes', path: '/parceiro/conversoes', icon: TrendingUp },
   { title: 'Saques', path: '/parceiro/saques', icon: Wallet },
   { title: 'Meu Perfil', path: '/parceiro/perfil', icon: User },
 ];
@@ -87,9 +87,7 @@ export default function ParceiroLayout({ children }: ParceiroLayoutProps) {
     staleTime: Infinity,
   });
   
-  // Verificar se é tenant master (RC Limpa Mais)
-  const isRCLimpaMais = !tenantData || isRCLimpaMaisTenant(tenantData.id) || isMasterFallbackTenant(tenantData.id);
-
+  // Verificar se Ã© tenant master (RC Limpa Mais)
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate('/parceiro/auth', { replace: true });
@@ -124,23 +122,17 @@ export default function ParceiroLayout({ children }: ParceiroLayoutProps) {
           {/* Logo */}
           <div className="flex items-center justify-between p-4 border-b border-white/10">
             <Link to="/parceiro/dashboard" className="flex items-center gap-2">
-              {isRCLimpaMais ? (
-                <img 
-                  src="/logo-rc-limpa-sidebar.png" 
-                  alt="RC Limpa Mais" 
-                  className="h-8 w-auto"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              ) : tenantData?.logo_url ? (
+              {tenantData?.logo_url ? (
                 <TenantLogo 
                   logoUrl={tenantData.logo_url} 
                   companyName={tenantData.nome_fantasia || tenantData.nome_empresa} 
                   className="h-8 w-auto"
                 />
               ) : (
-                <Users className="h-8 w-8 text-white" />
+                <div className="flex items-center gap-2 text-white">
+                  <Users className="h-8 w-8 text-white" />
+                  <span className="font-semibold">Limpamais</span>
+                </div>
               )}
               <span className="font-semibold text-white">+ Parceiro</span>
             </Link>
@@ -157,7 +149,7 @@ export default function ParceiroLayout({ children }: ParceiroLayoutProps) {
           {/* Parceiro Info */}
           {parceiro && (
             <div className="p-4 border-b border-white/10">
-              <p className="text-sm text-white/70">Olá,</p>
+              <p className="text-sm text-white/70">OlÃ¡,</p>
               <p className="font-bold text-base sm:text-lg truncate text-white">{parceiro.nome_exibicao || parceiro.nome}</p>
               <div className="mt-2">
                 <span className={cn(
@@ -170,7 +162,7 @@ export default function ParceiroLayout({ children }: ParceiroLayoutProps) {
                 </span>
               </div>
               <div className="mt-4 p-3 bg-white/10 rounded-xl border border-white/10">
-                <p className="text-xs text-white/70 mb-1">Saldo disponível</p>
+                <p className="text-xs text-white/70 mb-1">Saldo disponÃ­vel</p>
                 <p className="text-xl font-bold text-white">
                   {formatCurrency(parceiro.saldo_disponivel)}
                 </p>
@@ -229,7 +221,7 @@ export default function ParceiroLayout({ children }: ParceiroLayoutProps) {
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <span className="font-semibold text-sm">Área do Parceiro</span>
+          <span className="font-semibold text-sm">Ãrea do Parceiro</span>
           {parceiro && (
             <span className="text-xs font-medium text-primary">
               {formatCurrency(parceiro.saldo_disponivel)}
@@ -245,3 +237,5 @@ export default function ParceiroLayout({ children }: ParceiroLayoutProps) {
     </div>
   );
 }
+
+

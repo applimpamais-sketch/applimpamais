@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { 
@@ -49,7 +49,7 @@ import { useProfile } from '@/hooks/useProfile';
 import { useTenantModules } from '@/hooks/useTenantModules';
 import { useTenantContext } from '@/hooks/useTenantContext';
 import { MODULE_NAMES } from '@/config/moduleMenuMapping';
-import { isRCLimpaMaisTenant, isMasterFallbackTenant } from '@/constants/tenant';
+import { TenantLogo } from '@/components/branding/TenantLogo';
 import {
   Popover,
   PopoverContent,
@@ -76,20 +76,20 @@ interface MenuItemType {
 }
 
 const principalItems: MenuItemType[] = [
-  { title: 'Visão Geral', path: '/admin', icon: LayoutDashboard, end: true },
+  { title: 'VisÃ£o Geral', path: '/admin', icon: LayoutDashboard, end: true },
   { title: 'Analytics', path: '/admin/analytics', icon: Activity, requiredModule: 'loja_online' },
   { title: 'Agendamentos', path: '/admin/agendamentos', icon: Calendar },
-  { title: 'Técnicos', path: '/admin/tecnicos', icon: Wrench, requiredModule: 'rastreamento_rota' },
-  { title: 'Histórico Tracking', path: '/admin/tracking', icon: MapPinned, requiredModule: 'rastreamento_rota' },
+  { title: 'TÃ©cnicos', path: '/admin/tecnicos', icon: Wrench, requiredModule: 'rastreamento_rota' },
+  { title: 'HistÃ³rico Tracking', path: '/admin/tracking', icon: MapPinned, requiredModule: 'rastreamento_rota' },
 ];
 
 const blogItems: MenuItemType[] = [
   { title: 'Dashboard', path: '/admin/blog', icon: LayoutDashboard, end: true },
   { title: 'Gerar Posts', path: '/admin/blog/gerar', icon: Wand2 },
-  { title: 'Fila & Revisão', path: '/admin/blog/fila', icon: ListTodo },
+  { title: 'Fila & RevisÃ£o', path: '/admin/blog/fila', icon: ListTodo },
   { title: 'Banco Keywords', path: '/admin/blog/keywords', icon: FileText },
   { title: 'Importar Keywords', path: '/admin/blog/importar', icon: FileSpreadsheet },
-  { title: 'Configurações', path: '/admin/blog/configuracoes', icon: Settings },
+  { title: 'ConfiguraÃ§Ãµes', path: '/admin/blog/configuracoes', icon: Settings },
 ];
 
 const iarcItems: MenuItemType[] = [
@@ -106,14 +106,14 @@ const marketingItems: MenuItemType[] = [
   { title: 'Central Mensagens', path: '/admin/central-mensagens', icon: Send, requiredModule: 'whatsapp_bot' },
   { title: 'Templates WhatsApp', path: '/admin/templates', icon: MessageSquare, requiredModule: 'whatsapp_bot' },
   { title: 'Comandos do Bot', path: '/admin/comandos-bot', icon: Bot, requiredModule: 'whatsapp_bot' },
-  { title: 'Notificações Push', path: '/admin/push-notifications', icon: Zap, requiredModule: 'marketing_tools' },
-  { title: 'Config. Avaliações', path: '/admin/avaliacoes-config', icon: Star, requiredModule: 'marketing_tools' },
+  { title: 'NotificaÃ§Ãµes Push', path: '/admin/push-notifications', icon: Zap, requiredModule: 'marketing_tools' },
+  { title: 'Config. AvaliaÃ§Ãµes', path: '/admin/avaliacoes-config', icon: Star, requiredModule: 'marketing_tools' },
 ];
 
 const gestaoItems: MenuItemType[] = [
-  { title: 'Meus Serviços', path: '/admin/servicos', icon: Package, requiredModule: 'loja_online' },
-  { title: 'Orçamentos', path: '/admin/orcamentos', icon: FileSpreadsheet, requiredModule: 'loja_online' },
-  { title: 'Relatórios', path: '/admin/relatorios', icon: BarChart3, requiredModule: 'relatorios_avancados' },
+  { title: 'Meus ServiÃ§os', path: '/admin/servicos', icon: Package, requiredModule: 'loja_online' },
+  { title: 'OrÃ§amentos', path: '/admin/orcamentos', icon: FileSpreadsheet, requiredModule: 'loja_online' },
+  { title: 'RelatÃ³rios', path: '/admin/relatorios', icon: BarChart3, requiredModule: 'relatorios_avancados' },
   { title: 'Equipe', path: '/admin/equipe', icon: UserPlus },
   { title: 'Parcerias', path: '/admin/parcerias', icon: Users2, requiredModule: 'parcerias' },
   { title: 'Notas Fiscais', path: '/admin/notas-fiscais', icon: FileText, requiredModule: 'financeiro' },
@@ -131,14 +131,14 @@ const financeiroItems: MenuItemType[] = [
 const integracoesItems: MenuItemType[] = [
   { title: 'Canais de Origem', path: '/admin/integracoes/canais', icon: Link2 },
   { title: 'WhatsApp', path: '/admin/integracoes/whatsapp', icon: MessageSquare, requiredModule: 'whatsapp_bot' },
-  { title: 'Anúncios', path: '/admin/integracoes/anuncios', icon: Megaphone, requiredModule: 'api_access' },
+  { title: 'AnÃºncios', path: '/admin/integracoes/anuncios', icon: Megaphone, requiredModule: 'api_access' },
   
   { title: 'Webhook', path: '/admin/integracoes/webhook', icon: Zap, requiredModule: 'api_access' },
   { title: 'UTMify', path: '/admin/integracoes/utmify', icon: BarChart3, requiredModule: 'api_access' },
   { title: 'Dashboard UTMify', path: '/admin/integracoes/utmify-dashboard', icon: TrendingUp, requiredModule: 'api_access' },
 ];
 
-// MenuItem que verifica se o módulo está disponível
+// MenuItem que verifica se o mÃ³dulo estÃ¡ disponÃ­vel
 const MenuItem = ({ item, hasModule }: { item: MenuItemType; hasModule: (code: string) => boolean }) => {
   const isLocked = item.requiredModule && !hasModule(item.requiredModule);
   const moduleName = item.requiredModule ? MODULE_NAMES[item.requiredModule] || item.requiredModule : '';
@@ -159,7 +159,7 @@ const MenuItem = ({ item, hasModule }: { item: MenuItemType; hasModule: (code: s
         </TooltipTrigger>
         <TooltipContent side="right" className="bg-background text-foreground border">
           <p className="text-sm">
-            Módulo <strong>{moduleName}</strong> não incluído no seu plano
+            MÃ³dulo <strong>{moduleName}</strong> nÃ£o incluÃ­do no seu plano
           </p>
         </TooltipContent>
       </Tooltip>
@@ -184,7 +184,7 @@ const MenuItem = ({ item, hasModule }: { item: MenuItemType; hasModule: (code: s
   );
 };
 
-// Submenu bloqueável
+// Submenu bloqueÃ¡vel
 const LockedSubmenu = ({ 
   title, 
   icon: Icon, 
@@ -218,7 +218,7 @@ const LockedSubmenu = ({
         </TooltipTrigger>
         <TooltipContent side="right" className="bg-background text-foreground border">
           <p className="text-sm">
-            Módulo <strong>{moduleName}</strong> não incluído no seu plano
+            MÃ³dulo <strong>{moduleName}</strong> nÃ£o incluÃ­do no seu plano
           </p>
         </TooltipContent>
       </Tooltip>
@@ -279,17 +279,15 @@ export default function Sidebar({ className }: SidebarProps) {
     window.location.href = '/auth';
   };
 
-  // Detectar se é RC Limpa Mais (master)
-  const isRCLimpaMais = !tenant || isRCLimpaMaisTenant(tenant.id) || isMasterFallbackTenant(tenant.id);
-  
-  // Logo dinâmico: RC Limpa Mais usa logo estático, outros usam white_label + logo_url
-  const showTenantLogo = !isRCLimpaMais && hasModule('white_label') && tenant?.logo_url;
+  // Detectar se Ã© RC Limpa Mais (master)  
+  // Logo dinÃ¢mico: RC Limpa Mais usa logo estÃ¡tico, outros usam white_label + logo_url
+  const showTenantLogo = hasModule('white_label') && tenant?.logo_url;
 
   return (
     /**
      * ESTRUTURA DO SIDEBAR - 3 BLOCOS:
      * 1. HEADER FIXO (logo) - flex-shrink-0
-     * 2. NAV SCROLLÁVEL (menu) - flex-1 min-h-0 overflow-y-auto
+     * 2. NAV SCROLLÃVEL (menu) - flex-1 min-h-0 overflow-y-auto
      * 3. FOOTER FIXO (ajuda/avatar) - flex-shrink-0
      * 
      * IMPORTANTE: O <aside> recebe className externo (hidden/md:flex) 
@@ -299,30 +297,21 @@ export default function Sidebar({ className }: SidebarProps) {
       <nav className="h-screen w-64 flex flex-col overflow-hidden border-r border-white/10 bg-[#074FD5]">
         {/* ===== BLOCO A: HEADER FIXO - Logo ===== */}
         <div className="flex-shrink-0 border-b border-white/10 flex items-center justify-center px-4 py-6">
-          {isRCLimpaMais ? (
-            // RC Limpa Mais - sempre mostrar logo estático
-            <img 
-              src="/logo-rc-limpa-sidebar.png"
-              alt="RC Limpa Mais"
-              className="h-12 w-auto"
-            />
-          ) : showTenantLogo ? (
-            // Tenant com white_label e logo configurado
-            <img 
-              src={tenant!.logo_url!}
-              alt={tenant!.nome_empresa || 'Logo'}
+          {showTenantLogo ? (
+            <TenantLogo
+              logoUrl={tenant!.logo_url!}
+              companyName={tenant!.nome_fantasia || tenant!.nome_empresa || 'Limpamais'}
               className="h-12 w-auto max-w-[180px] object-contain"
             />
           ) : (
-            // Tenant sem white_label: mostrar ícone genérico
             <div className="flex items-center gap-2">
               <LayoutDashboard className="h-10 w-10 text-white" />
-              <span className="font-bold text-white text-lg">Dashboard</span>
+              <span className="font-bold text-white text-lg">Limpamais</span>
             </div>
           )}
         </div>
 
-        {/* ===== BLOCO B: NAV SCROLLÁVEL - ÚNICO CONTAINER COM SCROLL ===== */}
+        {/* ===== BLOCO B: NAV SCROLLÃVEL - ÃšNICO CONTAINER COM SCROLL ===== */}
         <div 
           className="sidebar-content flex-1 min-h-0 overflow-y-auto overflow-x-hidden py-4 px-2 space-y-4"
           style={{
@@ -346,7 +335,7 @@ export default function Sidebar({ className }: SidebarProps) {
             Marketing
           </h3>
           
-          {/* Blog / SEO - Submenu bloqueável */}
+          {/* Blog / SEO - Submenu bloqueÃ¡vel */}
           <LockedSubmenu
             title="Blog / SEO"
             icon={BookOpen}
@@ -357,7 +346,7 @@ export default function Sidebar({ className }: SidebarProps) {
             hasModule={hasModule}
           />
 
-          {/* IARC Studio - Submenu bloqueável */}
+          {/* IARC Studio - Submenu bloqueÃ¡vel */}
           <LockedSubmenu
             title="IARC Studio"
             icon={Palette}
@@ -373,16 +362,16 @@ export default function Sidebar({ className }: SidebarProps) {
           ))}
         </div>
 
-        {/* GESTÃO */}
+        {/* GESTÃƒO */}
         <div className="space-y-2">
           <h3 className="px-3 text-xs font-semibold text-white/70 uppercase tracking-wider mb-3">
-            Gestão
+            GestÃ£o
           </h3>
           {gestaoItems.map((item) => (
             <MenuItem key={item.path} item={item} hasModule={hasModule} />
           ))}
 
-          {/* Financeiro - Submenu bloqueável */}
+          {/* Financeiro - Submenu bloqueÃ¡vel */}
           <LockedSubmenu
             title="Financeiro"
             icon={DollarSign}
@@ -393,9 +382,9 @@ export default function Sidebar({ className }: SidebarProps) {
             hasModule={hasModule}
           />
 
-          {/* Integrações - Submenu bloqueável */}
+          {/* IntegraÃ§Ãµes - Submenu bloqueÃ¡vel */}
           <LockedSubmenu
-            title="Integrações"
+            title="IntegraÃ§Ãµes"
             icon={Plug}
             items={integracoesItems}
             expanded={integracoesExpanded}
@@ -405,13 +394,13 @@ export default function Sidebar({ className }: SidebarProps) {
           />
         </div>
 
-        {/* Padding extra no final para garantir que o último item não fique colado */}
+        {/* Padding extra no final para garantir que o Ãºltimo item nÃ£o fique colado */}
         <div className="h-4" aria-hidden="true" />
       </div>
 
       {/* ===== BLOCO C: FOOTER FIXO - Central de Ajuda + Avatar ===== */}
       <div className="flex-shrink-0 border-t border-white/10 p-4 space-y-3">
-        {/* Link Super Admin - só aparece se for super_admin */}
+        {/* Link Super Admin - sÃ³ aparece se for super_admin */}
         {isSuperAdmin && (
           <NavLink
             to="/super-admin"
@@ -482,3 +471,6 @@ export default function Sidebar({ className }: SidebarProps) {
     </aside>
   );
 }
+
+
+
