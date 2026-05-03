@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
-import { supabase } from "@/integrations/supabase/client";
+import { createClient } from "@supabase/supabase-js";
+import { useMemo } from "react";
 import {
   LPHeader,
   LPHero,
@@ -24,6 +25,8 @@ import LandingPage12DRenderer from "@/components/lp/LandingPage12DRenderer";
 import LandingPageTeodoroRenderer from "@/components/lp/LandingPageTeodoroRenderer";
 import { LandingRenderer } from "@/components/lp-editor/LandingRenderer";
 import type { LandingPageDocument } from "@/types/lp-document";
+import type { Database } from "@/integrations/supabase/types";
+import { usePublicTenantId } from "@/hooks/usePublicTenantId";
 
 interface ElementosConfig {
   timer?: boolean;
@@ -103,33 +106,64 @@ function isNewDocumentFormat(config: unknown): boolean {
 
 const LandingPageView = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { data: tenantId, isLoading: isLoadingTenant } = usePublicTenantId();
+
+  const supabaseForPublicLandingPages = useMemo(() => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+    return createClient<Database>(supabaseUrl, supabaseKey, {
+      global: {
+        headers: {
+          'x-tenant-id': tenantId || '',
+        },
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  }, [tenantId]);
 
   const { data: landingPage, isLoading, error } = useQuery({
-    queryKey: ['landing-page', slug],
+    queryKey: ['landing-page', tenantId, slug],
     queryFn: async () => {
-      const { data, error } = await supabase
+      if (!tenantId) return null;
+
+      const { data, error } = await supabaseForPublicLandingPages
         .from('iarc_landing_pages')
         .select('*')
+        .eq('tenant_id', tenantId)
         .eq('slug', slug)
-        .single();
+        .eq('status', 'publicada')
+        .maybeSingle();
 
       if (error) throw error;
-      return data as unknown as LandingPageData;
+      return data as unknown as LandingPageData | null;
     },
-    enabled: !!slug,
+    enabled: !!slug && !!tenantId,
   });
 
   // Get theme from config or default
   const theme: LPTheme = landingPage?.config?.theme || 'midnight';
   const t = getTheme(theme);
 
-  if (isLoading) {
+  if (isLoadingTenant || isLoading) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${t.bgPrimary}`}>
         <div className="flex flex-col items-center gap-4">
           <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${t.gradientPrimary} animate-pulse`} />
           <span className={t.textMuted}>Carregando...</span>
         </div>
+      </div>
+    );
+  }
+
+  if (!tenantId) {
+    return (
+      <div className={`min-h-screen flex flex-col items-center justify-center ${t.bgPrimary} text-center p-4`}>
+        <h1 className={`text-2xl font-bold ${t.textPrimary} mb-2`}>Loja não identificada</h1>
+        <p className={t.textMuted}>Não foi possível resolver o tenant para este domínio.</p>
       </div>
     );
   }
