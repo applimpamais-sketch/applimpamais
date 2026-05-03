@@ -1,9 +1,11 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.77.0';
 import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts';
+import { HttpError } from '../_shared/auth.ts';
+import { resolvePublicTenant } from '../_shared/publicTenant.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-api-key',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-api-key, x-tenant-id',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
@@ -47,6 +49,8 @@ const agendamentoBotSchema = z.object({
   valor_total: z.number().positive(),
   observacoes: z.string().optional(),
   conversa_id: z.string().uuid().optional(),
+  tenant_id: z.string().uuid().optional(),
+  tenantId: z.string().uuid().optional(),
 });
 
 Deno.serve(async (req) => {
@@ -80,6 +84,7 @@ Deno.serve(async (req) => {
     // Parse and validate body
     const body = await req.json();
     const validatedData = agendamentoBotSchema.parse(body);
+    const tenant = await resolvePublicTenant(supabase, req, body);
 
     // Gerar order_code único
     const orderCode = `BOT-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
@@ -102,6 +107,7 @@ Deno.serve(async (req) => {
         origem: 'whatsapp_bot',
         order_code: orderCode,
         criado_manualmente: false,
+        tenant_id: tenant.id,
       })
       .select()
       .single();
@@ -132,6 +138,7 @@ Deno.serve(async (req) => {
           itens_selecionados: validatedData.itens_carrinho,
           valor_total: validatedData.valor_total,
           status: 'confirmado',
+          tenant_id: tenant.id,
         });
     }
 
@@ -147,6 +154,7 @@ Deno.serve(async (req) => {
           data_agendamento: validatedData.data_agendamento,
           valor_total: validatedData.valor_total,
           status: 'pendente',
+          tenant_id: tenant.id,
         },
       }),
       { 
@@ -160,6 +168,13 @@ Deno.serve(async (req) => {
       return new Response(
         JSON.stringify({ error: 'Validation error', details: error.errors }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (error instanceof HttpError) {
+      return new Response(
+        JSON.stringify({ error: error.message }),
+        { status: error.status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
