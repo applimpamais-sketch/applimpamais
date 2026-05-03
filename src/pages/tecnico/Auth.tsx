@@ -206,7 +206,7 @@ export default function TecnicoAuth() {
             <div className="mx-auto">
               {isMasterBranding ? (
                 <img 
-                  src="/logo-rc-limpa-mais.png" 
+                  src="/logo.webp" 
                   alt={companyName || 'Limpamais'} 
                   className="h-16 mx-auto object-contain mb-2" 
                 />
@@ -273,7 +273,7 @@ export default function TecnicoAuth() {
           <div className="mx-auto">
             {isMasterBranding ? (
               <img 
-                src="/logo-rc-limpa-mais.png" 
+                src="/logo.webp" 
                 alt={companyName || 'Limpamais'} 
                 className="h-16 mx-auto object-contain mb-2" 
               />

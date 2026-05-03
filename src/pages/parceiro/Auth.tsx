@@ -228,7 +228,7 @@ export default function ParceiroAuth() {
           <CardHeader className="text-center pb-2">
             {isMasterBranding ? (
               <img
-                src="/logo-rc-limpa-mais.png"
+                src="/logo.webp"
                 alt={companyName || 'Limpamais'}
                 className="h-16 mx-auto mb-4"
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}

@@ -186,7 +186,7 @@ export default function ResetPassword() {
           <div className="flex justify-center">
             {isMasterBranding ? (
               <img 
-                src="/logo-rc-limpa-mais.png" 
+                src="/logo.webp" 
                 alt={companyName || 'Limpamais'} 
                 className="h-16 w-auto"
               />
