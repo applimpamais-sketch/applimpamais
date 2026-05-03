@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
@@ -45,7 +45,9 @@ import {
 } from '@/data/localizacao';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { supabase } from '@/integrations/supabase/client';
+import { createClient } from '@supabase/supabase-js';
+import type { Database } from '@/integrations/supabase/types';
+import { usePublicTenantId } from '@/hooks/usePublicTenantId';
 
 interface WelcomeCupomModalProps {
   isOpen: boolean;
@@ -57,6 +59,7 @@ type ModalStep = 'form' | 'success';
 
 export function WelcomeCupomModal({ isOpen, onClose, cupomCodigo = 'LIMPA10' }: WelcomeCupomModalProps) {
   const navigate = useNavigate();
+  const { data: tenantId } = usePublicTenantId();
   const [step, setStep] = useState<ModalStep>('form');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -67,6 +70,22 @@ export function WelcomeCupomModal({ isOpen, onClose, cupomCodigo = 'LIMPA10' }: 
   });
   const [openBairro, setOpenBairro] = useState(false);
   const [searchBairro, setSearchBairro] = useState('');
+  const supabaseForPublicLeads = useMemo(() => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+    return createClient<Database>(supabaseUrl, supabaseKey, {
+      global: {
+        headers: {
+          'x-tenant-id': tenantId || '',
+        },
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  }, [tenantId]);
 
   // Reset ao abrir
   useEffect(() => {
@@ -142,8 +161,17 @@ export function WelcomeCupomModal({ isOpen, onClose, cupomCodigo = 'LIMPA10' }: 
     setIsSubmitting(true);
 
     try {
+      if (!tenantId) {
+        toast({
+          title: 'Loja não identificada',
+          description: 'Não foi possível identificar o tenant desta loja.',
+          variant: 'destructive',
+        });
+        return;
+      }
+
       // Salvar no banco de dados
-      const { error } = await supabase
+      const { error } = await supabaseForPublicLeads
         .from('leads_cupom')
         .insert({
           nome_completo: formData.nome.trim(),
@@ -151,7 +179,8 @@ export function WelcomeCupomModal({ isOpen, onClose, cupomCodigo = 'LIMPA10' }: 
           cidade: formData.cidade,
           bairro: formData.bairro,
           cupom_codigo: cupomCodigo,
-          origem: 'popup_homepage'
+          origem: 'popup_homepage',
+          tenant_id: tenantId,
         });
 
       if (error) {

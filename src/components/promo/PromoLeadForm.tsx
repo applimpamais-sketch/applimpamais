@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Phone, MessageCircle, Loader2, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { supabase } from '@/integrations/supabase/client';
+import { createClient } from '@supabase/supabase-js';
+import type { Database } from '@/integrations/supabase/types';
 import { toast } from 'sonner';
 import DOMPurify from 'dompurify';
+import { usePublicTenantId } from '@/hooks/usePublicTenantId';
 
 const cidades = [
   'Belo Horizonte',
@@ -23,12 +25,29 @@ const cidades = [
 ];
 
 const PromoLeadForm = () => {
+  const { data: tenantId } = usePublicTenantId();
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
   const [cidade, setCidade] = useState('');
   const [bairro, setBairro] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const supabaseForPublicLeads = useMemo(() => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+    return createClient<Database>(supabaseUrl, supabaseKey, {
+      global: {
+        headers: {
+          'x-tenant-id': tenantId || '',
+        },
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  }, [tenantId]);
 
   const formatPhone = (value: string) => {
     const numbers = value.replace(/\D/g, '');
@@ -55,17 +74,23 @@ const PromoLeadForm = () => {
     setLoading(true);
 
     try {
+      if (!tenantId) {
+        toast.error('Não foi possível identificar a loja para registrar seu lead');
+        return;
+      }
+
       // Get UTM params from session storage
       const utmData = sessionStorage.getItem('promo_utm');
       const utm = utmData ? JSON.parse(utmData) : {};
 
-      const { error } = await supabase.from('leads_cupom').insert({
+      const { error } = await supabaseForPublicLeads.from('leads_cupom').insert({
         nome_completo: DOMPurify.sanitize(nome.trim()),
         whatsapp: phoneNumbers,
         cidade: DOMPurify.sanitize(cidade),
         bairro: DOMPurify.sanitize(bairro.trim() || 'Não informado'),
         cupom_codigo: 'SOFA149',
         origem: utm.utm_source ? `promo-sofa|${utm.utm_source}|${utm.utm_campaign || ''}` : 'promo-sofa-landing',
+        tenant_id: tenantId,
       });
 
       if (error) throw error;

@@ -9,6 +9,9 @@ verify_jwt = false
 [functions.create-public-agendamento]
 verify_jwt = false
 
+[functions.init-calendario]
+verify_jwt = true
+
 [functions.facebook-pixel-stats]
 verify_jwt = true
 

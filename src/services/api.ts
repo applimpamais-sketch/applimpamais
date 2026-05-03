@@ -44,6 +44,8 @@ export interface Agendamento {
   parceiro_codigo?: string | null;
   canal_origem?: string | null;
   forma_pagamento?: string | null;
+  tenant_id?: string | null;
+  tenantId?: string | null;
 }
 
 // Função para buscar serviços (com filtro opcional de tenant para dados públicos)
@@ -221,6 +223,10 @@ export async function createAgendamentoManual(agendamento: Agendamento & {
 
 // Função para inicializar calendário com disponibilidade (com tenant_id)
 export async function initializeCalendario(days: number = 60, tenantId?: string | null) {
+  if (!tenantId) {
+    return;
+  }
+
   const today = new Date();
   const slots = [];
   
@@ -240,7 +246,7 @@ export async function initializeCalendario(days: number = 60, tenantId?: string 
   // Inserir dados (ignora se já existirem)
   const { error } = await supabase
     .from('calendario_disponibilidade')
-    .upsert(slots, { onConflict: 'data', ignoreDuplicates: true });
+    .upsert(slots, { onConflict: 'tenant_id,data', ignoreDuplicates: true });
   
   if (error) console.error('Erro ao inicializar calendário:', error);
 }

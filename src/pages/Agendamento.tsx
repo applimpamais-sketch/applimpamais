@@ -596,6 +596,7 @@ const Agendamento = () => {
         parceiro_codigo: parceiroRef,
         canal_origem: canalRef,
         forma_pagamento: formaPagamento,
+        tenant_id: publicTenantId ?? null,
       });
       
       agendamentoCriado = true;
@@ -608,9 +609,14 @@ const Agendamento = () => {
 
       // === NÃO-CRÍTICO: Atualizar lead se existir ===
       try {
-        const { data: leadExistente, error: leadError } = await supabase
+        if (!publicTenantId) {
+          throw new Error('tenant-publico-ausente');
+        }
+
+        const { data: leadExistente, error: leadError } = await supabaseForPublicCoupons
           .from('leads_cupom')
           .select('id')
+          .eq('tenant_id', publicTenantId)
           .eq('whatsapp', telefoneFormatado)
           .order('created_at', { ascending: false })
           .limit(1)
@@ -620,12 +626,13 @@ const Agendamento = () => {
           // Silenciar erro 406 (Not Acceptable) - não é crítico
           // Non-critical: Lead lookup failed
         } else if (leadExistente) {
-          await supabase
+          await supabaseForPublicCoupons
             .from('leads_cupom')
             .update({
               converteu_em_agendamento: true,
               agendamento_id: agendamento.id
             })
+            .eq('tenant_id', publicTenantId)
             .eq('id', leadExistente.id);
           // Lead marked as converted
         }
@@ -635,11 +642,12 @@ const Agendamento = () => {
       }
 
       // === NÃO-CRÍTICO: Incrementar uso do cupom ===
-      if (cupomAplicado) {
+      if (cupomAplicado && publicTenantId) {
         try {
-          await supabase
+          await supabaseForPublicCoupons
             .from('cupons_desconto')
             .update({ uso_atual: cupomAplicado.uso_atual + 1 })
+            .eq('tenant_id', publicTenantId)
             .eq('id', cupomAplicado.id);
         } catch (cupomErr) {
           console.error('⚠️ [Checkout] Erro ao atualizar cupom (não-crítico):', cupomErr);

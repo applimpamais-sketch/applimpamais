@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -6,12 +6,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { supabase } from '@/integrations/supabase/client';
+import { createClient } from '@supabase/supabase-js';
+import type { Database } from '@/integrations/supabase/types';
 import { CheckCircle2, Phone, Mail, MessageSquare, ArrowRight, Loader2, Shield, Clock, Headphones } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { SUPPORT_EMAIL, SUPPORT_PHONE, SUPPORT_PHONE_DIGITS, WHATSAPP_BOT } from '@/lib/constants';
+import { usePublicTenantId } from '@/hooks/usePublicTenantId';
 
 export default function CTASection() {
+  const { data: tenantId } = usePublicTenantId();
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -22,6 +25,22 @@ export default function CTASection() {
   });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const supabaseForPublicLeads = useMemo(() => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+    return createClient<Database>(supabaseUrl, supabaseKey, {
+      global: {
+        headers: {
+          'x-tenant-id': tenantId || '',
+        },
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  }, [tenantId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -67,7 +86,7 @@ export default function CTASection() {
         status: 'novo',
       };
 
-      const { error } = await supabase
+      const { error } = await supabaseForPublicLeads
         .from('leads_white_label')
         .insert([sanitizedData]);
 
