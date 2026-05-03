@@ -51,7 +51,7 @@ export function useLoginBranding() {
         .from('saas_tenants')
         .select('nome_fantasia, nome_empresa, logo_url')
         .eq('dominio_customizado', hostname)
-        .eq('status', 'ativo')
+        .in('status', ['ativo', 'trial'])
         .maybeSingle();
 
       if (error) {

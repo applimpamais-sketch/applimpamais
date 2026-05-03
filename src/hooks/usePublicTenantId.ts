@@ -37,7 +37,7 @@ export function usePublicTenantId(options?: UsePublicTenantIdOptions) {
         .from('saas_tenants')
         .select('id')
         .eq('dominio_customizado', hostname)
-        .eq('status', 'ativo')
+        .in('status', ['ativo', 'trial'])
         .maybeSingle();
 
       if (error) {
