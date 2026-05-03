@@ -5,7 +5,7 @@ import { HttpError, requireSuperAdmin } from "../_shared/auth.ts";
 import { SITE_DOMAIN } from "../_shared/siteConfig.ts";
 
 const INVITES_FROM_EMAIL =
-  Deno.env.get("INVITES_FROM_EMAIL") ?? "Limpamais <convite@notificacao.rclimpamais.com.br>";
+  Deno.env.get("INVITES_FROM_EMAIL") ?? "Limpamais <convite@notificacao.limpamais.com>";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",

@@ -58,6 +58,7 @@ import { useRealtimeCanais } from '@/hooks/useRealtimeCanais';
  } from 'lucide-react';
  import { useCanaisEmpresa, CanalEmpresa, CanalFormData } from '@/hooks/useCanaisEmpresa';
  import { useToast } from '@/hooks/use-toast';
+ import { SITE_DOMAIN } from '@/lib/constants';
  
  const tipoIcons: Record<string, any> = {
    instagram: Instagram,
@@ -426,9 +427,9 @@ export default function Canais() {
              <strong>2.</strong> Use o link gerado em cada plataforma:
            </p>
            <ul className="list-disc list-inside ml-4 space-y-1">
-             <li>Bio do Instagram: <code className="bg-muted px-1 rounded">rclimpamais.com.br/?ref=bio</code></li>
-             <li>Google My Business: <code className="bg-muted px-1 rounded">rclimpamais.com.br/?ref=google-maps</code></li>
-             <li>Blog: <code className="bg-muted px-1 rounded">rclimpamais.com.br/?ref=blog</code></li>
+             <li>Bio do Instagram: <code className="bg-muted px-1 rounded">{`${SITE_DOMAIN}/?ref=bio`}</code></li>
+             <li>Google My Business: <code className="bg-muted px-1 rounded">{`${SITE_DOMAIN}/?ref=google-maps`}</code></li>
+             <li>Blog: <code className="bg-muted px-1 rounded">{`${SITE_DOMAIN}/?ref=blog`}</code></li>
            </ul>
            <p>
              <strong>3.</strong> Os cliques e conversões serão rastreados automaticamente

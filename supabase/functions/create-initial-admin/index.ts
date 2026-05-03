@@ -26,7 +26,7 @@ Deno.serve(async (req) => {
       }
     );
 
-    const ADMIN_EMAIL = Deno.env.get('INITIAL_ADMIN_EMAIL') ?? 'rclimpamais@gmail.com';
+    const ADMIN_EMAIL = Deno.env.get('INITIAL_ADMIN_EMAIL') ?? 'app@limpamais.com';
     const ADMIN_PASSWORD = Deno.env.get('INITIAL_ADMIN_PASSWORD') ?? crypto.randomUUID();
 
     // Check if admin already exists
@@ -54,7 +54,7 @@ Deno.serve(async (req) => {
       password: ADMIN_PASSWORD,
       email_confirm: true,
       user_metadata: {
-        nome_completo: 'RC Limpa Mais Admin'
+        nome_completo: 'Limpamais Admin'
       }
     });
 

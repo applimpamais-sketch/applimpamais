@@ -5,7 +5,7 @@ import { getCorsHeaders, handleCorsPreflightResponse } from "../_shared/corsConf
 import { SITE_DOMAIN } from "../_shared/siteConfig.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
-const INVITES_FROM_EMAIL = Deno.env.get("INVITES_FROM_EMAIL") ?? "Limpamais <convite@notificacao.rclimpamais.com.br>";
+const INVITES_FROM_EMAIL = Deno.env.get("INVITES_FROM_EMAIL") ?? "Limpamais <convite@notificacao.limpamais.com>";
 
 interface InviteEmailRequest {
   name: string;

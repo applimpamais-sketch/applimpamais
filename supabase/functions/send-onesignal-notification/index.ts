@@ -91,7 +91,7 @@ Deno.serve(async (req) => {
         break;
       
       default:
-        headings = '📢 RC Limpa Mais';
+        headings = '📢 Limpamais';
         contents = 'Nova atualização disponível';
     }
     

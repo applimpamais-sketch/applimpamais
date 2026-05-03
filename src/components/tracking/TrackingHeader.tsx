@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, CheckCircle, MapPin, Wrench, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 interface TrackingHeaderProps {
   status: 'em_rota' | 'chegou' | 'servico_em_andamento' | 'concluido' | 'cancelado';
@@ -167,7 +168,7 @@ export default function TrackingHeader({
               
               {status === 'concluido' && (
                 <p className="text-lg opacity-90 mt-2">
-                  Obrigado por escolher a RC Limpa Mais!
+                  Obrigado por escolher a {PLATFORM_NAME}!
                 </p>
               )}
             </motion.div>

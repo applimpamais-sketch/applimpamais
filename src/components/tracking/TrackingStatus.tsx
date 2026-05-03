@@ -14,6 +14,7 @@ import {
 import { formatCurrency } from '@/utils/format';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 interface TrackingStatusProps {
   status: 'em_rota' | 'chegou' | 'servico_em_andamento' | 'concluido' | 'cancelado';
@@ -175,7 +176,7 @@ export default function TrackingStatus({
                 Serviço concluído!
               </p>
               <p className="text-sm text-muted-foreground">
-                Obrigado por escolher a RC Limpa Mais
+                Obrigado por escolher a {PLATFORM_NAME}
               </p>
             </div>
           </div>

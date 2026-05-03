@@ -462,7 +462,7 @@ Deno.serve(async (req) => {
     // Obter VAPID keys dos secrets
     const vapidPublicKey = Deno.env.get('VAPID_PUBLIC_KEY') ?? '';
     const vapidPrivateKey = Deno.env.get('VAPID_PRIVATE_KEY') ?? '';
-    const vapidSubject = Deno.env.get('VAPID_SUBJECT') ?? 'mailto:admin@rclimpamais.com.br';
+    const vapidSubject = Deno.env.get('VAPID_SUBJECT') ?? 'mailto:suporte@limpamais.com';
 
     // Validar que secrets VAPID estão configurados
     if (!vapidPublicKey || !vapidPrivateKey) {

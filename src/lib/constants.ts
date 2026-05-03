@@ -19,4 +19,6 @@ export const SITE_DOMAIN = configuredSiteDomain.replace(/\/$/, '');
 
 export const PLATFORM_NAME = import.meta.env.VITE_PUBLIC_PLATFORM_NAME || 'Limpamais';
 export const SUPPORT_EMAIL = import.meta.env.VITE_PUBLIC_SUPPORT_EMAIL || 'suporte@limpamais.com';
+export const SUPPORT_PHONE = import.meta.env.VITE_PUBLIC_SUPPORT_PHONE || '';
+export const SUPPORT_PHONE_DIGITS = SUPPORT_PHONE.replace(/\D/g, '');
 

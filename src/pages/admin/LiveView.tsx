@@ -11,8 +11,7 @@ import { formatCurrency } from '@/utils/format';
 import { MiniSparkline } from '@/components/admin/MiniSparkline';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useTenantContext } from '@/hooks/useTenantContext';
-import { isRCLimpaMaisTenant } from '@/constants/tenant';
+import { SITE_DOMAIN } from '@/lib/constants';
 import { 
   LiveViewFunnel, 
   LiveViewProducts, 
@@ -21,8 +20,6 @@ import {
 } from '@/components/admin/liveview';
 
 export default function LiveView() {
-  const { tenantId } = useTenantContext();
-  const isRCLimpaMais = isRCLimpaMaisTenant(tenantId);
   const { stats, loading } = useLiveAnalytics();
   
   // Estado do período para dados históricos
@@ -30,7 +27,7 @@ export default function LiveView() {
   const { stats: historyStats, loading: historyLoading } = useLiveViewHistory(period);
 
   const handleOpenStore = () => {
-    window.open('https://rclimpamais.lovable.app', '_blank');
+    window.open(SITE_DOMAIN, '_blank');
   };
 
   const periodLabel = {
@@ -59,18 +56,15 @@ export default function LiveView() {
               </SelectContent>
             </Select>
             
-            {/* Botão Ver Loja - apenas para RC Limpa Mais master */}
-            {isRCLimpaMais && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleOpenStore}
-                className="hidden sm:flex"
-              >
-                <Eye className="h-4 w-4 mr-2" />
-                Ver Loja
-              </Button>
-            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleOpenStore}
+              className="hidden sm:flex"
+            >
+              <Eye className="h-4 w-4 mr-2" />
+              Ver Loja
+            </Button>
             <Badge variant="outline" className="animate-pulse" data-tour="live-badge">
               <span className="relative flex h-2 w-2 mr-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>

@@ -14,8 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { useTenantContext } from '@/hooks/useTenantContext';
-import { isRCLimpaMaisTenant } from '@/constants/tenant';
+import { SITE_DOMAIN } from '@/lib/constants';
 import { formatCurrency } from '@/utils/format';
 import { formatCurrency as formatCurrencyDash } from '@/utils/dashboardHelpers';
 import { format } from 'date-fns';
@@ -36,9 +35,6 @@ import {
 } from '@/components/admin/liveview';
 
 export default function Analytics() {
-  const { tenantId } = useTenantContext();
-  const isRCLimpaMais = isRCLimpaMaisTenant(tenantId);
-
   // Live View state
   const { stats, loading } = useLiveAnalytics();
   const [historyPeriod, setHistoryPeriod] = useState<HistoryPeriod>('30d');
@@ -51,7 +47,7 @@ export default function Analytics() {
   const { data: roasStats, isLoading: roasLoading } = useMarketingROAS(pixelPeriod, customRange);
 
   const handleOpenStore = () => {
-    window.open('https://rclimpamais.lovable.app', '_blank');
+    window.open(SITE_DOMAIN, '_blank');
   };
 
   const periodLabel = { '7d': '7 dias', '30d': '30 dias', '90d': '90 dias' };
@@ -64,12 +60,10 @@ export default function Analytics() {
         icon={Activity}
         actions={
           <div className="flex items-center gap-2 flex-wrap">
-            {isRCLimpaMais && (
-              <Button variant="outline" size="sm" onClick={handleOpenStore} className="hidden sm:flex">
-                <Eye className="h-4 w-4 mr-2" />
-                Ver Loja
-              </Button>
-            )}
+            <Button variant="outline" size="sm" onClick={handleOpenStore} className="hidden sm:flex">
+              <Eye className="h-4 w-4 mr-2" />
+              Ver Loja
+            </Button>
             <Badge variant="outline" className="animate-pulse" data-tour="live-badge">
               <span className="relative flex h-2 w-2 mr-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>

@@ -198,7 +198,7 @@ const handler = async (req: Request): Promise<Response> => {
     const senderName = tenantBranding?.nome_fantasia || tenantBranding?.nome_empresa || "Limpamais";
     const fromEmail =
       Deno.env.get("PASSWORD_RESET_FROM_EMAIL") ||
-      `Recuperação ${senderName} <recuperacao@notificacao.rclimpamais.com.br>`;
+      `Recuperação ${senderName} <recuperacao@notificacao.limpamais.com>`;
 
     await resend.emails.send({
       from: fromEmail,

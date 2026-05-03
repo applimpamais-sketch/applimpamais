@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.77.0";
+import { SITE_DOMAIN } from "../_shared/siteConfig.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -23,10 +24,11 @@ Deno.serve(async (req) => {
     if (insertErr) throw insertErr;
 
     const loc = [region_bairro, region_city].filter(Boolean).join(', ');
+    const platformName = Deno.env.get('PLATFORM_NAME') ?? 'Limpamais';
     const isAluguel = cluster === 'aluguel' || keyword.includes('aluguel');
-    const ctaLink = isAluguel ? 'https://rclimpamais.com.br/aluguel' : 'https://rclimpamais.com.br';
+    const ctaLink = isAluguel ? `${SITE_DOMAIN}/aluguel` : SITE_DOMAIN;
 
-    const prompt = `Você é redator SEO da RC Limpa Mais (BH/MG). Escreva artigo sobre "${keyword}". ${loc ? 'Região: ' + loc + '.' : ''} Cluster: ${cluster}. Funil: ${objective}.
+    const prompt = `Você é redator SEO da ${platformName}. Escreva artigo sobre "${keyword}". ${loc ? 'Região: ' + loc + '.' : ''} Cluster: ${cluster}. Funil: ${objective}.
 
 ESTRUTURA OBRIGATÓRIA (blocos Gutenberg):
 - NÃO inclua H1 (o WordPress adiciona automaticamente)
@@ -40,12 +42,12 @@ ESTRUTURA OBRIGATÓRIA (blocos Gutenberg):
 
 LINKS INTERNOS OBRIGATÓRIOS (muito importante para SEO):
 Insira 4-6 links contextuais no texto usando âncoras naturais. Links disponíveis:
-- "limpeza de sofá" ou "higienização de sofá" → https://rclimpamais.com.br
-- "limpeza de colchão" ou "higienização de colchão" → https://rclimpamais.com.br
-- "limpeza de estofados" → https://rclimpamais.com.br
-- "impermeabilização" → https://rclimpamais.com.br
-- "limpeza de tapetes" ou "lavagem de tapetes" → https://rclimpamais.com.br
-- "aluguel de extratora" ou "locação de equipamentos" → https://rclimpamais.com.br/aluguel
+- "limpeza de sofá" ou "higienização de sofá" → ${SITE_DOMAIN}
+- "limpeza de colchão" ou "higienização de colchão" → ${SITE_DOMAIN}
+- "limpeza de estofados" → ${SITE_DOMAIN}
+- "impermeabilização" → ${SITE_DOMAIN}
+- "limpeza de tapetes" ou "lavagem de tapetes" → ${SITE_DOMAIN}
+- "aluguel de extratora" ou "locação de equipamentos" → ${SITE_DOMAIN}/aluguel
 - "orçamento" ou "agende agora" ou "Entre em contato" → ${ctaLink}
 Formato: <a href="URL">texto âncora</a>. Distribua os links naturalmente ao longo do texto.
 

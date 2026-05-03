@@ -12,6 +12,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import { TenantLogo } from '@/components/branding/TenantLogo';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 interface TrackingSession {
   id: string;
@@ -212,7 +213,7 @@ export default function Tracking() {
     staleTime: Infinity,
   });
   
-  // Verificar se é tenant master (RC Limpa Mais)
+  // Verificar se é tenant master
   const isMasterTenant = !tenantData || tenantData.id === '00000000-0000-0000-0000-000000000001';
   const companyName = tenantData?.nome_fantasia || tenantData?.nome_empresa || 'Serviço';
 
@@ -295,7 +296,7 @@ export default function Tracking() {
                 </div>
               )}
               <div>
-                <h1 className="font-bold text-base">{isMasterTenant ? 'RC Limpa Mais' : companyName}</h1>
+                <h1 className="font-bold text-base">{isMasterTenant ? PLATFORM_NAME : companyName}</h1>
                 <p className="text-xs text-muted-foreground">Serviço</p>
               </div>
             </div>
@@ -329,7 +330,7 @@ export default function Tracking() {
               </Button>
               <div>
                 <h1 className="font-bold text-sm">Acompanhar {isLocacao ? 'entrega' : 'técnico'}</h1>
-                <p className="text-xs text-muted-foreground">{isMasterTenant ? 'RC Limpa Mais' : companyName}</p>
+                <p className="text-xs text-muted-foreground">{isMasterTenant ? PLATFORM_NAME : companyName}</p>
               </div>
             </div>
           </motion.header>
@@ -387,7 +388,7 @@ export default function Tracking() {
 
       {/* Footer */}
       <footer className="text-center py-3 text-xs text-muted-foreground bg-background border-t">
-        <p>© {new Date().getFullYear()} {isMasterTenant ? 'RC Limpa Mais' : companyName}</p>
+        <p>© {new Date().getFullYear()} {isMasterTenant ? PLATFORM_NAME : companyName}</p>
       </footer>
     </div>
   );

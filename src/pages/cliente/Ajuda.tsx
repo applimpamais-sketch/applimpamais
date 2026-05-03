@@ -14,6 +14,7 @@ import {
   Users
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { SUPPORT_EMAIL, SUPPORT_PHONE, SUPPORT_PHONE_DIGITS } from '@/lib/constants';
 
 const faqs = [
   {
@@ -125,8 +126,8 @@ export default function ClienteAjuda() {
               Envie sua dúvida por email
             </p>
             <Button variant="outline" className="w-full" asChild>
-              <a href="mailto:suporte@rclimpamais.com.br">
-                suporte@rclimpamais.com.br
+              <a href={`mailto:${SUPPORT_EMAIL}`}>
+                {SUPPORT_EMAIL}
               </a>
             </Button>
           </CardContent>
@@ -142,8 +143,8 @@ export default function ClienteAjuda() {
               Segunda a sexta, 9h às 18h
             </p>
             <Button variant="outline" className="w-full" asChild>
-              <a href="tel:+5521999999999">
-                (21) 99999-9999
+              <a href={SUPPORT_PHONE_DIGITS ? `tel:+${SUPPORT_PHONE_DIGITS}` : '#'}>
+                {SUPPORT_PHONE || 'Telefone não configurado'}
               </a>
             </Button>
           </CardContent>
