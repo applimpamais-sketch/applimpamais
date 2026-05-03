@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 import { Resend } from "npm:resend@2.0.0";
 import { SITE_DOMAIN } from "../_shared/siteConfig.ts";
+import { checkRateLimit, createRateLimitResponse, getClientIp } from "../_shared/rateLimiter.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -123,6 +124,12 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    const clientIp = getClientIp(req);
+    const ipRateLimit = checkRateLimit(clientIp, { maxRequests: 20, windowMs: 60000 });
+    if (!ipRateLimit.allowed) {
+      return createRateLimitResponse(ipRateLimit.resetAt);
+    }
+
     const { email, redirectTo }: RequestBody = await req.json();
 
     if (!email || typeof email !== "string") {
