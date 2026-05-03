@@ -641,19 +641,6 @@ const Agendamento = () => {
         // Non-critical: Lead update exception ignored
       }
 
-      // === NÃO-CRÍTICO: Incrementar uso do cupom ===
-      if (cupomAplicado && publicTenantId) {
-        try {
-          await supabaseForPublicCoupons
-            .from('cupons_desconto')
-            .update({ uso_atual: cupomAplicado.uso_atual + 1 })
-            .eq('tenant_id', publicTenantId)
-            .eq('id', cupomAplicado.id);
-        } catch (cupomErr) {
-          console.error('⚠️ [Checkout] Erro ao atualizar cupom (não-crítico):', cupomErr);
-        }
-      }
-
       setSubmitProgress('Enviando notificações...');
 
       // Formatar lista de serviços
