@@ -19,6 +19,8 @@ const getSessionId = (): string => {
 export { getAttributionParams as getUtmParams } from '@/utils/attribution';
 export { persistAttributionParams as persistUtmParams } from '@/utils/attribution';
 
+const DEFAULT_PUBLIC_TENANT_ID = import.meta.env.VITE_PUBLIC_DEFAULT_TENANT_ID || null;
+
 // Função auxiliar para enviar evento para backend local
 const trackLocalEvent = async (eventType: string, eventData: any) => {
   try {
@@ -43,6 +45,7 @@ const trackLocalEvent = async (eventType: string, eventData: any) => {
         gclid: attribution.gclid || null,
         fbclid: attribution.fbclid || null,
         landing_page: attribution.landing_page || null,
+        tenant_id: DEFAULT_PUBLIC_TENANT_ID,
       },
       headers: {
         'x-session-id': sessionId,

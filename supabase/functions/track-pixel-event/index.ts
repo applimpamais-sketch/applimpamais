@@ -1,5 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.77.0';
 import { checkRateLimit, getClientIp, createRateLimitResponse } from '../_shared/rateLimiter.ts';
+import { resolvePublicTenant } from '../_shared/publicTenant.ts';
+import { HttpError } from '../_shared/auth.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -29,6 +31,8 @@ interface PixelEventRequest {
   gclid?: string | null;
   fbclid?: string | null;
   landing_page?: string | null;
+  tenant_id?: string;
+  tenantId?: string;
 }
 
 Deno.serve(async (req) => {
@@ -54,6 +58,7 @@ Deno.serve(async (req) => {
     // Parse request body
     const requestBody: PixelEventRequest = await req.json();
     const { event_type, event_data, session_id, page_url, referrer, gclid, fbclid, landing_page } = requestBody;
+    const tenant = await resolvePublicTenant(supabaseClient, req, requestBody as unknown as Record<string, unknown>);
 
     // Validação básica
     if (!event_type || !['PageView', 'AddToCart', 'InitiateCheckout', 'Purchase', 'ViewContent'].includes(event_type)) {
@@ -76,6 +81,7 @@ Deno.serve(async (req) => {
 
     // Preparar dados para inserção
     const pixelEvent = {
+      tenant_id: tenant.id,
       event_type,
       session_id,
       user_agent: userAgent,
@@ -127,9 +133,10 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     console.error('Erro no processamento:', error);
+    const status = error instanceof HttpError ? error.status : 500;
     return new Response(
       JSON.stringify({ error: 'Erro interno', details: error instanceof Error ? error.message : String(error) }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });

@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { getCorsHeaders, handleCorsPreflightResponse } from "../_shared/corsConfig.ts";
+import { isInternalRequestAuthorized } from "../_shared/internalAuth.ts";
 
 /**
  * Edge function para iniciar fluxo de avaliação pós-venda
@@ -32,6 +33,14 @@ serve(async (req) => {
   
   if (req.method === "OPTIONS") {
     return handleCorsPreflightResponse(req);
+  }
+
+  const auth = isInternalRequestAuthorized(req);
+  if (!auth.ok) {
+    return new Response(
+      JSON.stringify({ error: auth.reason ?? "Unauthorized" }),
+      { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+    );
   }
 
   try {

@@ -26,6 +26,7 @@ Protected functions allow requests only when one of these is present:
 - `send-tecnico-notification`
 - `send-rota-diaria`
 - `process-avaliacao-queue`
+- `iniciar-avaliacao-pos-venda`
 
 ## Scheduler recommendation
 
