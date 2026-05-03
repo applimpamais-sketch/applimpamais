@@ -2,6 +2,9 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { createSessionScopedSupabaseClient } from '@/lib/sessionScopedSupabase';
 import { getOrCreateLiveSessionId } from '@/utils/liveSession';
+import { useAuth } from '@/hooks/useAuth';
+import { useTenantContext } from '@/hooks/useTenantContext';
+import { usePublicTenantId } from '@/hooks/usePublicTenantId';
 
 interface SessionData {
   etapa?: 'navegando' | 'carrinho' | 'checkout' | 'concluido';
@@ -11,34 +14,33 @@ interface SessionData {
 
 export function useSessionTracking() {
   const location = useLocation();
+  const { user } = useAuth();
+  const { tenantId: tenantIdFromAuth } = useTenantContext();
+  const { data: tenantIdFromDomain } = usePublicTenantId({ enabled: !user });
+  const effectiveTenantId = user ? tenantIdFromAuth : (tenantIdFromDomain ?? null);
+
   const sessionIdRef = useRef<string | null>(null);
   const currentEtapaRef = useRef<'navegando' | 'carrinho' | 'checkout' | 'concluido'>('navegando');
-  // Inicializar com valores padrão imediatamente
-  const locationDataRef = useRef<{ cidade: string; estado: string; pais: string }>({ 
-    cidade: 'Desconhecido', 
-    estado: 'Desconhecido', 
-    pais: 'BR' 
+  const locationDataRef = useRef<{ cidade: string; estado: string; pais: string }>({
+    cidade: 'Desconhecido',
+    estado: 'Desconhecido',
+    pais: 'BR',
   });
 
-  // Gerar ou recuperar session_id seguro (UUID v4) com rotação a cada 24h
   useEffect(() => {
     sessionIdRef.current = getOrCreateLiveSessionId();
   }, []);
 
-  // Atualizar sessão no banco (função estável com useCallback)
   const updateSession = useCallback(async (data: SessionData) => {
-    if (!sessionIdRef.current) {
-      console.warn('[Session Tracking] Session ID não encontrado');
-      return;
-    }
+    if (!sessionIdRef.current || !effectiveTenantId) return;
 
-    // Atualizar etapa atual se foi fornecida
     if (data.etapa) {
       currentEtapaRef.current = data.etapa;
     }
 
     const sessionData = {
       session_id: sessionIdRef.current,
+      tenant_id: effectiveTenantId,
       user_agent: navigator.userAgent,
       pagina_atual: window.location.pathname,
       etapa: data.etapa || currentEtapaRef.current,
@@ -49,58 +51,52 @@ export function useSessionTracking() {
     };
 
     try {
-      const sessionClient = createSessionScopedSupabaseClient(sessionIdRef.current);
+      const sessionClient = createSessionScopedSupabaseClient(sessionIdRef.current, effectiveTenantId);
       await sessionClient
         .from('live_sessions' as any)
         .upsert(sessionData, { onConflict: 'session_id' }) as any;
     } catch (error) {
-      console.error('Erro ao atualizar sessão:', error);
+      console.error('Erro ao atualizar sessao:', error);
     }
-  }, []);
+  }, [effectiveTenantId]);
 
-  // Detectar localização real de forma assíncrona (não-bloqueante)
   useEffect(() => {
     const getLocationFromIP = async () => {
       try {
         const response = await fetch('https://ipapi.co/json/');
         const data = await response.json();
-        
+
         locationDataRef.current = {
           cidade: data.city || 'Desconhecido',
           estado: data.region || 'Desconhecido',
           pais: data.country_code || 'BR',
         };
-        
+
         updateSession({ etapa: 'navegando' });
-      } catch (error) {
-        console.debug('Não foi possível detectar localização via IP');
+      } catch {
+        // ignore
       }
     };
 
     getLocationFromIP();
   }, [updateSession]);
 
-  // Rastrear mudanças de página
   useEffect(() => {
-    const isCheckout = location.pathname.includes('checkout') || 
-                       location.pathname.includes('agendamento');
-    
-    // Só atualizar para checkout se estiver na página de checkout
-    // Não sobrescrever se o usuário tem carrinho ativo
+    const isCheckout =
+      location.pathname.includes('checkout') ||
+      location.pathname.includes('agendamento');
+
     if (isCheckout) {
       currentEtapaRef.current = 'checkout';
       updateSession({ etapa: 'checkout' });
     } else if (currentEtapaRef.current === 'checkout') {
-      // Saiu do checkout, volta para navegando (ou carrinho se tiver itens)
       currentEtapaRef.current = 'navegando';
       updateSession({ etapa: 'navegando' });
     }
   }, [location.pathname, updateSession]);
 
-  // Heartbeat a cada 30 segundos - preserva etapa atual
   useEffect(() => {
     const interval = setInterval(() => {
-      // Apenas atualiza ultima_atividade, preservando a etapa atual
       updateSession({});
     }, 30000);
 

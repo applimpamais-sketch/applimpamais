@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { getValidCanalRef } from '@/utils/canalRef';
 import { createSessionScopedSupabaseClient } from '@/lib/sessionScopedSupabase';
+import { useAuth } from '@/hooks/useAuth';
+import { useTenantContext } from '@/hooks/useTenantContext';
+import { usePublicTenantId } from '@/hooks/usePublicTenantId';
 
 interface CartItem {
   id: string;
@@ -51,6 +54,11 @@ export function useCarrinhoAbandonado({
   valorFrete,
    canalOrigem,
 }: UseCarrinhoAbandonadoProps) {
+  const { user } = useAuth();
+  const { tenantId: tenantIdFromAuth } = useTenantContext();
+  const { data: tenantIdFromDomain } = usePublicTenantId({ enabled: !user });
+  const effectiveTenantId = user ? tenantIdFromAuth : (tenantIdFromDomain ?? null);
+
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
   const lastSavedDataRef = useRef<string>('');
   const [sessionId] = useState(() => {
@@ -92,6 +100,8 @@ export function useCarrinhoAbandonado({
   };
 
   const salvarCarrinhoAbandonado = async () => {
+    if (!effectiveTenantId) return;
+
     // FIX #2: Salvar carrinho abandonado mesmo sem telefone
     // Só pular se o carrinho estiver vazio
     if (cartItems.length === 0) return;
@@ -121,7 +131,8 @@ export function useCarrinhoAbandonado({
       percentual_preenchimento: calcularPercentualPreenchimento(),
       user_agent: navigator.userAgent,
       last_activity: new Date().toISOString(),
-       canal_origem: canalRef || null,
+      canal_origem: canalRef || null,
+      tenant_id: effectiveTenantId,
     };
 
     // Verificar se houve mudanças
@@ -129,7 +140,7 @@ export function useCarrinhoAbandonado({
     if (dataString === lastSavedDataRef.current) return;
 
     try {
-      const sessionClient = createSessionScopedSupabaseClient(sessionId);
+      const sessionClient = createSessionScopedSupabaseClient(sessionId, effectiveTenantId);
 
       // Tenta atualizar o carrinho ativo da sessão; se não existir, cria um novo
       const { count, error: updateError } = await sessionClient
@@ -155,8 +166,10 @@ export function useCarrinhoAbandonado({
   };
 
   const limparCarrinhoAbandonado = async () => {
+    if (!effectiveTenantId) return;
+
     try {
-      const sessionClient = createSessionScopedSupabaseClient(sessionId);
+      const sessionClient = createSessionScopedSupabaseClient(sessionId, effectiveTenantId);
 
       // Marcar como recuperado
       await sessionClient
@@ -190,7 +203,7 @@ export function useCarrinhoAbandonado({
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [cartItems, etapa, customerInfo, selectedDate, cupomCodigo]);
+  }, [cartItems, etapa, customerInfo, selectedDate, cupomCodigo, effectiveTenantId]);
  
    return {
      sessionId,
