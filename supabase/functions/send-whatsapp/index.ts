@@ -52,6 +52,12 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const data: WhatsAppRequest = await req.json();
+    if (!data.agendamento_id) {
+      return new Response(
+        JSON.stringify({ error: 'agendamento_id is required' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+      );
+    }
     console.log('📱 Enviando mensagens WhatsApp via UltraMsg:', { 
       cliente: data.clienteNome,
       agendamento_id: data.agendamento_id,
@@ -77,35 +83,41 @@ serve(async (req) => {
     let tenantId: string | null = null;
     let telefoneResponsavel: string | null = null;
 
-    if (data.agendamento_id) {
-      const { data: agendamento, error: agendamentoError } = await supabase
-        .from('agendamentos')
-        .select('tenant_id')
-        .eq('id', data.agendamento_id)
-        .maybeSingle();
+    const { data: agendamento, error: agendamentoError } = await supabase
+      .from('agendamentos')
+      .select('tenant_id')
+      .eq('id', data.agendamento_id)
+      .maybeSingle();
 
-      if (agendamentoError) {
-        console.error('[send-whatsapp] Erro ao buscar tenant do agendamento:', agendamentoError);
-      } else {
-        tenantId = agendamento?.tenant_id || null;
-      }
+    if (agendamentoError) {
+      console.error('[send-whatsapp] Erro ao buscar tenant do agendamento:', agendamentoError);
+      return new Response(
+        JSON.stringify({ error: 'Erro ao validar agendamento' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+      );
+    }
 
-      if (tenantId) {
-        const { data: funcionarioPrincipal, error: funcionarioError } = await supabase
-          .from('funcionarios_bot')
-          .select('telefone_whatsapp')
-          .eq('tenant_id', tenantId)
-          .eq('ativo', true)
-          .order('created_at', { ascending: true })
-          .limit(1)
-          .maybeSingle();
+    tenantId = agendamento?.tenant_id || null;
+    if (!tenantId) {
+      return new Response(
+        JSON.stringify({ error: 'Agendamento invalido para envio de WhatsApp' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+      );
+    }
 
-        if (funcionarioError) {
-          console.error('[send-whatsapp] Erro ao buscar funcionario_bot ativo:', funcionarioError);
-        } else {
-          telefoneResponsavel = funcionarioPrincipal?.telefone_whatsapp || null;
-        }
-      }
+    const { data: funcionarioPrincipal, error: funcionarioError } = await supabase
+      .from('funcionarios_bot')
+      .select('telefone_whatsapp')
+      .eq('tenant_id', tenantId)
+      .eq('ativo', true)
+      .order('created_at', { ascending: true })
+      .limit(1)
+      .maybeSingle();
+
+    if (funcionarioError) {
+      console.error('[send-whatsapp] Erro ao buscar funcionario_bot ativo:', funcionarioError);
+    } else {
+      telefoneResponsavel = funcionarioPrincipal?.telefone_whatsapp || null;
     }
 
     if (!telefoneResponsavel) {
