@@ -3,7 +3,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.77.0';
 import { checkRateLimit, getClientIp, createRateLimitResponse } from "../_shared/rateLimiter.ts";
 import { getCorsHeaders, handleCorsPreflightResponse } from "../_shared/corsConfig.ts";
 import { renderTemplateWithFallback, formatarValor } from "../_shared/templateRenderer.ts";
-import { enviarWhatsApp, EMPRESA_TELEFONE, EMPRESA_NOME } from "../_shared/whatsappSender.ts";
+import { enviarWhatsApp, EMPRESA_NOME } from "../_shared/whatsappSender.ts";
 
 interface WhatsAppRequest {
   clienteNome: string;
@@ -18,6 +18,14 @@ interface WhatsAppRequest {
   cep: string;
   observacoes: string;
   agendamento_id?: string; // ID do agendamento para confirmação interativa
+}
+
+function normalizePhoneForConversation(phone: string): string {
+  if (phone.includes('@')) {
+    return phone;
+  }
+  const onlyDigits = phone.replace(/\D/g, '');
+  return `${onlyDigits}@c.us`;
 }
 
 serve(async (req) => {
@@ -64,6 +72,52 @@ serve(async (req) => {
       cep: data.cep,
       observacoes: data.observacoes || 'Nenhuma'
     };
+
+    // Resolver tenant do agendamento e telefone do funcionário responsável
+    let tenantId: string | null = null;
+    let telefoneResponsavel: string | null = null;
+
+    if (data.agendamento_id) {
+      const { data: agendamento, error: agendamentoError } = await supabase
+        .from('agendamentos')
+        .select('tenant_id')
+        .eq('id', data.agendamento_id)
+        .maybeSingle();
+
+      if (agendamentoError) {
+        console.error('[send-whatsapp] Erro ao buscar tenant do agendamento:', agendamentoError);
+      } else {
+        tenantId = agendamento?.tenant_id || null;
+      }
+
+      if (tenantId) {
+        const { data: funcionarioPrincipal, error: funcionarioError } = await supabase
+          .from('funcionarios_bot')
+          .select('telefone_whatsapp')
+          .eq('tenant_id', tenantId)
+          .eq('ativo', true)
+          .order('created_at', { ascending: true })
+          .limit(1)
+          .maybeSingle();
+
+        if (funcionarioError) {
+          console.error('[send-whatsapp] Erro ao buscar funcionario_bot ativo:', funcionarioError);
+        } else {
+          telefoneResponsavel = funcionarioPrincipal?.telefone_whatsapp || null;
+        }
+      }
+    }
+
+    if (!telefoneResponsavel) {
+      telefoneResponsavel = Deno.env.get('WHATSAPP_NOTIFICATIONS_PHONE') ?? null;
+    }
+
+    if (!telefoneResponsavel) {
+      return new Response(
+        JSON.stringify({ error: 'Nenhum telefone de notificação configurado para este tenant' }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+      );
+    }
 
     // Fallback hardcoded caso template não exista
     const fallbackCliente = `Olá ${data.clienteNome}! 😊
@@ -130,16 +184,14 @@ Responda *NÃO* para lançar manualmente`;
     const resultCliente = await enviarWhatsApp(data.clienteTelefone, mensagemCliente);
 
     // Enviar mensagem para a EMPRESA (funcionário)
-    const resultEmpresa = await enviarWhatsApp(EMPRESA_TELEFONE, mensagemEmpresa);
+    const resultEmpresa = await enviarWhatsApp(telefoneResponsavel, mensagemEmpresa);
 
     // Se temos agendamento_id, criar registro de confirmação pendente
     if (data.agendamento_id && resultEmpresa.success) {
       console.log('📋 Criando registro de confirmação pendente para agendamento:', data.agendamento_id);
       
       // Formatar telefone da empresa para match no webhook
-      const telefoneEmpresa = EMPRESA_TELEFONE.includes('@') 
-        ? EMPRESA_TELEFONE 
-        : `${EMPRESA_TELEFONE.replace(/\D/g, '')}@c.us`;
+      const telefoneEmpresa = normalizePhoneForConversation(telefoneResponsavel);
       
       const { error: insertError } = await supabase
         .from('agendamentos_pendentes_confirmacao')
