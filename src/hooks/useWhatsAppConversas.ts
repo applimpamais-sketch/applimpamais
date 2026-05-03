@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useTenantContext } from '@/hooks/useTenantContext';
 
 export interface WhatsAppConversa {
   id: string;
@@ -24,12 +25,17 @@ export interface WhatsAppMensagem {
 }
 
 export function useWhatsAppConversas(filtro?: 'ativas' | 'finalizadas') {
+  const { tenantId } = useTenantContext();
+
   return useQuery({
-    queryKey: ['whatsapp-conversas', filtro],
+    queryKey: ['whatsapp-conversas', tenantId, filtro],
     queryFn: async (): Promise<WhatsAppConversa[]> => {
+      if (!tenantId) return [];
+
       let query = supabase
         .from('whatsapp_conversas')
         .select('*')
+        .eq('tenant_id', tenantId)
         .order('ultima_mensagem', { ascending: false });
 
       if (filtro === 'ativas') {
@@ -43,17 +49,23 @@ export function useWhatsAppConversas(filtro?: 'ativas' | 'finalizadas') {
       if (error) throw error;
       return data || [];
     },
+    enabled: !!tenantId,
     refetchInterval: 10000, // Atualizar a cada 10s
   });
 }
 
 export function useWhatsAppMensagens(conversaId: string) {
+  const { tenantId } = useTenantContext();
+
   return useQuery({
-    queryKey: ['whatsapp-mensagens', conversaId],
+    queryKey: ['whatsapp-mensagens', tenantId, conversaId],
     queryFn: async (): Promise<WhatsAppMensagem[]> => {
+      if (!tenantId) return [];
+
       const { data, error } = await supabase
         .from('whatsapp_mensagens')
         .select('*')
+        .eq('tenant_id', tenantId)
         .eq('conversa_id', conversaId)
         .order('criado_em', { ascending: true });
 
@@ -64,17 +76,29 @@ export function useWhatsAppMensagens(conversaId: string) {
         tipo: msg.tipo as 'texto' | 'imagem' | 'audio'
       }));
     },
-    enabled: !!conversaId,
+    enabled: !!tenantId && !!conversaId,
   });
 }
 
 export function useWhatsAppStats() {
+  const { tenantId } = useTenantContext();
+
   return useQuery({
-    queryKey: ['whatsapp-stats'],
+    queryKey: ['whatsapp-stats', tenantId],
     queryFn: async () => {
+      if (!tenantId) {
+        return {
+          totalConversas: 0,
+          conversasAtivas: 0,
+          agendamentosConfirmados: 0,
+          orcamentosPendentes: 0,
+          taxaConversao: 0,
+        };
+      }
+
       const [conversasRes, agendamentosRes] = await Promise.all([
-        supabase.from('whatsapp_conversas').select('*', { count: 'exact', head: true }),
-        supabase.from('agendamentos_bot').select('status', { count: 'exact' })
+        supabase.from('whatsapp_conversas').select('*', { count: 'exact', head: true }).eq('tenant_id', tenantId),
+        supabase.from('agendamentos_bot').select('status', { count: 'exact' }).eq('tenant_id', tenantId),
       ]);
 
       const totalConversas = conversasRes.count || 0;
@@ -95,6 +119,7 @@ export function useWhatsAppStats() {
         taxaConversao: parseFloat(taxaConversao)
       };
     },
+    enabled: !!tenantId,
     refetchInterval: 30000, // Atualizar a cada 30s
   });
 }

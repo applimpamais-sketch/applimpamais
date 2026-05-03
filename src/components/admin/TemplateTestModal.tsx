@@ -54,7 +54,7 @@ export default function TemplateTestModal({
       'telefone': '(31) 99999-9999',
       'valor_total': 'R$ 250,00',
       'observacoes': 'Cliente preferencial',
-      'link_carrinho': 'https://rclimpamais.br/checkout?id=abc123',
+      'link_carrinho': 'https://app.limpamais.com/checkout?id=abc123',
       'cupom': 'DESCONTO10',
       'desconto': '10%'
     };
