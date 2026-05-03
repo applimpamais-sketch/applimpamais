@@ -36,3 +36,16 @@ x-cron-secret: <INTERNAL_FUNCTION_SECRET>
 ```
 
 This avoids exposing privileged automations to public, unauthenticated requests.
+
+## WhatsApp webhook hardening (optional but recommended)
+
+Set:
+
+```bash
+WHATSAPP_WEBHOOK_SECRET=<strong-random-secret>
+```
+
+Then configure your webhook provider to send either:
+
+- header `x-webhook-secret: <WHATSAPP_WEBHOOK_SECRET>`
+- or query param `?secret=<WHATSAPP_WEBHOOK_SECRET>`

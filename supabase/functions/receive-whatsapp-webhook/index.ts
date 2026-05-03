@@ -101,6 +101,22 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return handleCorsPreflightResponse(req);
 
   try {
+    const webhookSecret = Deno.env.get("WHATSAPP_WEBHOOK_SECRET");
+    if (webhookSecret) {
+      const reqUrl = new URL(req.url);
+      const requestSecret =
+        req.headers.get("x-webhook-secret") ??
+        req.headers.get("X-Webhook-Secret") ??
+        reqUrl.searchParams.get("secret");
+
+      if (!requestSecret || requestSecret !== webhookSecret) {
+        return new Response(
+          JSON.stringify({ error: "Unauthorized webhook call" }),
+          { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+    }
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const systemPrompt = Deno.env.get("WHATSAPP_BOT_SYSTEM_PROMPT")!;
