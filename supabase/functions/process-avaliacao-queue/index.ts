@@ -2,10 +2,11 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.77.0";
 import { renderTemplateWithFallback } from "../_shared/templateRenderer.ts";
 import { enviarWhatsApp } from "../_shared/whatsappSender.ts";
+import { isInternalRequestAuthorized } from "../_shared/internalAuth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-internal-function-secret, x-cron-secret',
 };
 
 const PLATFORM_NAME = Deno.env.get('PLATFORM_NAME') ?? 'Limpamais';
@@ -18,6 +19,14 @@ const PLATFORM_NAME = Deno.env.get('PLATFORM_NAME') ?? 'Limpamais';
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  const auth = isInternalRequestAuthorized(req);
+  if (!auth.ok) {
+    return new Response(
+      JSON.stringify({ success: false, error: auth.reason ?? 'Unauthorized' }),
+      { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   }
 
   try {
