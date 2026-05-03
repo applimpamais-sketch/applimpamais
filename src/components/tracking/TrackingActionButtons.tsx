@@ -1,7 +1,8 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { Phone, MessageCircle, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { PLATFORM_NAME, WHATSAPP_BOT } from '@/lib/constants';
 
 interface TrackingActionButtonsProps {
   telefoneEmpresa?: string;
@@ -9,17 +10,26 @@ interface TrackingActionButtonsProps {
 }
 
 export default function TrackingActionButtons({
-  telefoneEmpresa = '5531991356855', // Número padrão RC Limpa Mais
+  telefoneEmpresa = WHATSAPP_BOT.numero || '',
   nomeCliente,
 }: TrackingActionButtonsProps) {
   const handleLigar = () => {
+    if (!telefoneEmpresa) {
+      toast.error('Telefone não configurado');
+      return;
+    }
     window.open(`tel:+${telefoneEmpresa}`, '_self');
   };
 
   const handleWhatsApp = () => {
+    if (!telefoneEmpresa) {
+      toast.error('WhatsApp não configurado');
+      return;
+    }
+
     const mensagem = nomeCliente
-      ? `Olá! Sou ${nomeCliente} e estou acompanhando o trajeto do técnico.`
-      : 'Olá! Estou acompanhando o trajeto do técnico.';
+      ? `OlÃ¡! Sou ${nomeCliente} e estou acompanhando o trajeto do tÃ©cnico.`
+      : 'OlÃ¡! Estou acompanhando o trajeto do tÃ©cnico.';
     
     window.open(
       `https://wa.me/${telefoneEmpresa}?text=${encodeURIComponent(mensagem)}`,
@@ -29,17 +39,17 @@ export default function TrackingActionButtons({
 
   const handleCompartilhar = async () => {
     const url = window.location.href;
-    const texto = 'Acompanhe a chegada do técnico da RC Limpa Mais';
+    const texto = `Acompanhe a chegada do técnico da ${PLATFORM_NAME}`;
 
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'RC Limpa Mais - Rastreamento',
+          title: `${PLATFORM_NAME} - Rastreamento`,
           text: texto,
           url: url,
         });
       } catch (error) {
-        // Usuário cancelou ou erro - fallback para copiar
+        // UsuÃ¡rio cancelou ou erro - fallback para copiar
         await navigator.clipboard.writeText(url);
         toast.success('Link copiado!');
       }
@@ -84,3 +94,5 @@ export default function TrackingActionButtons({
     </motion.div>
   );
 }
+
+

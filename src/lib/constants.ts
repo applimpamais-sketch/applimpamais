@@ -1,5 +1,5 @@
-/**
- * Constantes centralizadas da aplicação.
+ï»¿/**
+ * Constantes centralizadas da aplicaÃ§Ã£o.
  */
 
 const DEFAULT_SITE_DOMAIN = 'https://app.limpamais.com';
@@ -16,3 +16,7 @@ export const WHATSAPP_BOT = {
 };
 
 export const SITE_DOMAIN = configuredSiteDomain.replace(/\/$/, '');
+
+export const PLATFORM_NAME = import.meta.env.VITE_PUBLIC_PLATFORM_NAME || 'Limpamais';
+export const SUPPORT_EMAIL = import.meta.env.VITE_PUBLIC_SUPPORT_EMAIL || 'suporte@limpamais.com';
+

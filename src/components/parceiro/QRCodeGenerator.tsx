@@ -1,4 +1,4 @@
- import { useRef, useState } from 'react';
+﻿ import { useRef, useState } from 'react';
  import { QRCodeCanvas } from 'qrcode.react';
  import { Download, Copy, Check, QrCode } from 'lucide-react';
  import { Button } from '@/components/ui/button';
@@ -6,6 +6,7 @@
  import { Input } from '@/components/ui/input';
  import { Label } from '@/components/ui/label';
  import { toast } from 'sonner';
+ import { SITE_DOMAIN } from '@/lib/constants';
  
  interface QRCodeGeneratorProps {
    codigoReferencia: string;
@@ -14,7 +15,7 @@
  
 export default function QRCodeGenerator({ 
   codigoReferencia, 
-  baseUrl = 'https://rclimpamais.com.br' 
+  baseUrl = SITE_DOMAIN 
 }: QRCodeGeneratorProps) {
    const canvasRef = useRef<HTMLDivElement>(null);
    const [copied, setCopied] = useState(false);
@@ -56,7 +57,7 @@ export default function QRCodeGenerator({
        </CardHeader>
       <CardContent className="space-y-4 px-3 sm:px-6">
          <p className="text-sm text-muted-foreground">
-           Imprima e coloque no seu estabelecimento. Quando clientes escanearem e agendarem, você ganha comissão automaticamente!
+           Imprima e coloque no seu estabelecimento. Quando clientes escanearem e agendarem, vocÃª ganha comissÃ£o automaticamente!
          </p>
          
         <div className="flex flex-col items-center gap-4 sm:gap-6">
@@ -75,10 +76,10 @@ export default function QRCodeGenerator({
              />
            </div>
            
-           {/* Info e ações */}
+           {/* Info e aÃ§Ãµes */}
           <div className="w-full space-y-4">
              <div className="space-y-2">
-               <Label className="text-xs text-muted-foreground">Seu link de indicação</Label>
+               <Label className="text-xs text-muted-foreground">Seu link de indicaÃ§Ã£o</Label>
                <div className="flex gap-2">
                  <Input 
                    value={fullUrl} 
@@ -104,7 +105,7 @@ export default function QRCodeGenerator({
              
              <div className="bg-primary/10 rounded-lg p-3 border border-primary/20">
                <p className="text-xs text-primary">
-                 💡 <strong>Dica:</strong> Imprima em tamanho grande (mínimo 10x10cm) e coloque em local visível para seus clientes.
+                 ðŸ’¡ <strong>Dica:</strong> Imprima em tamanho grande (mÃ­nimo 10x10cm) e coloque em local visÃ­vel para seus clientes.
                </p>
              </div>
            </div>

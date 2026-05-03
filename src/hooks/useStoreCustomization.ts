@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useTenantContext } from '@/hooks/useTenantContext';
 import { toast } from 'sonner';
+import { SITE_DOMAIN } from '@/lib/constants';
 
 export interface StoreCustomization {
   logoUrl: string | null;
@@ -14,20 +15,20 @@ export function useStoreCustomization() {
   const { tenant, tenantId } = useTenantContext();
   const queryClient = useQueryClient();
   
-  // Estado local das customizações
+  // Estado local das customizaÃ§Ãµes
   const [customization, setCustomization] = useState<StoreCustomization>({
     logoUrl: null,
     corPrimaria: '#3b82f6',
     corSecundaria: '#1e40af',
   });
   
-  // Estado original para detectar mudanças
+  // Estado original para detectar mudanÃ§as
   const [originalCustomization, setOriginalCustomization] = useState<StoreCustomization | null>(null);
   
-  // Flag de alterações pendentes
+  // Flag de alteraÃ§Ãµes pendentes
   const [hasChanges, setHasChanges] = useState(false);
   
-  // Carregar dados do tenant quando disponível
+  // Carregar dados do tenant quando disponÃ­vel
   useEffect(() => {
     if (tenant) {
       const initial: StoreCustomization = {
@@ -41,7 +42,7 @@ export function useStoreCustomization() {
     }
   }, [tenant]);
   
-  // Detectar mudanças
+  // Detectar mudanÃ§as
   useEffect(() => {
     if (!originalCustomization) return;
     
@@ -53,12 +54,12 @@ export function useStoreCustomization() {
     setHasChanges(changed);
   }, [customization, originalCustomization]);
   
-  // Atualizar cor primária
+  // Atualizar cor primÃ¡ria
   const setCorPrimaria = useCallback((cor: string) => {
     setCustomization(prev => ({ ...prev, corPrimaria: cor }));
   }, []);
   
-  // Atualizar cor secundária
+  // Atualizar cor secundÃ¡ria
   const setCorSecundaria = useCallback((cor: string) => {
     setCustomization(prev => ({ ...prev, corSecundaria: cor }));
   }, []);
@@ -66,7 +67,7 @@ export function useStoreCustomization() {
   // Upload de logo
   const uploadLogo = useCallback(async (file: File): Promise<string | null> => {
     if (!tenantId) {
-      toast.error('Tenant não encontrado');
+      toast.error('Tenant nÃ£o encontrado');
       return null;
     }
     
@@ -90,7 +91,7 @@ export function useStoreCustomization() {
         return null;
       }
       
-      // Obter URL pública
+      // Obter URL pÃºblica
       const { data: { publicUrl } } = supabase.storage
         .from('tenant-logos')
         .getPublicUrl(fileName);
@@ -111,10 +112,10 @@ export function useStoreCustomization() {
     setCustomization(prev => ({ ...prev, logoUrl: null }));
   }, []);
   
-  // Mutation para salvar alterações
+  // Mutation para salvar alteraÃ§Ãµes
   const saveMutation = useMutation({
     mutationFn: async () => {
-      if (!tenantId) throw new Error('Tenant não encontrado');
+      if (!tenantId) throw new Error('Tenant nÃ£o encontrado');
       
       const { error } = await supabase
         .from('saas_tenants')
@@ -144,16 +145,16 @@ export function useStoreCustomization() {
     },
     onError: (error) => {
       console.error('[useStoreCustomization] Erro ao salvar:', error);
-      toast.error('Erro ao salvar alterações');
+      toast.error('Erro ao salvar alteraÃ§Ãµes');
     },
   });
   
-  // Publicar alterações
+  // Publicar alteraÃ§Ãµes
   const publish = useCallback(() => {
     saveMutation.mutate();
   }, [saveMutation]);
   
-  // Descartar alterações
+  // Descartar alteraÃ§Ãµes
   const discardChanges = useCallback(() => {
     if (originalCustomization) {
       setCustomization(originalCustomization);
@@ -166,8 +167,8 @@ export function useStoreCustomization() {
     if (tenant?.dominio_customizado) {
       return `https://${tenant.dominio_customizado}`;
     }
-    // URL padrão usando o domínio de produção
-    return 'https://rclimpamais.com.br';
+    // URL padrão usando domínio configurável da plataforma
+    return SITE_DOMAIN;
   }, [tenant]);
   
   return {
@@ -183,3 +184,4 @@ export function useStoreCustomization() {
     getStoreUrl,
   };
 }
+

@@ -116,7 +116,8 @@ export default function Auth() {
       const hostname = window.location.hostname;
       
       // DomÃ­nios principais da plataforma - usar branding padrÃ£o (RC Limpa Mais)
-      const mainDomains = [\r\n        'localhost',
+      const mainDomains = [
+        'localhost',
         '127.0.0.1'
       ];
       
@@ -574,4 +575,3 @@ export default function Auth() {
      </div>
    );
  }
-
