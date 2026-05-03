@@ -103,13 +103,16 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.database-metrics]
-verify_jwt = false
+verify_jwt = true
 
 [functions.create-tenant-admin]
-verify_jwt = false
+verify_jwt = true
 
 [functions.resend-tenant-invite]
-verify_jwt = false
+verify_jwt = true
+
+[functions.create-team-member]
+verify_jwt = true
 
 [functions.iarc-generate-creative]
 verify_jwt = false

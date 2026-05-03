@@ -2,15 +2,17 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@4.0.0";
 import { checkRateLimit, getClientIp, createRateLimitResponse } from "../_shared/rateLimiter.ts";
 import { getCorsHeaders, handleCorsPreflightResponse } from "../_shared/corsConfig.ts";
+import { SITE_DOMAIN } from "../_shared/siteConfig.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const INVITES_FROM_EMAIL = Deno.env.get("INVITES_FROM_EMAIL") ?? "Limpamais <convite@notificacao.rclimpamais.com.br>";
 
 interface InviteEmailRequest {
   name: string;
   email: string;
-  magicLink: string; // 🔒 SECURITY: Magic Link ao invés de senha
+  magicLink: string;
   role: 'admin' | 'operador' | 'visualizador' | 'tecnico';
-  tenantId?: string; // Opcional: tenant do usuário convidado
+  tenantId?: string;
 }
 
 interface TenantBranding {
@@ -24,27 +26,27 @@ const getRoleDetails = (role: string) => {
     case 'admin':
       return {
         name: 'Administrador',
-        description: 'Acesso total ao sistema, incluindo gerenciamento de equipe'
+        description: 'Acesso total ao sistema, incluindo gerenciamento de equipe',
       };
     case 'operador':
       return {
         name: 'Operador',
-        description: 'Gerenciar agendamentos, cupons e visualizar relatórios'
+        description: 'Gerenciar agendamentos, cupons e visualizar relatórios',
       };
     case 'visualizador':
       return {
         name: 'Visualizador',
-        description: 'Apenas visualização de dados e relatórios'
+        description: 'Apenas visualização de dados e relatórios',
       };
     case 'tecnico':
       return {
         name: 'Técnico',
-        description: 'Visualizar e gerenciar serviços atribuídos'
+        description: 'Visualizar e gerenciar serviços atribuídos',
       };
     default:
       return {
         name: role,
-        description: 'Permissões personalizadas'
+        description: 'Permissões personalizadas',
       };
   }
 };
@@ -58,183 +60,97 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    // 🔒 SECURITY: Rate limiting - 5 requisições por minuto por IP
     const clientIp = getClientIp(req);
     const rateLimit = checkRateLimit(clientIp, { maxRequests: 5, windowMs: 60000 });
-    
+
     if (!rateLimit.allowed) {
-      console.warn(`⚠️ Rate limit exceeded for IP: ${clientIp}`);
       return createRateLimitResponse(rateLimit.resetAt);
     }
 
     const { name, email, magicLink, role, tenantId }: InviteEmailRequest = await req.json();
-    
-    console.log(`[send-team-invite] Enviando convite para ${email} (${name}) com role: ${role}`);
-    console.log(`[send-team-invite] RESEND_API_KEY configurada: ${Deno.env.get("RESEND_API_KEY") ? "Sim" : "Não"}`);
-    console.log(`[send-team-invite] Client IP: ${clientIp}, Remaining requests: ${rateLimit.remaining}`);
-    
-    // Buscar branding do tenant
+    const roleDetails = getRoleDetails(role);
+
     let tenantBranding: TenantBranding | null = null;
-    
+
     if (tenantId && tenantId !== '00000000-0000-0000-0000-000000000001') {
       const supabaseUrl = Deno.env.get("SUPABASE_URL");
       const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-      
+
       if (supabaseUrl && supabaseServiceKey) {
         const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.49.4");
         const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-          auth: { autoRefreshToken: false, persistSession: false }
+          auth: { autoRefreshToken: false, persistSession: false },
         });
-        
+
         const { data: tenant } = await supabase
           .from('saas_tenants')
           .select('nome_fantasia, nome_empresa, logo_url')
           .eq('id', tenantId)
           .single();
-        
+
         if (tenant) {
           tenantBranding = tenant as TenantBranding;
-          console.log(`[send-team-invite] Usando branding do tenant: ${tenantBranding.nome_fantasia || tenantBranding.nome_empresa}`);
         }
       }
     }
-    
-    // Determinar nome da empresa e logo
-    const companyName = tenantBranding?.nome_fantasia || tenantBranding?.nome_empresa || 'RC Limpa Mais';
-    const logoUrl = tenantBranding?.logo_url || 'https://rclimpamais.com.br/logo-rc-limpa-mais.png';
-    const isMaster = !tenantBranding;
 
-    const emailResponse = await resend.emails.send({
-      from: "RC Limpa Mais <convite@notificacao.rclimpamais.com.br>",
+    const companyName = tenantBranding?.nome_fantasia || tenantBranding?.nome_empresa || 'Limpamais';
+    const logoUrl = tenantBranding?.logo_url || `${SITE_DOMAIN}/icon-192x192.png`;
+
+    await resend.emails.send({
+      from: INVITES_FROM_EMAIL,
       to: [email],
-      subject: "🎉 Você foi convidado para RC Limpa Mais",
+      subject: `🎉 Você foi convidado para ${companyName}`,
       html: `
         <!DOCTYPE html>
         <html lang="pt-BR">
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Convite RC Limpa Mais</title>
+          <title>Convite ${companyName}</title>
         </head>
         <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f5;">
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f4f4f5;">
             <tr>
               <td style="padding: 40px 20px;">
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                  <!-- Header -->
                   <tr>
-                    <td style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); padding: 40px 30px; text-align: center;">
-                      <img src="https://rclimpamais.com.br/logo-rc-limpa-mais.png" alt="RC Limpa Mais" style="height: 60px; width: auto; margin-bottom: 20px;" />
+                    <td style="background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%); padding: 40px 30px; text-align: center;">
+                      <img src="${logoUrl}" alt="${companyName}" style="height: 60px; width: auto; margin-bottom: 20px;" />
                       <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 600;">Bem-vindo à Equipe! 🎉</h1>
                     </td>
                   </tr>
-                  
-                  <!-- Body -->
                   <tr>
                     <td style="padding: 40px 30px;">
                       <p style="color: #1f2937; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
                         Olá <strong>${name}</strong>,
                       </p>
                       <p style="color: #374151; font-size: 16px; line-height: 1.6; margin: 0 0 30px 0;">
-                        Você foi convidado para fazer parte da equipe <strong>RC Limpa Mais</strong>!
+                        Você foi convidado para fazer parte da equipe <strong>${companyName}</strong>.
                       </p>
-                      
-                      <!-- Role Card -->
                       <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 30px;">
                         <tr>
-                          <td style="background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); border-radius: 12px; padding: 20px; border-left: 4px solid #7c3aed;">
-                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                              <tr>
-                                <td style="width: 50px; vertical-align: top;">
-                                  <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); border-radius: 50%; text-align: center; line-height: 44px; font-size: 20px;">
-                                    🎯
-                                  </div>
-                                </td>
-                                <td style="vertical-align: top; padding-left: 15px;">
-                                  <p style="color: #6b7280; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 5px 0; font-weight: 600;">Sua Função</p>
-                                  <p style="color: #1f2937; font-size: 20px; font-weight: 700; margin: 0 0 8px 0;">${roleDetails.name}</p>
-                                  <p style="color: #6b7280; font-size: 14px; margin: 0; line-height: 1.5;">${roleDetails.description}</p>
-                                </td>
-                              </tr>
-                            </table>
+                          <td style="background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%); border-radius: 12px; padding: 20px; border-left: 4px solid #0f766e;">
+                            <p style="color: #6b7280; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 5px 0; font-weight: 600;">Sua Função</p>
+                            <p style="color: #1f2937; font-size: 20px; font-weight: 700; margin: 0 0 8px 0;">${roleDetails.name}</p>
+                            <p style="color: #6b7280; font-size: 14px; margin: 0; line-height: 1.5;">${roleDetails.description}</p>
                           </td>
                         </tr>
                       </table>
-                      
-                      <!-- Steps Card -->
-                      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 30px;">
-                        <tr>
-                          <td style="background-color: #f9fafb; border-radius: 12px; padding: 25px;">
-                            <p style="color: #1f2937; font-size: 16px; font-weight: 600; margin: 0 0 20px 0;">🚀 Próximos Passos</p>
-                            
-                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                              <tr>
-                                <td style="padding-bottom: 15px;">
-                                  <table role="presentation" cellspacing="0" cellpadding="0" border="0">
-                                    <tr>
-                                      <td style="width: 32px; height: 32px; background-color: #7c3aed; border-radius: 50%; text-align: center; color: #ffffff; font-weight: 600; font-size: 14px; line-height: 32px;">1</td>
-                                      <td style="padding-left: 12px; color: #374151; font-size: 14px;">Clique no botão de acesso abaixo</td>
-                                    </tr>
-                                  </table>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td style="padding-bottom: 15px;">
-                                  <table role="presentation" cellspacing="0" cellpadding="0" border="0">
-                                    <tr>
-                                      <td style="width: 32px; height: 32px; background-color: #7c3aed; border-radius: 50%; text-align: center; color: #ffffff; font-weight: 600; font-size: 14px; line-height: 32px;">2</td>
-                                      <td style="padding-left: 12px; color: #374151; font-size: 14px;">Você será automaticamente autenticado</td>
-                                    </tr>
-                                  </table>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <table role="presentation" cellspacing="0" cellpadding="0" border="0">
-                                    <tr>
-                                      <td style="width: 32px; height: 32px; background-color: #7c3aed; border-radius: 50%; text-align: center; color: #ffffff; font-weight: 600; font-size: 14px; line-height: 32px;">3</td>
-                                      <td style="padding-left: 12px; color: #374151; font-size: 14px;">Configure sua senha no primeiro acesso</td>
-                                    </tr>
-                                  </table>
-                                </td>
-                              </tr>
-                            </table>
-                          </td>
-                        </tr>
-                      </table>
-                      
-                      <!-- CTA Button -->
                       <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                         <tr>
                           <td style="text-align: center; padding: 10px 0 30px 0;">
-                            <a href="${magicLink}" style="display: inline-block; background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);">
+                            <a href="${magicLink}" style="display: inline-block; background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 8px; font-size: 16px; font-weight: 600;">
                               🔐 Acessar Sistema Agora
                             </a>
                           </td>
                         </tr>
                       </table>
-                      
-                      <!-- Warning -->
-                      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                      <div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 16px;">
                         <p style="color: #92400e; font-size: 14px; margin: 0; line-height: 1.5;">
-                          ⚠️ <strong>Importante:</strong> Este link é válido por <strong>1 hora</strong> e só pode ser usado uma vez. Se precisar de um novo link, entre em contato com o administrador.
+                          ⚠️ <strong>Importante:</strong> Este link é válido por <strong>1 hora</strong> e só pode ser usado uma vez.
                         </p>
                       </div>
-                    </td>
-                  </tr>
-                  
-                  <!-- Footer -->
-                  <tr>
-                    <td style="background-color: #f9fafb; padding: 25px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
-                      <p style="color: #9ca3af; font-size: 12px; margin: 0 0 10px 0;">
-                        Esta é uma mensagem automática. Por favor, não responda a este email.
-                      </p>
-                      <p style="color: #9ca3af; font-size: 12px; margin: 0 0 10px 0;">
-                        © ${new Date().getFullYear()} <strong>${companyName}</strong> - Todos os direitos reservados
-                      </p>
-                      <p style="color: #d1d5db; font-size: 11px; margin: 0;">
-                        Se você não solicitou este convite, ignore este email.
-                      </p>
                     </td>
                   </tr>
                 </table>
@@ -246,11 +162,9 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("[send-team-invite] Email enviado com sucesso:", emailResponse);
-
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       success: true,
-      message: "Email de convite enviado com sucesso"
+      message: "Email de convite enviado com sucesso",
     }), {
       status: 200,
       headers: {
@@ -261,17 +175,13 @@ const handler = async (req: Request): Promise<Response> => {
     });
   } catch (error: any) {
     console.error("[send-team-invite] Erro ao enviar email:", error);
-    console.error("[send-team-invite] Stack trace:", error.stack);
-    return new Response(
-      JSON.stringify({ 
-        success: false,
-        error: error.message || "Erro desconhecido ao enviar email"
-      }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
-    );
+    return new Response(JSON.stringify({
+      success: false,
+      error: error.message || "Erro desconhecido ao enviar email",
+    }), {
+      status: 500,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
   }
 };
 
