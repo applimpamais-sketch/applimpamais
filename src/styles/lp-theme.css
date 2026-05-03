@@ -1,0 +1,346 @@
+/* ============================================
+   LP Theme System - CSS Custom Properties
+   ============================================
+   
+   These utility classes use CSS variables that are
+   injected via inline styles on the root element.
+   
+   Usage:
+   <div style={getThemeStyle(themeId)} className="lp-bg lp-text">
+     <h1 className="lp-gradient-text">Title</h1>
+     <button className="lp-btn-primary">CTA</button>
+   </div>
+============================================ */
+
+/* === BACKGROUNDS === */
+
+.lp-bg {
+  background-color: var(--lp-bg);
+}
+
+.lp-surface {
+  background-color: var(--lp-surface);
+}
+
+.lp-surface-alt {
+  background-color: var(--lp-surface-alt);
+}
+
+.lp-surface-hover:hover {
+  background-color: var(--lp-surface-hover);
+}
+
+/* === TEXT COLORS === */
+
+.lp-text {
+  color: var(--lp-text);
+}
+
+.lp-text-muted {
+  color: var(--lp-text-muted);
+}
+
+.lp-text-inverse {
+  color: var(--lp-text-inverse);
+}
+
+.lp-text-accent {
+  color: var(--lp-accent);
+}
+
+.lp-text-accent-hover:hover {
+  color: var(--lp-accent-hover);
+}
+
+/* === GRADIENT TEXT === */
+
+.lp-gradient-text {
+  background: linear-gradient(to right, var(--lp-primary), var(--lp-primary-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.lp-gradient-text-light {
+  background: linear-gradient(to right, var(--lp-text), var(--lp-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* === GRADIENT BACKGROUNDS === */
+
+.lp-gradient-bg {
+  background: linear-gradient(to right, var(--lp-primary), var(--lp-primary-end));
+}
+
+.lp-gradient-bg-135 {
+  background: linear-gradient(135deg, var(--lp-primary), var(--lp-primary-end));
+}
+
+.lp-gradient-bg-hover:hover {
+  filter: brightness(1.1);
+}
+
+.lp-gradient-bg-radial {
+  background: radial-gradient(circle at center, var(--lp-primary), var(--lp-primary-end));
+}
+
+/* === ACCENT COLORS === */
+
+.lp-accent-bg {
+  background-color: var(--lp-accent-light);
+}
+
+.lp-accent-border {
+  border-color: var(--lp-accent);
+}
+
+/* === BORDERS === */
+
+.lp-border {
+  border-color: var(--lp-border);
+}
+
+.lp-border-hover:hover {
+  border-color: var(--lp-border-hover);
+}
+
+/* === SHADOWS & GLOW === */
+
+.lp-shadow {
+  box-shadow: var(--lp-shadow);
+}
+
+.lp-shadow-cta {
+  box-shadow: var(--lp-shadow-cta);
+}
+
+.lp-glow {
+  box-shadow: 0 0 40px var(--lp-glow);
+}
+
+.lp-glow-sm {
+  box-shadow: 0 0 20px var(--lp-glow);
+}
+
+/* === BUTTONS === */
+
+.lp-btn-primary {
+  background: linear-gradient(to right, var(--lp-primary), var(--lp-primary-end));
+  color: var(--lp-primary-contrast);
+  box-shadow: var(--lp-shadow-cta);
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.lp-btn-primary:hover {
+  filter: brightness(1.1);
+  transform: scale(1.02);
+  box-shadow: var(--lp-shadow);
+}
+
+.lp-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.lp-btn-secondary {
+  background-color: transparent;
+  color: var(--lp-text);
+  border: 1px solid var(--lp-border);
+  transition: all 0.2s ease;
+}
+
+.lp-btn-secondary:hover {
+  border-color: var(--lp-border-hover);
+  background-color: var(--lp-surface-hover);
+}
+
+.lp-btn-outline {
+  background-color: transparent;
+  color: var(--lp-accent);
+  border: 2px solid var(--lp-accent);
+  transition: all 0.2s ease;
+}
+
+.lp-btn-outline:hover {
+  background: linear-gradient(to right, var(--lp-primary), var(--lp-primary-end));
+  color: var(--lp-primary-contrast);
+  border-color: transparent;
+}
+
+/* === CARDS === */
+
+.lp-card {
+  background-color: var(--lp-surface);
+  border: 1px solid var(--lp-border);
+  transition: border-color 0.2s ease;
+}
+
+.lp-card:hover {
+  border-color: var(--lp-border-hover);
+}
+
+.lp-card-glass {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--lp-border);
+}
+
+.lp-card-accent {
+  background-color: var(--lp-surface);
+  border: 2px solid var(--lp-primary);
+}
+
+/* === DECORATIVE ELEMENTS === */
+
+.lp-orb {
+  background: radial-gradient(circle, var(--lp-primary) 0%, transparent 70%);
+  opacity: 0.15;
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.lp-line-accent {
+  background: linear-gradient(to right, var(--lp-primary), var(--lp-primary-end));
+}
+
+.lp-badge {
+  background-color: var(--lp-accent-light);
+  color: var(--lp-accent);
+  border: 1px solid currentColor;
+}
+
+/* === CHECKMARKS / ICONS === */
+
+.lp-icon-check {
+  color: var(--lp-success);
+}
+
+.lp-icon-x {
+  color: var(--lp-warning);
+}
+
+.lp-icon-accent {
+  color: var(--lp-accent);
+}
+
+.lp-icon-gradient {
+  background: linear-gradient(to right, var(--lp-primary), var(--lp-primary-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* === FORM ELEMENTS === */
+
+.lp-input {
+  background-color: var(--lp-surface);
+  border: 1px solid var(--lp-border);
+  color: var(--lp-text);
+  transition: border-color 0.2s ease;
+}
+
+.lp-input:focus {
+  border-color: var(--lp-primary);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--lp-accent-light);
+}
+
+.lp-input::placeholder {
+  color: var(--lp-text-muted);
+}
+
+/* === ACCORDION / FAQ === */
+
+.lp-accordion-trigger {
+  color: var(--lp-text);
+  transition: color 0.2s ease;
+}
+
+.lp-accordion-trigger:hover {
+  color: var(--lp-accent);
+}
+
+.lp-accordion-content {
+  color: var(--lp-text-muted);
+}
+
+/* === PRICING === */
+
+.lp-price-original {
+  color: var(--lp-text-muted);
+  text-decoration: line-through;
+}
+
+.lp-price-current {
+  background: linear-gradient(to right, var(--lp-primary), var(--lp-primary-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* === SCROLL/MARQUEE === */
+
+.lp-marquee-bg {
+  background: linear-gradient(to right, var(--lp-primary), var(--lp-primary-end));
+}
+
+.lp-marquee-text {
+  color: var(--lp-text-inverse);
+}
+
+/* === DIVIDERS === */
+
+.lp-divider {
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--lp-border),
+    transparent
+  );
+  height: 1px;
+}
+
+.lp-divider-accent {
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--lp-primary),
+    var(--lp-primary-end),
+    transparent
+  );
+  height: 2px;
+}
+
+/* === ANIMATIONS === */
+
+@keyframes lp-pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--lp-glow);
+  }
+  50% {
+    box-shadow: 0 0 40px var(--lp-glow);
+  }
+}
+
+.lp-animate-glow {
+  animation: lp-pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes lp-gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.lp-animate-gradient {
+  background-size: 200% 200%;
+  animation: lp-gradient-shift 3s ease infinite;
+}

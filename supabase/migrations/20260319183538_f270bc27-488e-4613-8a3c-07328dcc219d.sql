@@ -1,0 +1,1 @@
+ALTER TABLE public.agendamentos ADD COLUMN google_event_id TEXT UNIQUE;

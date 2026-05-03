@@ -1,0 +1,2 @@
+ALTER TABLE integracoes DROP CONSTRAINT integracoes_tipo_check;
+ALTER TABLE integracoes ADD CONSTRAINT integracoes_tipo_check CHECK (tipo = ANY (ARRAY['facebook'::text, 'webhook'::text, 'whatsapp'::text, 'avaliacoes'::text]));

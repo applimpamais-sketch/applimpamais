@@ -1,0 +1,20 @@
+--- a/supabase/functions/receive-whatsapp-bot-webhook/index.ts
++++ b/supabase/functions/receive-whatsapp-bot-webhook/index.ts
+@@ -1131,9 +1131,14 @@ async function processarComIA(
+           textoParaProcessar = primeiroItem;
+         } else {
+           // Cliente especificou qual item - buscar na lista
+-          const itemEscolhido = contexto.itens_informados.find((item: string) => 
+-            removerAcentos(texto.toLowerCase()).includes(removerAcentos(item.toLowerCase()))
+-          );
++          // HOTFIX #2: Melhorar matching com match exato e bidirecional
++          const itemEscolhido = contexto.itens_informados.find((item: string) => {
++            const textoNorm = removerAcentos(texto.toLowerCase().trim());
++            const itemNorm = removerAcentos(item.toLowerCase().trim());
++            return textoNorm === itemNorm || 
++                   textoNorm.includes(itemNorm) || 
++                   itemNorm.includes(textoNorm);
++          });
+           
+           if (itemEscolhido) {
+             console.log('[identificando_item] Cliente escolheu item específico:', itemEscolhido);

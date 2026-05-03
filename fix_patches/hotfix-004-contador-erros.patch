@@ -1,0 +1,29 @@
+--- a/supabase/functions/receive-whatsapp-bot-webhook/index.ts
++++ b/supabase/functions/receive-whatsapp-bot-webhook/index.ts
+@@ -1343,10 +1343,25 @@ async function processarComIA(
+       }
+       
+       // CASO 4: Item não reconhecido - mostrar opções válidas
++      // HOTFIX #4: Adicionar contador de erros e escalação para humano
++      contexto.erros_consecutivos = (contexto.erros_consecutivos || 0) + 1;
++      
++      if (contexto.erros_consecutivos >= 3) {
++        return {
++          novoEstado: 'aguardando_atendente',
++          contexto: { 
++            ...contexto, 
++            necessita_humano: true,
++            motivo_escalacao: 'erros_consecutivos_identificacao'
++          },
++          mensagem: '😕 Percebo que está com dificuldade...\n\n✋ Vou transferir você para um atendente humano que pode te ajudar melhor!\n\n⏱️ Um momento, por favor...'
++        };
++      }
++      
+       return {
+         novoEstado: 'identificando_item',
+         contexto,
+-        mensagem: `${escolherResposta(ERROS_EMPATICOS)}\n\nA gente faz limpeza de sofá, colchão, poltrona, tapete e banco automotivo\n\nQual desses você precisa? 😊`
++        mensagem: `${escolherResposta(ERROS_EMPATICOS)}\n\nA gente faz limpeza de:\n🛋️ Sofá\n🛏️ Colchão\n🪑 Poltrona\n🧶 Tapete\n🚗 Banco automotivo\n\nQual desses você precisa?`
+       };
+     
+     case 'coletando_opcao_item':

@@ -1,0 +1,807 @@
+[
+  {
+    "id": "css00001",
+    "elType": "container",
+    "settings": {
+      "content_width": "full",
+      "padding": { "unit": "px", "top": "0", "right": "0", "bottom": "0", "left": "0" }
+    },
+    "elements": [
+      {
+        "id": "css00002",
+        "elType": "widget",
+        "widgetType": "html",
+        "settings": {
+          "html": "<style>\n/* ===== GLOBAL CSS RESET FOR LP2 ===== */\nbody, .elementor-page, .page-template-default {\n  background-color: #000000 !important;\n  color: #FFFFFF !important;\n}\n.elementor *, .elementor *::before, .elementor *::after {\n  box-sizing: border-box !important;\n}\n.elementor-element .elementor-widget-container {\n  color: inherit !important;\n}\n.elementor h1, .elementor h2, .elementor h3, .elementor h4, .elementor h5, .elementor h6,\n.elementor p, .elementor span, .elementor a, .elementor li, .elementor label {\n  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;\n}\n.elementor a { color: inherit !important; text-decoration: none !important; }\n.elementor a:hover { opacity: 0.85 !important; }\n.elementor img { max-width: 100% !important; height: auto !important; }\n.elementor .elementor-widget-text-editor { color: inherit !important; }\n@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');\n</style>"
+        },
+        "elements": []
+      }
+    ]
+  },
+
+  {
+    "id": "hero0001",
+    "elType": "container",
+    "settings": {
+      "content_width": "full",
+      "min_height": { "unit": "vh", "size": 100 },
+      "flex_direction": "column",
+      "flex_justify_content": "center",
+      "flex_align_items": "center",
+      "background_background": "classic",
+      "background_color": "#000000",
+      "padding": { "unit": "px", "top": "80", "right": "0", "bottom": "80", "left": "0" },
+      "padding_mobile": { "unit": "px", "top": "60", "right": "0", "bottom": "60", "left": "0" },
+      "position": "relative",
+      "overflow": "hidden"
+    },
+    "elements": [
+      {
+        "id": "hero0010",
+        "elType": "container",
+        "settings": {
+          "content_width": "boxed",
+          "flex_direction": "column",
+          "flex_align_items": "center",
+          "flex_gap": { "unit": "px", "size": 32, "column": "", "row": "" }
+        },
+        "elements": [
+          {
+            "id": "hero0011",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style=\"display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid rgba(59,130,246,0.3);border-radius:9999px;background:rgba(59,130,246,0.05);font-size:14px;font-weight:500;color:#3B82F6;font-family:Inter,sans-serif;animation:pulse 2s infinite\">\n🏆 Plataforma #1 para Limpeza de Estofados\n</div>\n<style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}</style>"
+            },
+            "elements": []
+          },
+          {
+            "id": "hero0012",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "Sua Empresa no <span style=\"background:linear-gradient(90deg,#60A5FA,#22D3EE,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent\">Piloto Automático</span>",
+              "header_size": "h1",
+              "align": "center",
+              "title_color": "#FFFFFF",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter",
+              "typography_font_size": { "unit": "px", "size": 72 },
+              "typography_font_size_tablet": { "unit": "px", "size": 48 },
+              "typography_font_size_mobile": { "unit": "px", "size": 36 },
+              "typography_font_weight": "700",
+              "typography_line_height": { "unit": "em", "size": 1.1 }
+            },
+            "elements": []
+          },
+          {
+            "id": "hero0013",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style=\"font-size:24px;color:#9CA3AF;text-align:center;font-family:Inter,sans-serif;max-width:768px;margin:0 auto\"><span style=\"color:#FFFFFF;font-weight:600\">12 módulos integrados</span> para transformar sua operação em uma máquina de vendas</p>",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter"
+            },
+            "elements": []
+          },
+          {
+            "id": "hero0020",
+            "elType": "container",
+            "settings": {
+              "content_width": "boxed",
+              "flex_direction": "row",
+              "flex_wrap": "wrap",
+              "flex_justify_content": "center",
+              "flex_gap": { "unit": "px", "size": 12, "column": "12", "row": "12" },
+              "padding": { "unit": "px", "top": "32", "right": "0", "bottom": "32", "left": "0" },
+              "box_max_width": { "unit": "px", "size": 900 }
+            },
+            "elements": [
+              {
+                "id": "heroic01",
+                "elType": "widget",
+                "widgetType": "html",
+                "settings": {
+                  "html": "<div style=\"display:grid;grid-template-columns:repeat(6,1fr);gap:12px;max-width:800px;margin:0 auto;font-family:Inter,sans-serif\">\n<div style=\"display:flex;flex-direction:column;align-items:center;gap:4px\"><div style=\"width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1F2937,#111827);border:1px solid #374151;display:flex;align-items:center;justify-content:center;font-size:20px\">📊</div><span style=\"font-size:10px;color:#6B7280\">Dashboard</span></div>\n<div style=\"display:flex;flex-direction:column;align-items:center;gap:4px\"><div style=\"width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1F2937,#111827);border:1px solid #374151;display:flex;align-items:center;justify-content:center;font-size:20px\">🛒</div><span style=\"font-size:10px;color:#6B7280\">Loja</span></div>\n<div style=\"display:flex;flex-direction:column;align-items:center;gap:4px\"><div style=\"width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1F2937,#111827);border:1px solid #374151;display:flex;align-items:center;justify-content:center;font-size:20px\">💰</div><span style=\"font-size:10px;color:#6B7280\">Financeiro</span></div>\n<div style=\"display:flex;flex-direction:column;align-items:center;gap:4px\"><div style=\"width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1F2937,#111827);border:1px solid #374151;display:flex;align-items:center;justify-content:center;font-size:20px\">💬</div><span style=\"font-size:10px;color:#6B7280\">WhatsApp Bot</span></div>\n<div style=\"display:flex;flex-direction:column;align-items:center;gap:4px\"><div style=\"width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1F2937,#111827);border:1px solid #374151;display:flex;align-items:center;justify-content:center;font-size:20px\">📍</div><span style=\"font-size:10px;color:#6B7280\">Rastreamento</span></div>\n<div style=\"display:flex;flex-direction:column;align-items:center;gap:4px\"><div style=\"width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1F2937,#111827);border:1px solid #374151;display:flex;align-items:center;justify-content:center;font-size:20px\">📈</div><span style=\"font-size:10px;color:#6B7280\">Marketing</span></div>\n<div style=\"display:flex;flex-direction:column;align-items:center;gap:4px\"><div style=\"width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1F2937,#111827);border:1px solid #374151;display:flex;align-items:center;justify-content:center;font-size:20px\">📝</div><span style=\"font-size:10px;color:#6B7280\">Blog SEO</span></div>\n<div style=\"display:flex;flex-direction:column;align-items:center;gap:4px\"><div style=\"width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1F2937,#111827);border:1px solid #374151;display:flex;align-items:center;justify-content:center;font-size:20px\">🤝</div><span style=\"font-size:10px;color:#6B7280\">Parcerias</span></div>\n<div style=\"display:flex;flex-direction:column;align-items:center;gap:4px\"><div style=\"width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1F2937,#111827);border:1px solid #374151;display:flex;align-items:center;justify-content:center;font-size:20px\">📊</div><span style=\"font-size:10px;color:#6B7280\">Relatórios</span></div>\n<div style=\"display:flex;flex-direction:column;align-items:center;gap:4px\"><div style=\"width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1F2937,#111827);border:1px solid #374151;display:flex;align-items:center;justify-content:center;font-size:20px\">🔌</div><span style=\"font-size:10px;color:#6B7280\">API</span></div>\n<div style=\"display:flex;flex-direction:column;align-items:center;gap:4px\"><div style=\"width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1F2937,#111827);border:1px solid #374151;display:flex;align-items:center;justify-content:center;font-size:20px\">⭐</div><span style=\"font-size:10px;color:#6B7280\">White Label</span></div>\n<div style=\"display:flex;flex-direction:column;align-items:center;gap:4px\"><div style=\"width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#1F2937,#111827);border:1px solid #374151;display:flex;align-items:center;justify-content:center;font-size:20px\">🎨</div><span style=\"font-size:10px;color:#6B7280\">IARC Studio</span></div>\n</div>\n<style>@media(max-width:767px){div[style*=\"grid-template-columns:repeat(6\"]{grid-template-columns:repeat(4,1fr) !important}}</style>"
+                },
+                "elements": []
+              }
+            ]
+          },
+          {
+            "id": "hero0030",
+            "elType": "container",
+            "settings": {
+              "flex_direction": "row",
+              "flex_direction_mobile": "column",
+              "flex_justify_content": "center",
+              "flex_gap": { "unit": "px", "size": 16, "column": "16", "row": "16" },
+              "padding": { "unit": "px", "top": "16", "right": "0", "bottom": "0", "left": "0" }
+            },
+            "elements": [
+              {
+                "id": "hero0031",
+                "elType": "widget",
+                "widgetType": "button",
+                "settings": {
+                  "text": "▶ Ver Demonstração →",
+                  "align": "center",
+                  "link": { "url": "#cta-form", "is_external": false },
+                  "typography_typography": "custom",
+                  "typography_font_family": "Inter",
+                  "typography_font_size": { "unit": "px", "size": 18 },
+                  "typography_font_weight": "600",
+                  "button_text_color": "#FFFFFF",
+                  "background_color": "#3B82F6",
+                  "button_background_hover_color": "#2563EB",
+                  "border_radius": { "unit": "px", "top": "12", "right": "12", "bottom": "12", "left": "12" },
+                  "button_padding": { "unit": "px", "top": "16", "right": "32", "bottom": "16", "left": "32" }
+                },
+                "elements": []
+              },
+              {
+                "id": "hero0032",
+                "elType": "widget",
+                "widgetType": "button",
+                "settings": {
+                  "text": "💬 Falar com Consultor",
+                  "align": "center",
+                  "link": { "url": "https://wa.me/5531999999999", "is_external": true },
+                  "typography_typography": "custom",
+                  "typography_font_family": "Inter",
+                  "typography_font_size": { "unit": "px", "size": 18 },
+                  "typography_font_weight": "400",
+                  "button_text_color": "#FFFFFF",
+                  "background_color": "transparent",
+                  "border_border": "solid",
+                  "border_width": { "unit": "px", "top": "1", "right": "1", "bottom": "1", "left": "1" },
+                  "border_color": "#374151",
+                  "button_background_hover_color": "#1F2937",
+                  "border_radius": { "unit": "px", "top": "12", "right": "12", "bottom": "12", "left": "12" },
+                  "button_padding": { "unit": "px", "top": "16", "right": "32", "bottom": "16", "left": "32" }
+                },
+                "elements": []
+              }
+            ]
+          },
+          {
+            "id": "hero0040",
+            "elType": "container",
+            "settings": {
+              "flex_direction": "row",
+              "flex_direction_mobile": "column",
+              "flex_justify_content": "center",
+              "flex_gap": { "unit": "px", "size": 64, "column": "64", "row": "32" },
+              "flex_gap_mobile": { "unit": "px", "size": 32, "column": "32", "row": "32" },
+              "padding": { "unit": "px", "top": "48", "right": "0", "bottom": "0", "left": "0" },
+              "border_border": "solid",
+              "border_width": { "unit": "px", "top": "1", "right": "0", "bottom": "0", "left": "0" },
+              "border_color": "#1F2937"
+            },
+            "elements": [
+              {
+                "id": "hero0041",
+                "elType": "widget",
+                "widgetType": "html",
+                "settings": {
+                  "html": "<div style=\"text-align:center\"><p style=\"font-size:36px;font-weight:700;background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Inter,sans-serif;margin:0\">50+</p><p style=\"color:#6B7280;font-size:14px;margin-top:4px;font-family:Inter,sans-serif\">Empresas Ativas</p></div>"
+                },
+                "elements": []
+              },
+              {
+                "id": "hero0042",
+                "elType": "widget",
+                "widgetType": "html",
+                "settings": {
+                  "html": "<div style=\"text-align:center\"><p style=\"font-size:36px;font-weight:700;background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Inter,sans-serif;margin:0\">R$ 2M+</p><p style=\"color:#6B7280;font-size:14px;margin-top:4px;font-family:Inter,sans-serif\">Gerenciado</p></div>"
+                },
+                "elements": []
+              },
+              {
+                "id": "hero0043",
+                "elType": "widget",
+                "widgetType": "html",
+                "settings": {
+                  "html": "<div style=\"text-align:center\"><p style=\"font-size:36px;font-weight:700;background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Inter,sans-serif;margin:0\">10k+</p><p style=\"color:#6B7280;font-size:14px;margin-top:4px;font-family:Inter,sans-serif\">Serviços</p></div>"
+                },
+                "elements": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "prob0001",
+    "elType": "container",
+    "settings": {
+      "content_width": "full",
+      "background_background": "gradient",
+      "background_color": "#000000",
+      "background_color_b": "#030712",
+      "padding": { "unit": "px", "top": "80", "right": "0", "bottom": "80", "left": "0" },
+      "padding_mobile": { "unit": "px", "top": "60", "right": "0", "bottom": "60", "left": "0" }
+    },
+    "elements": [
+      {
+        "id": "prob0010",
+        "elType": "container",
+        "settings": {
+          "content_width": "boxed",
+          "flex_direction": "column",
+          "flex_align_items": "center"
+        },
+        "elements": [
+          {
+            "id": "prob0011",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "De <span style=\"color:#F87171\">Caos</span> para <span style=\"background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent\">Controle Total</span>",
+              "header_size": "h2",
+              "align": "center",
+              "title_color": "#FFFFFF",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter",
+              "typography_font_size": { "unit": "px", "size": 48 },
+              "typography_font_size_tablet": { "unit": "px", "size": 36 },
+              "typography_font_size_mobile": { "unit": "px", "size": 30 },
+              "typography_font_weight": "700"
+            },
+            "elements": []
+          },
+          {
+            "id": "prob0012",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style=\"font-size:20px;color:#9CA3AF;text-align:center;font-family:Inter,sans-serif\">Veja a diferença que um sistema completo faz no seu dia a dia</p>",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter"
+            },
+            "elements": []
+          },
+          {
+            "id": "prob0020",
+            "elType": "container",
+            "settings": {
+              "flex_direction": "row",
+              "flex_direction_tablet": "column",
+              "flex_direction_mobile": "column",
+              "flex_gap": { "unit": "px", "size": 32, "column": "32", "row": "32" },
+              "padding": { "unit": "px", "top": "48", "right": "0", "bottom": "0", "left": "0" },
+              "content_width": "boxed",
+              "box_max_width": { "unit": "px", "size": 1024 }
+            },
+            "elements": [
+              {
+                "id": "prob0021",
+                "elType": "widget",
+                "widgetType": "html",
+                "settings": {
+                  "html": "<div style=\"border-radius:24px;border:1px solid rgba(248,113,113,0.2);background:linear-gradient(135deg,rgba(248,113,113,0.05),transparent);padding:32px;position:relative;font-family:Inter,sans-serif\">\n<div style=\"position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#F87171,transparent);border-radius:24px 24px 0 0\"></div>\n<div style=\"display:flex;align-items:center;gap:12px;margin-bottom:32px\">\n<div style=\"width:40px;height:40px;border-radius:50%;background:rgba(248,113,113,0.2);display:flex;align-items:center;justify-content:center;font-size:18px\">✕</div>\n<h3 style=\"font-size:20px;font-weight:700;color:#F87171;margin:0\">Você ainda...</h3>\n</div>\n<div style=\"display:flex;flex-direction:column;gap:16px\">\n<div style=\"display:flex;align-items:center;gap:16px;padding:16px;border-radius:12px;background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.1)\">\n<div style=\"width:40px;height:40px;border-radius:8px;background:rgba(248,113,113,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px\">🚫</div>\n<p style=\"color:#D1D5DB;margin:0;font-size:15px\">Perde clientes por não responder rápido</p>\n</div>\n<div style=\"display:flex;align-items:center;gap:16px;padding:16px;border-radius:12px;background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.1)\">\n<div style=\"width:40px;height:40px;border-radius:8px;background:rgba(248,113,113,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px\">📋</div>\n<p style=\"color:#D1D5DB;margin:0;font-size:15px\">Controla tudo em planilhas bagunçadas</p>\n</div>\n<div style=\"display:flex;align-items:center;gap:16px;padding:16px;border-radius:12px;background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.1)\">\n<div style=\"width:40px;height:40px;border-radius:8px;background:rgba(248,113,113,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px\">❓</div>\n<p style=\"color:#D1D5DB;margin:0;font-size:15px\">Não sabe quanto lucra por serviço</p>\n</div>\n<div style=\"display:flex;align-items:center;gap:16px;padding:16px;border-radius:12px;background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.1)\">\n<div style=\"width:40px;height:40px;border-radius:8px;background:rgba(248,113,113,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px\">⏰</div>\n<p style=\"color:#D1D5DB;margin:0;font-size:15px\">Depende 100% do WhatsApp manual</p>\n</div>\n</div>\n</div>"
+                },
+                "elements": []
+              },
+              {
+                "id": "prob0022",
+                "elType": "widget",
+                "widgetType": "html",
+                "settings": {
+                  "html": "<div style=\"border-radius:24px;border:1px solid rgba(34,211,238,0.2);background:linear-gradient(135deg,rgba(34,211,238,0.05),transparent);padding:32px;position:relative;font-family:Inter,sans-serif\">\n<div style=\"position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#22D3EE,transparent);border-radius:24px 24px 0 0\"></div>\n<div style=\"display:flex;align-items:center;gap:12px;margin-bottom:32px\">\n<div style=\"width:40px;height:40px;border-radius:50%;background:rgba(34,211,238,0.2);display:flex;align-items:center;justify-content:center;font-size:18px\">✓</div>\n<h3 style=\"font-size:20px;font-weight:700;color:#22D3EE;margin:0\">Com nossa plataforma...</h3>\n</div>\n<div style=\"display:flex;flex-direction:column;gap:16px\">\n<div style=\"display:flex;align-items:center;gap:16px;padding:16px;border-radius:12px;background:rgba(34,211,238,0.05);border:1px solid rgba(34,211,238,0.1)\">\n<div style=\"width:40px;height:40px;border-radius:8px;background:rgba(34,211,238,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px\">🤖</div>\n<p style=\"color:#D1D5DB;margin:0;font-size:15px\">Bot responde 24/7 automaticamente</p>\n</div>\n<div style=\"display:flex;align-items:center;gap:16px;padding:16px;border-radius:12px;background:rgba(34,211,238,0.05);border:1px solid rgba(34,211,238,0.1)\">\n<div style=\"width:40px;height:40px;border-radius:8px;background:rgba(34,211,238,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px\">📊</div>\n<p style=\"color:#D1D5DB;margin:0;font-size:15px\">Dashboard centralizado em tempo real</p>\n</div>\n<div style=\"display:flex;align-items:center;gap:16px;padding:16px;border-radius:12px;background:rgba(34,211,238,0.05);border:1px solid rgba(34,211,238,0.1)\">\n<div style=\"width:40px;height:40px;border-radius:8px;background:rgba(34,211,238,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px\">📈</div>\n<p style=\"color:#D1D5DB;margin:0;font-size:15px\">DRE e fluxo de caixa automáticos</p>\n</div>\n<div style=\"display:flex;align-items:center;gap:16px;padding:16px;border-radius:12px;background:rgba(34,211,238,0.05);border:1px solid rgba(34,211,238,0.1)\">\n<div style=\"width:40px;height:40px;border-radius:8px;background:rgba(34,211,238,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px\">⚡</div>\n<p style=\"color:#D1D5DB;margin:0;font-size:15px\">Automações que vendem enquanto você dorme</p>\n</div>\n</div>\n</div>"
+                },
+                "elements": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "mods0001",
+    "elType": "container",
+    "settings": {
+      "content_width": "full",
+      "background_background": "classic",
+      "background_color": "#000000",
+      "padding": { "unit": "px", "top": "80", "right": "0", "bottom": "80", "left": "0" },
+      "padding_mobile": { "unit": "px", "top": "60", "right": "0", "bottom": "60", "left": "0" }
+    },
+    "elements": [
+      {
+        "id": "mods0010",
+        "elType": "container",
+        "settings": {
+          "content_width": "boxed",
+          "flex_direction": "column",
+          "flex_align_items": "center"
+        },
+        "elements": [
+          {
+            "id": "mods0011",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style=\"display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(59,130,246,0.3);border-radius:9999px;font-size:14px;font-weight:500;color:#3B82F6;font-family:Inter,sans-serif;margin-bottom:16px\">12 Módulos Integrados</div>"
+            },
+            "elements": []
+          },
+          {
+            "id": "mods0012",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "Tudo que Você Precisa, <span style=\"background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent\">Em Um Só Lugar</span>",
+              "header_size": "h2",
+              "align": "center",
+              "title_color": "#FFFFFF",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter",
+              "typography_font_size": { "unit": "px", "size": 48 },
+              "typography_font_size_tablet": { "unit": "px", "size": 36 },
+              "typography_font_size_mobile": { "unit": "px", "size": 30 },
+              "typography_font_weight": "700"
+            },
+            "elements": []
+          },
+          {
+            "id": "mods0013",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style=\"font-size:20px;color:#9CA3AF;text-align:center;font-family:Inter,sans-serif\">Escolha os módulos que fazem sentido para o seu negócio</p>",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter"
+            },
+            "elements": []
+          },
+          {
+            "id": "mods0020",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px;font-family:Inter,sans-serif\">\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(135deg,rgba(17,24,39,0.8),rgba(0,0,0,0.8));padding:24px;transition:all 0.3s\">\n<div style=\"width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#3B82F6,#2563EB);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:28px\">📊</div>\n<h3 style=\"font-size:18px;font-weight:700;color:#FFF;margin:0 0 8px 0\">Dashboard de Gestão</h3>\n<p style=\"font-size:14px;color:#9CA3AF;margin:0 0 16px 0;line-height:1.5\">Visão 360° da sua operação com métricas em tempo real, KPIs e indicadores.</p>\n<div style=\"display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1F2937\">\n<span style=\"font-size:12px;color:#60A5FA;border:1px solid rgba(96,165,250,0.3);padding:2px 10px;border-radius:9999px\">Core</span>\n<span style=\"font-size:15px;font-weight:700;color:#3B82F6\">Incluído</span>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(135deg,rgba(17,24,39,0.8),rgba(0,0,0,0.8));padding:24px\">\n<div style=\"width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#F97316,#EA580C);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:28px\">🛒</div>\n<h3 style=\"font-size:18px;font-weight:700;color:#FFF;margin:0 0 8px 0\">Loja Online</h3>\n<p style=\"font-size:14px;color:#9CA3AF;margin:0 0 16px 0;line-height:1.5\">E-commerce completo com carrinho, checkout e agendamento integrado.</p>\n<div style=\"display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1F2937\">\n<span style=\"font-size:12px;color:#FB923C;border:1px solid rgba(251,146,60,0.3);padding:2px 10px;border-radius:9999px\">Vendas</span>\n<span style=\"font-size:15px;font-weight:700;color:#3B82F6\">R$ 97<span style=\"font-size:11px;color:#6B7280\">/mês</span></span>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(135deg,rgba(17,24,39,0.8),rgba(0,0,0,0.8));padding:24px\">\n<div style=\"width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#8B5CF6,#7C3AED);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:28px\">💰</div>\n<h3 style=\"font-size:18px;font-weight:700;color:#FFF;margin:0 0 8px 0\">Financeiro</h3>\n<p style=\"font-size:14px;color:#9CA3AF;margin:0 0 16px 0;line-height:1.5\">Controle de receitas, despesas, DRE e fluxo de caixa automatizado.</p>\n<div style=\"display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1F2937\">\n<span style=\"font-size:12px;color:#A78BFA;border:1px solid rgba(167,139,250,0.3);padding:2px 10px;border-radius:9999px\">Gestão</span>\n<span style=\"font-size:15px;font-weight:700;color:#3B82F6\">R$ 67<span style=\"font-size:11px;color:#6B7280\">/mês</span></span>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(135deg,rgba(17,24,39,0.8),rgba(0,0,0,0.8));padding:24px\">\n<div style=\"width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#F59E0B,#D97706);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:28px\">💬</div>\n<h3 style=\"font-size:18px;font-weight:700;color:#FFF;margin:0 0 8px 0\">WhatsApp Bot</h3>\n<p style=\"font-size:14px;color:#9CA3AF;margin:0 0 16px 0;line-height:1.5\">Atendimento automático 24/7 com agendamento, orçamento e follow-up.</p>\n<div style=\"display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1F2937\">\n<span style=\"font-size:12px;color:#FBBF24;border:1px solid rgba(251,191,36,0.3);padding:2px 10px;border-radius:9999px\">Automação</span>\n<span style=\"font-size:15px;font-weight:700;color:#3B82F6\">R$ 127<span style=\"font-size:11px;color:#6B7280\">/mês</span></span>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(135deg,rgba(17,24,39,0.8),rgba(0,0,0,0.8));padding:24px\">\n<div style=\"width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#22C55E,#16A34A);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:28px\">📍</div>\n<h3 style=\"font-size:18px;font-weight:700;color:#FFF;margin:0 0 8px 0\">Rastreamento de Rota</h3>\n<p style=\"font-size:14px;color:#9CA3AF;margin:0 0 16px 0;line-height:1.5\">Acompanhe seus técnicos em tempo real com mapa e status de entregas.</p>\n<div style=\"display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1F2937\">\n<span style=\"font-size:12px;color:#4ADE80;border:1px solid rgba(74,222,128,0.3);padding:2px 10px;border-radius:9999px\">Operação</span>\n<span style=\"font-size:15px;font-weight:700;color:#3B82F6\">R$ 47<span style=\"font-size:11px;color:#6B7280\">/mês</span></span>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(135deg,rgba(17,24,39,0.8),rgba(0,0,0,0.8));padding:24px\">\n<div style=\"width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#EC4899,#DB2777);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:28px\">📈</div>\n<h3 style=\"font-size:18px;font-weight:700;color:#FFF;margin:0 0 8px 0\">Marketing Tools</h3>\n<p style=\"font-size:14px;color:#9CA3AF;margin:0 0 16px 0;line-height:1.5\">Cupons, campanhas, canais UTM e automações de marketing integradas.</p>\n<div style=\"display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1F2937\">\n<span style=\"font-size:12px;color:#F472B6;border:1px solid rgba(244,114,182,0.3);padding:2px 10px;border-radius:9999px\">Marketing</span>\n<span style=\"font-size:15px;font-weight:700;color:#3B82F6\">R$ 57<span style=\"font-size:11px;color:#6B7280\">/mês</span></span>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(135deg,rgba(17,24,39,0.8),rgba(0,0,0,0.8));padding:24px\">\n<div style=\"width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#EC4899,#DB2777);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:28px\">📝</div>\n<h3 style=\"font-size:18px;font-weight:700;color:#FFF;margin:0 0 8px 0\">Blog SEO</h3>\n<p style=\"font-size:14px;color:#9CA3AF;margin:0 0 16px 0;line-height:1.5\">Blog otimizado para SEO com geração automática de conteúdo por IA.</p>\n<div style=\"display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1F2937\">\n<span style=\"font-size:12px;color:#F472B6;border:1px solid rgba(244,114,182,0.3);padding:2px 10px;border-radius:9999px\">Marketing</span>\n<span style=\"font-size:15px;font-weight:700;color:#3B82F6\">R$ 87<span style=\"font-size:11px;color:#6B7280\">/mês</span></span>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(135deg,rgba(17,24,39,0.8),rgba(0,0,0,0.8));padding:24px\">\n<div style=\"width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#22C55E,#16A34A);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:28px\">🤝</div>\n<h3 style=\"font-size:18px;font-weight:700;color:#FFF;margin:0 0 8px 0\">Parcerias</h3>\n<p style=\"font-size:14px;color:#9CA3AF;margin:0 0 16px 0;line-height:1.5\">Programa de parceiros e afiliados com links rastreáveis e comissões.</p>\n<div style=\"display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1F2937\">\n<span style=\"font-size:12px;color:#4ADE80;border:1px solid rgba(74,222,128,0.3);padding:2px 10px;border-radius:9999px\">Operação</span>\n<span style=\"font-size:15px;font-weight:700;color:#3B82F6\">R$ 37<span style=\"font-size:11px;color:#6B7280\">/mês</span></span>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(135deg,rgba(17,24,39,0.8),rgba(0,0,0,0.8));padding:24px\">\n<div style=\"width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#8B5CF6,#7C3AED);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:28px\">📊</div>\n<h3 style=\"font-size:18px;font-weight:700;color:#FFF;margin:0 0 8px 0\">Relatórios Avançados</h3>\n<p style=\"font-size:14px;color:#9CA3AF;margin:0 0 16px 0;line-height:1.5\">Relatórios detalhados com gráficos, exportação PDF e análise preditiva.</p>\n<div style=\"display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1F2937\">\n<span style=\"font-size:12px;color:#A78BFA;border:1px solid rgba(167,139,250,0.3);padding:2px 10px;border-radius:9999px\">Gestão</span>\n<span style=\"font-size:15px;font-weight:700;color:#3B82F6\">R$ 47<span style=\"font-size:11px;color:#6B7280\">/mês</span></span>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(135deg,rgba(17,24,39,0.8),rgba(0,0,0,0.8));padding:24px\">\n<div style=\"width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#06B6D4,#0891B2);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:28px\">🔌</div>\n<h3 style=\"font-size:18px;font-weight:700;color:#FFF;margin:0 0 8px 0\">API Access</h3>\n<p style=\"font-size:14px;color:#9CA3AF;margin:0 0 16px 0;line-height:1.5\">Integre com qualquer sistema externo via API REST documentada.</p>\n<div style=\"display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1F2937\">\n<span style=\"font-size:12px;color:#22D3EE;border:1px solid rgba(34,211,238,0.3);padding:2px 10px;border-radius:9999px\">Integração</span>\n<span style=\"font-size:15px;font-weight:700;color:#3B82F6\">R$ 97<span style=\"font-size:11px;color:#6B7280\">/mês</span></span>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(135deg,rgba(17,24,39,0.8),rgba(0,0,0,0.8));padding:24px\">\n<div style=\"width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#EAB308,#CA8A04);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:28px\">⭐</div>\n<h3 style=\"font-size:18px;font-weight:700;color:#FFF;margin:0 0 8px 0\">White Label</h3>\n<p style=\"font-size:14px;color:#9CA3AF;margin:0 0 16px 0;line-height:1.5\">Sua marca, seu domínio, sua identidade. Zero menção à nossa plataforma.</p>\n<div style=\"display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1F2937\">\n<span style=\"font-size:12px;color:#FACC15;border:1px solid rgba(250,204,21,0.3);padding:2px 10px;border-radius:9999px\">Premium</span>\n<span style=\"font-size:15px;font-weight:700;color:#3B82F6\">R$ 197<span style=\"font-size:11px;color:#6B7280\">/mês</span></span>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(135deg,rgba(17,24,39,0.8),rgba(0,0,0,0.8));padding:24px\">\n<div style=\"width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#EAB308,#CA8A04);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:28px\">🎨</div>\n<h3 style=\"font-size:18px;font-weight:700;color:#FFF;margin:0 0 8px 0\">IARC Studio</h3>\n<p style=\"font-size:14px;color:#9CA3AF;margin:0 0 16px 0;line-height:1.5\">Gerador de criativos com IA para posts, stories e landing pages.</p>\n<div style=\"display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1F2937\">\n<span style=\"font-size:12px;color:#FACC15;border:1px solid rgba(250,204,21,0.3);padding:2px 10px;border-radius:9999px\">Premium</span>\n<span style=\"font-size:15px;font-weight:700;color:#3B82F6\">R$ 147<span style=\"font-size:11px;color:#6B7280\">/mês</span></span>\n</div>\n</div>\n\n</div>\n<style>@media(max-width:1024px){div[style*=\"grid-template-columns:repeat(4\"]{grid-template-columns:repeat(2,1fr) !important}}@media(max-width:767px){div[style*=\"grid-template-columns:repeat(4\"]{grid-template-columns:1fr !important}}</style>"
+            },
+            "elements": []
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "bent0001",
+    "elType": "container",
+    "settings": {
+      "content_width": "full",
+      "background_background": "gradient",
+      "background_color": "#030712",
+      "background_color_b": "#000000",
+      "padding": { "unit": "px", "top": "80", "right": "0", "bottom": "80", "left": "0" },
+      "padding_mobile": { "unit": "px", "top": "60", "right": "0", "bottom": "60", "left": "0" }
+    },
+    "elements": [
+      {
+        "id": "bent0010",
+        "elType": "container",
+        "settings": {
+          "content_width": "boxed",
+          "flex_direction": "column",
+          "flex_align_items": "center"
+        },
+        "elements": [
+          {
+            "id": "bent0011",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "Por que <span style=\"background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent\">Nos Escolher?</span>",
+              "header_size": "h2",
+              "align": "center",
+              "title_color": "#FFFFFF",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter",
+              "typography_font_size": { "unit": "px", "size": 48 },
+              "typography_font_size_tablet": { "unit": "px", "size": 36 },
+              "typography_font_size_mobile": { "unit": "px", "size": 30 },
+              "typography_font_weight": "700"
+            },
+            "elements": []
+          },
+          {
+            "id": "bent0012",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style=\"font-size:20px;color:#9CA3AF;text-align:center;font-family:Inter,sans-serif\">Diferenciais que fazem a diferença no seu dia a dia</p>",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter"
+            },
+            "elements": []
+          },
+          {
+            "id": "bent0020",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;max-width:1152px;font-family:Inter,sans-serif\">\n\n<div style=\"border-radius:24px;border:1px solid rgba(234,179,8,0.3);background:linear-gradient(135deg,rgba(234,179,8,0.2),rgba(249,115,22,0.2));padding:32px;transition:all 0.3s\">\n<div style=\"width:56px;height:56px;border-radius:16px;background:rgba(17,24,39,0.5);border:1px solid #1F2937;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:28px\">⭐</div>\n<h3 style=\"font-size:20px;font-weight:700;color:#FFF;margin:0 0 12px 0\">White Label Completo</h3>\n<p style=\"color:#9CA3AF;line-height:1.6;margin:0\">Seu logo, suas cores, sua marca. Nenhuma menção à nossa plataforma.</p>\n</div>\n\n<div style=\"border-radius:24px;border:1px solid rgba(59,130,246,0.3);background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(6,182,212,0.2));padding:32px\">\n<div style=\"width:56px;height:56px;border-radius:16px;background:rgba(17,24,39,0.5);border:1px solid #1F2937;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:28px\">⏱️</div>\n<h3 style=\"font-size:20px;font-weight:700;color:#FFF;margin:0 0 12px 0\">Implementação em 48h</h3>\n<p style=\"color:#9CA3AF;line-height:1.6;margin:0\">Do zero ao operacional em tempo recorde.</p>\n</div>\n\n<div style=\"border-radius:24px;border:1px solid rgba(34,197,94,0.3);background:linear-gradient(135deg,rgba(34,197,94,0.2),rgba(16,185,129,0.2));padding:32px\">\n<div style=\"width:56px;height:56px;border-radius:16px;background:rgba(17,24,39,0.5);border:1px solid #1F2937;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:28px\">🎧</div>\n<h3 style=\"font-size:20px;font-weight:700;color:#FFF;margin:0 0 12px 0\">Suporte Humanizado</h3>\n<p style=\"color:#9CA3AF;line-height:1.6;margin:0\">Atendimento real via WhatsApp quando você precisar.</p>\n</div>\n\n<div style=\"border-radius:24px;border:1px solid rgba(168,85,247,0.3);background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(236,72,153,0.2));padding:32px\">\n<div style=\"width:56px;height:56px;border-radius:16px;background:rgba(17,24,39,0.5);border:1px solid #1F2937;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:28px\">📱</div>\n<h3 style=\"font-size:20px;font-weight:700;color:#FFF;margin:0 0 12px 0\">Mobile First (PWA)</h3>\n<p style=\"color:#9CA3AF;line-height:1.6;margin:0\">Instale como app no celular. Funciona offline.</p>\n</div>\n\n<div style=\"border-radius:24px;border:1px solid rgba(6,182,212,0.3);background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(20,184,166,0.2));padding:32px\">\n<div style=\"width:56px;height:56px;border-radius:16px;background:rgba(17,24,39,0.5);border:1px solid #1F2937;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:28px\">🛡️</div>\n<h3 style=\"font-size:20px;font-weight:700;color:#FFF;margin:0 0 12px 0\">Segurança LGPD</h3>\n<p style=\"color:#9CA3AF;line-height:1.6;margin:0\">Seus dados protegidos com criptografia de ponta.</p>\n</div>\n\n<div style=\"border-radius:24px;border:1px solid rgba(244,63,94,0.3);background:linear-gradient(135deg,rgba(244,63,94,0.2),rgba(239,68,68,0.2));padding:32px\">\n<div style=\"width:56px;height:56px;border-radius:16px;background:rgba(17,24,39,0.5);border:1px solid #1F2937;display:flex;align-items:center;justify-content:center;margin-bottom:24px;font-size:28px\">🔄</div>\n<h3 style=\"font-size:20px;font-weight:700;color:#FFF;margin:0 0 12px 0\">Atualizações Mensais</h3>\n<p style=\"color:#9CA3AF;line-height:1.6;margin:0\">Novas funcionalidades todo mês, sem custo extra.</p>\n</div>\n\n</div>\n<style>@media(max-width:1024px){div[style*=\"grid-template-columns:repeat(3\"]{grid-template-columns:repeat(2,1fr) !important}}@media(max-width:767px){div[style*=\"grid-template-columns:repeat(3\"]{grid-template-columns:1fr !important}}</style>"
+            },
+            "elements": []
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "calc0001",
+    "elType": "container",
+    "settings": {
+      "content_width": "full",
+      "background_background": "gradient",
+      "background_color": "#000000",
+      "background_color_b": "#030712",
+      "padding": { "unit": "px", "top": "80", "right": "0", "bottom": "80", "left": "0" },
+      "padding_mobile": { "unit": "px", "top": "60", "right": "0", "bottom": "60", "left": "0" }
+    },
+    "elements": [
+      {
+        "id": "calc0010",
+        "elType": "container",
+        "settings": { "content_width": "boxed", "flex_direction": "column", "flex_align_items": "center" },
+        "elements": [
+          {
+            "id": "calc0011",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style=\"display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(74,222,128,0.3);border-radius:9999px;font-size:14px;font-weight:500;color:#4ADE80;font-family:Inter,sans-serif;margin-bottom:16px\">🧮 Calculadora de Economia</div>"
+            },
+            "elements": []
+          },
+          {
+            "id": "calc0012",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "Quanto Você Pode <span style=\"background:linear-gradient(90deg,#4ADE80,#34D399);-webkit-background-clip:text;-webkit-text-fill-color:transparent\">Economizar?</span>",
+              "header_size": "h2",
+              "align": "center",
+              "title_color": "#FFFFFF",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter",
+              "typography_font_size": { "unit": "px", "size": 48 },
+              "typography_font_size_tablet": { "unit": "px", "size": 36 },
+              "typography_font_size_mobile": { "unit": "px", "size": 30 },
+              "typography_font_weight": "700"
+            },
+            "elements": []
+          },
+          {
+            "id": "calc0013",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style=\"font-size:20px;color:#9CA3AF;text-align:center;font-family:Inter,sans-serif\">Ajuste os valores abaixo e veja o impacto no seu negócio</p>"
+            },
+            "elements": []
+          },
+          {
+            "id": "calc0020",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div id=\"lp2-calculator\" style=\"display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:48px;max-width:1152px;font-family:Inter,sans-serif\">\n\n<div style=\"background:rgba(17,24,39,0.5);border:1px solid #1F2937;border-radius:16px;padding:24px\">\n<div style=\"margin-bottom:32px\">\n<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:16px\"><label style=\"color:#FFF;font-weight:500\">Serviços por mês</label><span id=\"calc-servicos-val\" style=\"font-size:24px;font-weight:700;color:#3B82F6\">30</span></div>\n<input type=\"range\" id=\"calc-servicos\" min=\"10\" max=\"200\" step=\"5\" value=\"30\" style=\"width:100%;accent-color:#3B82F6;height:8px\">\n</div>\n<div style=\"margin-bottom:32px\">\n<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:16px\"><label style=\"color:#FFF;font-weight:500\">Preço médio do serviço</label><span id=\"calc-preco-val\" style=\"font-size:24px;font-weight:700;color:#3B82F6\">R$ 200</span></div>\n<input type=\"range\" id=\"calc-preco\" min=\"100\" max=\"500\" step=\"10\" value=\"200\" style=\"width:100%;accent-color:#3B82F6;height:8px\">\n</div>\n<div>\n<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:16px\"><label style=\"color:#FFF;font-weight:500\">% de orçamentos perdidos</label><span id=\"calc-perdidos-val\" style=\"font-size:24px;font-weight:700;color:#F87171\">40%</span></div>\n<input type=\"range\" id=\"calc-perdidos\" min=\"10\" max=\"70\" step=\"5\" value=\"40\" style=\"width:100%;accent-color:#F87171;height:8px\">\n</div>\n</div>\n\n<div style=\"display:flex;flex-direction:column;gap:24px\">\n<div style=\"background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(16,185,129,0.1));border:1px solid rgba(34,197,94,0.2);border-radius:16px;padding:24px;display:flex;align-items:flex-start;gap:16px\">\n<div style=\"width:48px;height:48px;border-radius:12px;background:rgba(34,197,94,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:24px\">🛒</div>\n<div><p style=\"color:#9CA3AF;font-size:14px;margin:0\">Recuperando 30% dos carrinhos</p><p id=\"calc-receita\" style=\"font-size:30px;font-weight:700;color:#4ADE80;margin:4px 0\">+ R$ 720/mês</p><p id=\"calc-servicos-extras\" style=\"color:#6B7280;font-size:14px;margin:0\">3 serviços extras por mês</p></div>\n</div>\n<div style=\"background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(6,182,212,0.1));border:1px solid rgba(59,130,246,0.2);border-radius:16px;padding:24px;display:flex;align-items:flex-start;gap:16px\">\n<div style=\"width:48px;height:48px;border-radius:12px;background:rgba(59,130,246,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:24px\">⏰</div>\n<div><p style=\"color:#9CA3AF;font-size:14px;margin:0\">Automatizando agendamentos</p><p id=\"calc-tempo\" style=\"font-size:30px;font-weight:700;color:#60A5FA;margin:4px 0\">- 3h/mês</p><p style=\"color:#6B7280;font-size:14px;margin:0\">Tempo que você pode usar para crescer</p></div>\n</div>\n<div style=\"background:linear-gradient(135deg,rgba(168,85,247,0.1),rgba(236,72,153,0.1));border:1px solid rgba(168,85,247,0.2);border-radius:16px;padding:24px;display:flex;align-items:flex-start;gap:16px\">\n<div style=\"width:48px;height:48px;border-radius:12px;background:rgba(168,85,247,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:24px\">📈</div>\n<div><p style=\"color:#9CA3AF;font-size:14px;margin:0\">Aumento potencial no faturamento</p><p id=\"calc-roi\" style=\"font-size:30px;font-weight:700;color:#A78BFA;margin:4px 0\">+ 12%</p><p id=\"calc-faturamento\" style=\"color:#6B7280;font-size:14px;margin:0\">De R$ 6.000 para R$ 6.720/mês</p></div>\n</div>\n</div>\n\n</div>\n\n<style>@media(max-width:1024px){#lp2-calculator{grid-template-columns:1fr !important}}</style>\n\n<script>\ndocument.addEventListener('DOMContentLoaded',function(){\nvar sS=document.getElementById('calc-servicos'),sP=document.getElementById('calc-preco'),sL=document.getElementById('calc-perdidos');\nif(!sS)return;\nfunction upd(){\nvar sv=parseInt(sS.value),pr=parseInt(sP.value),pe=parseInt(sL.value);\ndocument.getElementById('calc-servicos-val').textContent=sv;\ndocument.getElementById('calc-preco-val').textContent='R$ '+pr;\ndocument.getElementById('calc-perdidos-val').textContent=pe+'%';\nvar fat=sv*pr,rec=Math.round(sv*(pe/100)*0.3),recV=rec*pr,hrs=Math.round(sv*0.1);\ndocument.getElementById('calc-receita').textContent='+ R$ '+recV.toLocaleString('pt-BR')+'/mês';\ndocument.getElementById('calc-servicos-extras').textContent=rec+' serviços extras por mês';\ndocument.getElementById('calc-tempo').textContent='- '+hrs+'h/mês';\ndocument.getElementById('calc-roi').textContent='+ '+Math.round((recV/fat)*100)+'%';\ndocument.getElementById('calc-faturamento').textContent='De R$ '+fat.toLocaleString('pt-BR')+' para R$ '+(fat+recV).toLocaleString('pt-BR')+'/mês';\n}\nsS.addEventListener('input',upd);sP.addEventListener('input',upd);sL.addEventListener('input',upd);\n});\n</script>"
+            },
+            "elements": []
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "test0001",
+    "elType": "container",
+    "settings": {
+      "content_width": "full",
+      "background_background": "classic",
+      "background_color": "#000000",
+      "padding": { "unit": "px", "top": "80", "right": "0", "bottom": "80", "left": "0" },
+      "padding_mobile": { "unit": "px", "top": "60", "right": "0", "bottom": "60", "left": "0" }
+    },
+    "elements": [
+      {
+        "id": "test0010",
+        "elType": "container",
+        "settings": { "content_width": "boxed", "flex_direction": "column", "flex_align_items": "center" },
+        "elements": [
+          {
+            "id": "test0011",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "<span style=\"background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent\">Resultados Reais</span> de Empresas Reais",
+              "header_size": "h2",
+              "align": "center",
+              "title_color": "#FFFFFF",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter",
+              "typography_font_size": { "unit": "px", "size": 48 },
+              "typography_font_size_tablet": { "unit": "px", "size": 36 },
+              "typography_font_size_mobile": { "unit": "px", "size": 30 },
+              "typography_font_weight": "700"
+            },
+            "elements": []
+          },
+          {
+            "id": "test0012",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style=\"font-size:20px;color:#9CA3AF;text-align:center;font-family:Inter,sans-serif\">Veja como outras empresas de limpeza transformaram seus negócios</p>"
+            },
+            "elements": []
+          },
+          {
+            "id": "test0020",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style=\"display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;font-family:Inter,sans-serif\">\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:24px;position:relative\">\n<div style=\"display:inline-block;padding:4px 12px;border-radius:9999px;background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.2);margin-bottom:16px\"><span style=\"color:#22D3EE;font-size:14px;font-weight:500\">+40% faturamento</span></div>\n<div style=\"display:flex;gap:4px;margin-bottom:16px\">⭐⭐⭐⭐⭐</div>\n<p style=\"color:#D1D5DB;font-size:14px;line-height:1.6;margin:0 0 24px 0\">\"Revolucionou nossa operação! Antes tínhamos planilhas confusas, agora tudo está automatizado. Aumentamos 40% no faturamento em 3 meses.\"</p>\n<div style=\"display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #1F2937\">\n<div style=\"width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#06B6D4);display:flex;align-items:center;justify-content:center;color:#FFF;font-size:14px;font-weight:600\">CE</div>\n<div><p style=\"color:#FFF;font-weight:500;margin:0;font-size:14px\">Carlos Eduardo Silva</p><p style=\"color:#9CA3AF;font-size:13px;margin:2px 0 0 0\">CEO - LimpaTech</p><p style=\"color:#6B7280;font-size:12px;margin:2px 0 0 0\">São Paulo, SP</p></div>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:24px;position:relative\">\n<div style=\"display:inline-block;padding:4px 12px;border-radius:9999px;background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.2);margin-bottom:16px\"><span style=\"color:#22D3EE;font-size:14px;font-weight:500\">-3h/dia no WhatsApp</span></div>\n<div style=\"display:flex;gap:4px;margin-bottom:16px\">⭐⭐⭐⭐⭐</div>\n<p style=\"color:#D1D5DB;font-size:14px;line-height:1.6;margin:0 0 24px 0\">\"O agendamento online mudou tudo. Antes perdia 3h/dia no WhatsApp respondendo orçamentos. Agora o cliente agenda sozinho 24h.\"</p>\n<div style=\"display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #1F2937\">\n<div style=\"width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#06B6D4);display:flex;align-items:center;justify-content:center;color:#FFF;font-size:14px;font-weight:600\">MC</div>\n<div><p style=\"color:#FFF;font-weight:500;margin:0;font-size:14px\">Mariana Costa</p><p style=\"color:#9CA3AF;font-size:13px;margin:2px 0 0 0\">Proprietária - Clean Express</p><p style=\"color:#6B7280;font-size:12px;margin:2px 0 0 0\">Rio de Janeiro, RJ</p></div>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:24px;position:relative\">\n<div style=\"display:inline-block;padding:4px 12px;border-radius:9999px;background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.2);margin-bottom:16px\"><span style=\"color:#22D3EE;font-size:14px;font-weight:500\">ROI em 30 dias</span></div>\n<div style=\"display:flex;gap:4px;margin-bottom:16px\">⭐⭐⭐⭐⭐</div>\n<p style=\"color:#D1D5DB;font-size:14px;line-height:1.6;margin:0 0 24px 0\">\"Implementação super rápida e suporte excepcional. Em 48h já estávamos vendendo online. O ROI veio no primeiro mês!\"</p>\n<div style=\"display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #1F2937\">\n<div style=\"width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#06B6D4);display:flex;align-items:center;justify-content:center;color:#FFF;font-size:14px;font-weight:600\">RA</div>\n<div><p style=\"color:#FFF;font-weight:500;margin:0;font-size:14px\">Ricardo Almeida</p><p style=\"color:#9CA3AF;font-size:13px;margin:2px 0 0 0\">Diretor - HigiPro</p><p style=\"color:#6B7280;font-size:12px;margin:2px 0 0 0\">Belo Horizonte, MG</p></div>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:24px;position:relative\">\n<div style=\"display:inline-block;padding:4px 12px;border-radius:9999px;background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.2);margin-bottom:16px\"><span style=\"color:#22D3EE;font-size:14px;font-weight:500\">+25% lucro líquido</span></div>\n<div style=\"display:flex;gap:4px;margin-bottom:16px\">⭐⭐⭐⭐⭐</div>\n<p style=\"color:#D1D5DB;font-size:14px;line-height:1.6;margin:0 0 24px 0\">\"O controle financeiro integrado me deu visão total do negócio. Descobri que tinha serviços dando prejuízo e corrigi na hora.\"</p>\n<div style=\"display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #1F2937\">\n<div style=\"width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#06B6D4);display:flex;align-items:center;justify-content:center;color:#FFF;font-size:14px;font-weight:600\">JF</div>\n<div><p style=\"color:#FFF;font-weight:500;margin:0;font-size:14px\">Juliana Ferreira</p><p style=\"color:#9CA3AF;font-size:13px;margin:2px 0 0 0\">Fundadora - Estofados BH</p><p style=\"color:#6B7280;font-size:12px;margin:2px 0 0 0\">Belo Horizonte, MG</p></div>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:24px;position:relative\">\n<div style=\"display:inline-block;padding:4px 12px;border-radius:9999px;background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.2);margin-bottom:16px\"><span style=\"color:#22D3EE;font-size:14px;font-weight:500\">30% carrinhos recuperados</span></div>\n<div style=\"display:flex;gap:4px;margin-bottom:16px\">⭐⭐⭐⭐⭐</div>\n<p style=\"color:#D1D5DB;font-size:14px;line-height:1.6;margin:0 0 24px 0\">\"A automação de WhatsApp trouxe muito mais profissionalismo. Recuperamos 30% dos carrinhos abandonados automaticamente.\"</p>\n<div style=\"display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #1F2937\">\n<div style=\"width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#06B6D4);display:flex;align-items:center;justify-content:center;color:#FFF;font-size:14px;font-weight:600\">PS</div>\n<div><p style=\"color:#FFF;font-weight:500;margin:0;font-size:14px\">Paulo Santos</p><p style=\"color:#9CA3AF;font-size:13px;margin:2px 0 0 0\">Gerente - LimpaMais</p><p style=\"color:#6B7280;font-size:12px;margin:2px 0 0 0\">Curitiba, PR</p></div>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:24px;position:relative\">\n<div style=\"display:inline-block;padding:4px 12px;border-radius:9999px;background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.2);margin-bottom:16px\"><span style=\"color:#22D3EE;font-size:14px;font-weight:500\">8 técnicos organizados</span></div>\n<div style=\"display:flex;gap:4px;margin-bottom:16px\">⭐⭐⭐⭐⭐</div>\n<p style=\"color:#D1D5DB;font-size:14px;line-height:1.6;margin:0 0 24px 0\">\"Mobile perfeito! Minha equipe de 8 técnicos gerencia tudo pelo celular. Os clientes elogiam o profissionalismo.\"</p>\n<div style=\"display:flex;align-items:center;gap:12px;padding-top:16px;border-top:1px solid #1F2937\">\n<div style=\"width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#06B6D4);display:flex;align-items:center;justify-content:center;color:#FFF;font-size:14px;font-weight:600\">AR</div>\n<div><p style=\"color:#FFF;font-weight:500;margin:0;font-size:14px\">Ana Paula Rodrigues</p><p style=\"color:#9CA3AF;font-size:13px;margin:2px 0 0 0\">Proprietária - Clean Home</p><p style=\"color:#6B7280;font-size:12px;margin:2px 0 0 0\">Porto Alegre, RS</p></div>\n</div>\n</div>\n\n</div>\n\n<div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:32px;max-width:896px;margin:64px auto 0;font-family:Inter,sans-serif\">\n<div style=\"text-align:center\"><p style=\"font-size:36px;font-weight:700;background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0\">98%</p><p style=\"color:#9CA3AF;font-size:14px;margin:4px 0 0 0\">Taxa de satisfação</p></div>\n<div style=\"text-align:center\"><p style=\"font-size:36px;font-weight:700;background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0\">+35%</p><p style=\"color:#9CA3AF;font-size:14px;margin:4px 0 0 0\">Aumento médio em vendas</p></div>\n<div style=\"text-align:center\"><p style=\"font-size:36px;font-weight:700;background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0\">-50%</p><p style=\"color:#9CA3AF;font-size:14px;margin:4px 0 0 0\">Tempo em tarefas manuais</p></div>\n<div style=\"text-align:center\"><p style=\"font-size:36px;font-weight:700;background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0\">30 dias</p><p style=\"color:#9CA3AF;font-size:14px;margin:4px 0 0 0\">Tempo médio para ROI</p></div>\n</div>\n\n<style>@media(max-width:1024px){div[style*=\"grid-template-columns:repeat(3\"]{grid-template-columns:repeat(2,1fr) !important}}@media(max-width:767px){div[style*=\"grid-template-columns:repeat(3\"]{grid-template-columns:1fr !important}div[style*=\"grid-template-columns:repeat(4\"]{grid-template-columns:repeat(2,1fr) !important}}</style>"
+            },
+            "elements": []
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "pric0001",
+    "elType": "container",
+    "settings": {
+      "content_width": "full",
+      "background_background": "gradient",
+      "background_color": "#030712",
+      "background_color_b": "#000000",
+      "padding": { "unit": "px", "top": "80", "right": "0", "bottom": "80", "left": "0" },
+      "padding_mobile": { "unit": "px", "top": "60", "right": "0", "bottom": "60", "left": "0" }
+    },
+    "elements": [
+      {
+        "id": "pric0010",
+        "elType": "container",
+        "settings": { "content_width": "boxed", "flex_direction": "column", "flex_align_items": "center" },
+        "elements": [
+          {
+            "id": "pric0011",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style=\"display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border:1px solid rgba(59,130,246,0.3);border-radius:9999px;font-size:14px;font-weight:500;color:#3B82F6;font-family:Inter,sans-serif;margin-bottom:16px\">Pricing Flexível</div>"
+            },
+            "elements": []
+          },
+          {
+            "id": "pric0012",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "Monte Seu <span style=\"background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent\">Plano Ideal</span>",
+              "header_size": "h2",
+              "align": "center",
+              "title_color": "#FFFFFF",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter",
+              "typography_font_size": { "unit": "px", "size": 48 },
+              "typography_font_size_tablet": { "unit": "px", "size": 36 },
+              "typography_font_size_mobile": { "unit": "px", "size": 30 },
+              "typography_font_weight": "700"
+            },
+            "elements": []
+          },
+          {
+            "id": "pric0013",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style=\"font-size:20px;color:#9CA3AF;text-align:center;font-family:Inter,sans-serif\">Pague apenas pelos módulos que você realmente precisa</p>"
+            },
+            "elements": []
+          },
+          {
+            "id": "pric0020",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style=\"display:grid;grid-template-columns:2fr 1fr;gap:32px;margin-top:48px;max-width:1152px;font-family:Inter,sans-serif\">\n\n<div>\n<div style=\"border-radius:16px;border:1px solid rgba(59,130,246,0.3);background:rgba(59,130,246,0.05);padding:24px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center\">\n<div><div style=\"display:inline-block;padding:4px 12px;border-radius:9999px;background:rgba(59,130,246,0.2);color:#3B82F6;font-size:13px;font-weight:500;margin-bottom:8px\">Sempre Incluído</div><h3 style=\"font-size:20px;font-weight:700;color:#FFF;margin:0\">Command Center (Dashboard)</h3><p style=\"color:#9CA3AF;font-size:14px;margin:4px 0 0 0\">Gestão centralizada da sua operação</p></div>\n<div style=\"text-align:right\"><p style=\"font-size:30px;font-weight:700;color:#3B82F6;margin:0\">R$ 147</p><p style=\"color:#6B7280;font-size:14px;margin:0\">/mês</p></div>\n</div>\n\n<h4 style=\"font-size:18px;font-weight:600;color:#FFF;margin:0 0 16px 0\">Módulos Adicionais</h4>\n\n<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:16px\">\n<div style=\"border-radius:12px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:16px;display:flex;justify-content:space-between;align-items:center\"><div><p style=\"color:#FFF;font-weight:500;margin:0\">Loja Online</p><p style=\"color:#6B7280;font-size:14px;margin:4px 0 0 0\">+ R$ 97/mês</p></div><div style=\"width:44px;height:24px;border-radius:12px;background:#374151;position:relative\"><div style=\"width:20px;height:20px;border-radius:50%;background:#6B7280;position:absolute;top:2px;left:2px\"></div></div></div>\n<div style=\"border-radius:12px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:16px;display:flex;justify-content:space-between;align-items:center\"><div><p style=\"color:#FFF;font-weight:500;margin:0\">Financeiro</p><p style=\"color:#6B7280;font-size:14px;margin:4px 0 0 0\">+ R$ 67/mês</p></div><div style=\"width:44px;height:24px;border-radius:12px;background:#374151;position:relative\"><div style=\"width:20px;height:20px;border-radius:50%;background:#6B7280;position:absolute;top:2px;left:2px\"></div></div></div>\n<div style=\"border-radius:12px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:16px;display:flex;justify-content:space-between;align-items:center\"><div><p style=\"color:#FFF;font-weight:500;margin:0\">WhatsApp Bot</p><p style=\"color:#6B7280;font-size:14px;margin:4px 0 0 0\">+ R$ 127/mês</p></div><div style=\"width:44px;height:24px;border-radius:12px;background:#374151;position:relative\"><div style=\"width:20px;height:20px;border-radius:50%;background:#6B7280;position:absolute;top:2px;left:2px\"></div></div></div>\n<div style=\"border-radius:12px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:16px;display:flex;justify-content:space-between;align-items:center\"><div><p style=\"color:#FFF;font-weight:500;margin:0\">Rastreamento</p><p style=\"color:#6B7280;font-size:14px;margin:4px 0 0 0\">+ R$ 47/mês</p></div><div style=\"width:44px;height:24px;border-radius:12px;background:#374151;position:relative\"><div style=\"width:20px;height:20px;border-radius:50%;background:#6B7280;position:absolute;top:2px;left:2px\"></div></div></div>\n<div style=\"border-radius:12px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:16px;display:flex;justify-content:space-between;align-items:center\"><div><p style=\"color:#FFF;font-weight:500;margin:0\">Marketing Tools</p><p style=\"color:#6B7280;font-size:14px;margin:4px 0 0 0\">+ R$ 57/mês</p></div><div style=\"width:44px;height:24px;border-radius:12px;background:#374151;position:relative\"><div style=\"width:20px;height:20px;border-radius:50%;background:#6B7280;position:absolute;top:2px;left:2px\"></div></div></div>\n<div style=\"border-radius:12px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:16px;display:flex;justify-content:space-between;align-items:center\"><div><p style=\"color:#FFF;font-weight:500;margin:0\">Blog SEO</p><p style=\"color:#6B7280;font-size:14px;margin:4px 0 0 0\">+ R$ 87/mês</p></div><div style=\"width:44px;height:24px;border-radius:12px;background:#374151;position:relative\"><div style=\"width:20px;height:20px;border-radius:50%;background:#6B7280;position:absolute;top:2px;left:2px\"></div></div></div>\n<div style=\"border-radius:12px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:16px;display:flex;justify-content:space-between;align-items:center\"><div><p style=\"color:#FFF;font-weight:500;margin:0\">White Label</p><p style=\"color:#6B7280;font-size:14px;margin:4px 0 0 0\">+ R$ 197/mês</p></div><div style=\"width:44px;height:24px;border-radius:12px;background:#374151;position:relative\"><div style=\"width:20px;height:20px;border-radius:50%;background:#6B7280;position:absolute;top:2px;left:2px\"></div></div></div>\n<div style=\"border-radius:12px;border:1px solid #1F2937;background:rgba(17,24,39,0.5);padding:16px;display:flex;justify-content:space-between;align-items:center\"><div><p style=\"color:#FFF;font-weight:500;margin:0\">IARC Studio</p><p style=\"color:#6B7280;font-size:14px;margin:4px 0 0 0\">+ R$ 147/mês</p></div><div style=\"width:44px;height:24px;border-radius:12px;background:#374151;position:relative\"><div style=\"width:20px;height:20px;border-radius:50%;background:#6B7280;position:absolute;top:2px;left:2px\"></div></div></div>\n</div>\n</div>\n\n<div style=\"border-radius:16px;border:1px solid #1F2937;background:linear-gradient(180deg,#111827,#000);padding:24px;position:sticky;top:32px;height:fit-content\">\n<h3 style=\"font-size:20px;font-weight:700;color:#FFF;margin:0 0 24px 0\">Seu Plano</h3>\n<div style=\"display:flex;align-items:center;gap:8px;color:#D1D5DB;margin-bottom:12px\"><span style=\"color:#3B82F6\">✓</span> Command Center <span style=\"margin-left:auto;color:#6B7280\">R$ 147</span></div>\n<div style=\"border-top:1px solid #1F2937;margin:16px 0\"></div>\n<div style=\"display:flex;justify-content:space-between;align-items:center;margin-bottom:24px\"><span style=\"color:#9CA3AF\">Total mensal</span><div style=\"text-align:right\"><p style=\"font-size:30px;font-weight:700;color:#FFF;margin:0\">R$ 147</p><p style=\"color:#6B7280;font-size:14px;margin:0\">/mês</p></div></div>\n<a href=\"#cta-form\" style=\"display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border-radius:12px;background:linear-gradient(90deg,#3B82F6,#06B6D4);color:#FFF;font-size:18px;font-weight:600;text-decoration:none;font-family:Inter,sans-serif\">💬 Falar com Consultor</a>\n<p style=\"text-align:center;color:#6B7280;font-size:12px;margin:16px 0 0 0\">Valores negociáveis. Descontos para pagamento anual.</p>\n</div>\n\n</div>\n<style>@media(max-width:1024px){div[style*=\"grid-template-columns:2fr 1fr\"]{grid-template-columns:1fr !important}}</style>"
+            },
+            "elements": []
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "faq00001",
+    "elType": "container",
+    "settings": {
+      "content_width": "full",
+      "background_background": "gradient",
+      "background_color": "#000000",
+      "background_color_b": "#030712",
+      "padding": { "unit": "px", "top": "80", "right": "0", "bottom": "80", "left": "0" },
+      "padding_mobile": { "unit": "px", "top": "60", "right": "0", "bottom": "60", "left": "0" }
+    },
+    "elements": [
+      {
+        "id": "faq00010",
+        "elType": "container",
+        "settings": { "content_width": "boxed", "flex_direction": "column", "flex_align_items": "center", "box_max_width": { "unit": "px", "size": 896 } },
+        "elements": [
+          {
+            "id": "faq00011",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style=\"display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:9999px;background:linear-gradient(90deg,rgba(59,130,246,0.1),rgba(6,182,212,0.1));border:1px solid rgba(59,130,246,0.2);font-size:14px;font-weight:600;color:#22D3EE;font-family:Inter,sans-serif;margin-bottom:16px\">❓ Perguntas Frequentes</div>"
+            },
+            "elements": []
+          },
+          {
+            "id": "faq00012",
+            "elType": "widget",
+            "widgetType": "heading",
+            "settings": {
+              "title": "Dúvidas? <span style=\"background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent\">Temos as Respostas</span>",
+              "header_size": "h2",
+              "align": "center",
+              "title_color": "#FFFFFF",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter",
+              "typography_font_size": { "unit": "px", "size": 48 },
+              "typography_font_size_tablet": { "unit": "px", "size": 40 },
+              "typography_font_size_mobile": { "unit": "px", "size": 30 },
+              "typography_font_weight": "700"
+            },
+            "elements": []
+          },
+          {
+            "id": "faq00013",
+            "elType": "widget",
+            "widgetType": "text-editor",
+            "settings": {
+              "editor": "<p style=\"font-size:20px;color:#9CA3AF;text-align:center;font-family:Inter,sans-serif;margin-bottom:48px\">Tudo que você precisa saber sobre o sistema</p>"
+            },
+            "elements": []
+          },
+          {
+            "id": "faq00020",
+            "elType": "widget",
+            "widgetType": "toggle",
+            "settings": {
+              "tabs": [
+                { "tab_title": "Como funciona o White Label?", "tab_content": "Você recebe o sistema completo com sua marca (logo, cores, nome da empresa). Seus clientes veem apenas sua empresa, não há nenhuma menção à nossa plataforma. É como se você tivesse desenvolvido o sistema do zero." },
+                { "tab_title": "Quanto tempo leva a implementação?", "tab_content": "Em média 48 horas após a contratação. Você nos envia seu logo, cores da marca e informações básicas, e nós configuramos tudo. Você recebe acesso ao sistema pronto para usar, com treinamento incluído." },
+                { "tab_title": "Preciso de conhecimento técnico?", "tab_content": "Não! O sistema foi desenvolvido para ser extremamente intuitivo. Qualquer pessoa consegue usar sem dificuldades. Além disso, oferecemos treinamento completo na implantação e suporte contínuo." },
+                { "tab_title": "E se eu já tenho um site?", "tab_content": "Perfeito! O sistema pode ser integrado ao seu site existente ou funcionar de forma independente. Podemos adicionar um botão de agendamento no seu site atual que direciona para o sistema." },
+                { "tab_title": "Os dados são seguros?", "tab_content": "Totalmente! Utilizamos infraestrutura que oferece criptografia de ponta a ponta, backups automáticos diários e conformidade com LGPD. Seus dados e de seus clientes estão 100% protegidos." },
+                { "tab_title": "Posso personalizar as funcionalidades?", "tab_content": "Sim! No plano Enterprise oferecemos customizações exclusivas para atender necessidades específicas do seu negócio. Além disso, todos os planos incluem templates personalizáveis de mensagens e configurações flexíveis." },
+                { "tab_title": "Como funciona o suporte?", "tab_content": "Oferecemos suporte via WhatsApp e email. No plano Starter, o suporte é por email com resposta em até 24h. Nos planos Professional e Enterprise, temos suporte prioritário via WhatsApp com tempo de resposta muito mais rápido." },
+                { "tab_title": "Posso mudar de plano depois?", "tab_content": "Sim! Você pode fazer upgrade ou downgrade do seu plano a qualquer momento, sem burocracia. As mudanças entram em vigor no próximo ciclo de cobrança. Seus dados são preservados em qualquer mudança." },
+                { "tab_title": "Existe contrato de fidelidade?", "tab_content": "Não! Trabalhamos com mensalidade, sem contrato de fidelidade. Você pode cancelar quando quiser. Acreditamos que a qualidade do nosso serviço é o que mantém nossos clientes conosco, não contratos." },
+                { "tab_title": "Há limite de clientes ou agendamentos?", "tab_content": "No plano Starter há limite de 100 agendamentos/mês. Nos planos Professional e Enterprise não há limites! Você pode ter quantos clientes e agendamentos quiser, o sistema escala automaticamente." }
+              ],
+              "title_color": "#FFFFFF",
+              "title_active_color": "#60A5FA",
+              "content_color": "#9CA3AF",
+              "tab_active_color": "#60A5FA",
+              "border_color": "#1F2937",
+              "typography_typography": "custom",
+              "typography_font_family": "Inter",
+              "typography_font_size": { "unit": "px", "size": 18 },
+              "typography_font_weight": "600",
+              "content_typography_typography": "custom",
+              "content_typography_font_family": "Inter",
+              "content_typography_font_size": { "unit": "px", "size": 16 },
+              "icon_color": "#9CA3AF",
+              "icon_active_color": "#60A5FA",
+              "space_between": 16,
+              "toggle_border_radius": { "unit": "px", "top": "16", "right": "16", "bottom": "16", "left": "16" }
+            },
+            "elements": []
+          },
+          {
+            "id": "faq00030",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style=\"margin-top:64px;text-align:center;padding:32px;border-radius:16px;border:1px solid rgba(59,130,246,0.2);background:linear-gradient(135deg,rgba(59,130,246,0.05),rgba(6,182,212,0.05));font-family:Inter,sans-serif\">\n<h3 style=\"font-size:24px;font-weight:700;color:#FFF;margin:0 0 12px 0\">Ainda tem dúvidas?</h3>\n<p style=\"color:#9CA3AF;margin:0 0 24px 0\">Nossa equipe está pronta para te ajudar! Entre em contato via WhatsApp.</p>\n<a href=\"https://wa.me/5531999999999\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;background:linear-gradient(90deg,#3B82F6,#06B6D4);color:#FFF;font-weight:600;text-decoration:none;font-size:16px\">Falar com Especialista</a>\n</div>"
+            },
+            "elements": []
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "cta00001",
+    "elType": "container",
+    "settings": {
+      "content_width": "full",
+      "background_background": "gradient",
+      "background_color": "#000000",
+      "background_color_b": "#0C1629",
+      "padding": { "unit": "px", "top": "80", "right": "0", "bottom": "80", "left": "0" },
+      "padding_mobile": { "unit": "px", "top": "60", "right": "0", "bottom": "60", "left": "0" }
+    },
+    "elements": [
+      {
+        "id": "cta00010",
+        "elType": "container",
+        "settings": { "content_width": "boxed", "flex_direction": "row", "flex_direction_tablet": "column", "flex_direction_mobile": "column", "flex_gap": { "unit": "px", "size": 48, "column": "48", "row": "48" }, "flex_align_items": "center", "box_max_width": { "unit": "px", "size": 1152 } },
+        "elements": [
+          {
+            "id": "cta00020",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style=\"font-family:Inter,sans-serif\">\n<h2 style=\"font-size:48px;font-weight:700;color:#FFF;margin:0 0 16px 0;line-height:1.1\">Pronto para <span style=\"background:linear-gradient(90deg,#60A5FA,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent\">Transformar</span> seu Negócio?</h2>\n<p style=\"font-size:20px;color:#9CA3AF;margin:0 0 32px 0\">Agende uma demonstração gratuita e veja como podemos ajudar sua empresa a crescer.</p>\n\n<div style=\"display:flex;flex-direction:column;gap:16px;margin-bottom:32px\">\n<div style=\"display:flex;align-items:flex-start;gap:16px;padding:16px;border-radius:12px;background:rgba(17,24,39,0.5);border:1px solid #1F2937\">\n<div style=\"width:40px;height:40px;border-radius:8px;background:rgba(59,130,246,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px\">⏱️</div>\n<div><h4 style=\"color:#FFF;font-weight:500;margin:0\">Demo personalizada de 30 min</h4><p style=\"color:#9CA3AF;font-size:14px;margin:4px 0 0 0\">Mostramos exatamente como o sistema se adapta ao seu negócio</p></div>\n</div>\n<div style=\"display:flex;align-items:flex-start;gap:16px;padding:16px;border-radius:12px;background:rgba(17,24,39,0.5);border:1px solid #1F2937\">\n<div style=\"width:40px;height:40px;border-radius:8px;background:rgba(6,182,212,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px\">🛡️</div>\n<div><h4 style=\"color:#FFF;font-weight:500;margin:0\">14 dias grátis para testar</h4><p style=\"color:#9CA3AF;font-size:14px;margin:4px 0 0 0\">Sem cartão de crédito, sem compromisso</p></div>\n</div>\n<div style=\"display:flex;align-items:flex-start;gap:16px;padding:16px;border-radius:12px;background:rgba(17,24,39,0.5);border:1px solid #1F2937\">\n<div style=\"width:40px;height:40px;border-radius:8px;background:rgba(34,197,94,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px\">🎧</div>\n<div><h4 style=\"color:#FFF;font-weight:500;margin:0\">Suporte na implementação</h4><p style=\"color:#9CA3AF;font-size:14px;margin:4px 0 0 0\">Te ajudamos a configurar tudo do zero</p></div>\n</div>\n</div>\n\n<div style=\"display:flex;flex-wrap:wrap;gap:16px\">\n<a href=\"tel:+5531999999999\" style=\"display:flex;align-items:center;gap:8px;color:#9CA3AF;text-decoration:none;font-size:15px\">📞 (31) 99999-9999</a>\n<a href=\"mailto:comercial@rclimpamais.com.br\" style=\"display:flex;align-items:center;gap:8px;color:#9CA3AF;text-decoration:none;font-size:15px\">📧 comercial@rclimpamais.com.br</a>\n</div>\n</div>"
+            },
+            "elements": []
+          },
+          {
+            "id": "cta00030",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div id=\"cta-form\" style=\"border-radius:16px;border:1px solid #1F2937;background:rgba(17,24,39,0.8);padding:32px;box-shadow:0 25px 50px -12px rgba(59,130,246,0.05);font-family:Inter,sans-serif;max-width:500px;width:100%\">\n<h3 style=\"font-size:24px;font-weight:700;color:#FFF;margin:0 0 8px 0\">Agendar Demonstração</h3>\n<p style=\"color:#9CA3AF;font-size:14px;margin:0 0 24px 0\">Preencha seus dados e entraremos em contato</p>\n<form style=\"display:flex;flex-direction:column;gap:16px\">\n<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:16px\">\n<div><label style=\"display:block;color:#D1D5DB;font-size:14px;margin-bottom:8px\">Nome *</label><input type=\"text\" placeholder=\"Seu nome\" style=\"width:100%;padding:10px 14px;border-radius:8px;border:1px solid #374151;background:rgba(31,41,55,0.5);color:#FFF;font-size:15px;font-family:Inter,sans-serif;outline:none\" required></div>\n<div><label style=\"display:block;color:#D1D5DB;font-size:14px;margin-bottom:8px\">WhatsApp *</label><input type=\"tel\" placeholder=\"(00) 00000-0000\" style=\"width:100%;padding:10px 14px;border-radius:8px;border:1px solid #374151;background:rgba(31,41,55,0.5);color:#FFF;font-size:15px;font-family:Inter,sans-serif;outline:none\" required></div>\n</div>\n<div><label style=\"display:block;color:#D1D5DB;font-size:14px;margin-bottom:8px\">Email *</label><input type=\"email\" placeholder=\"seu@email.com\" style=\"width:100%;padding:10px 14px;border-radius:8px;border:1px solid #374151;background:rgba(31,41,55,0.5);color:#FFF;font-size:15px;font-family:Inter,sans-serif;outline:none\" required></div>\n<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:16px\">\n<div><label style=\"display:block;color:#D1D5DB;font-size:14px;margin-bottom:8px\">Nome da Empresa *</label><input type=\"text\" placeholder=\"Sua empresa\" style=\"width:100%;padding:10px 14px;border-radius:8px;border:1px solid #374151;background:rgba(31,41,55,0.5);color:#FFF;font-size:15px;font-family:Inter,sans-serif;outline:none\" required></div>\n<div><label style=\"display:block;color:#D1D5DB;font-size:14px;margin-bottom:8px\">Qtd. Técnicos</label><select style=\"width:100%;padding:10px 14px;border-radius:8px;border:1px solid #374151;background:rgba(31,41,55,0.5);color:#FFF;font-size:15px;font-family:Inter,sans-serif;outline:none\"><option value=\"\">Selecione</option><option value=\"1\">1 técnico</option><option value=\"2-5\">2 a 5 técnicos</option><option value=\"6-10\">6 a 10 técnicos</option><option value=\"10+\">Mais de 10</option></select></div>\n</div>\n<div><label style=\"display:block;color:#D1D5DB;font-size:14px;margin-bottom:8px\">Mensagem (opcional)</label><textarea placeholder=\"Conte-nos sobre sua empresa e seus desafios...\" rows=\"3\" style=\"width:100%;padding:10px 14px;border-radius:8px;border:1px solid #374151;background:rgba(31,41,55,0.5);color:#FFF;font-size:15px;font-family:Inter,sans-serif;outline:none;resize:none\"></textarea></div>\n<button type=\"submit\" style=\"width:100%;padding:14px;border-radius:12px;background:linear-gradient(90deg,#3B82F6,#06B6D4);color:#FFF;font-size:16px;font-weight:600;border:none;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;gap:8px\">Agendar Minha Demonstração →</button>\n<p style=\"text-align:center;color:#6B7280;font-size:12px;margin:0\">🔒 Seus dados estão seguros. Não compartilhamos com terceiros.</p>\n</form>\n</div>"
+            },
+            "elements": []
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "id": "foot0001",
+    "elType": "container",
+    "settings": {
+      "content_width": "full",
+      "background_background": "classic",
+      "background_color": "#000000",
+      "border_border": "solid",
+      "border_width": { "unit": "px", "top": "1", "right": "0", "bottom": "0", "left": "0" },
+      "border_color": "#1F2937",
+      "padding": { "unit": "px", "top": "48", "right": "0", "bottom": "48", "left": "0" },
+      "padding_mobile": { "unit": "px", "top": "40", "right": "0", "bottom": "40", "left": "0" }
+    },
+    "elements": [
+      {
+        "id": "foot0010",
+        "elType": "container",
+        "settings": { "content_width": "boxed", "flex_direction": "column" },
+        "elements": [
+          {
+            "id": "foot0020",
+            "elType": "widget",
+            "widgetType": "html",
+            "settings": {
+              "html": "<div style=\"display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-bottom:48px;font-family:Inter,sans-serif\">\n\n<div>\n<img src=\"/logo-rc-limpa-sidebar.png\" alt=\"RC Limpa Mais\" style=\"height:48px;width:auto;margin-bottom:16px\">\n<p style=\"color:#9CA3AF;font-size:14px;line-height:1.6\">Sistema completo de gestão para empresas de limpeza de estofados. White label e totalmente personalizável.</p>\n</div>\n\n<div>\n<h4 style=\"color:#FFF;font-size:18px;font-weight:600;margin:0 0 16px 0\">Solução</h4>\n<ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px\">\n<li><a href=\"#\" style=\"color:#9CA3AF;text-decoration:none;font-size:14px\">Funcionalidades</a></li>\n<li><a href=\"#\" style=\"color:#9CA3AF;text-decoration:none;font-size:14px\">Planos e Preços</a></li>\n<li><a href=\"#\" style=\"color:#9CA3AF;text-decoration:none;font-size:14px\">White Label</a></li>\n<li><a href=\"#\" style=\"color:#9CA3AF;text-decoration:none;font-size:14px\">Demonstração</a></li>\n</ul>\n</div>\n\n<div>\n<h4 style=\"color:#FFF;font-size:18px;font-weight:600;margin:0 0 16px 0\">Suporte</h4>\n<ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px\">\n<li><a href=\"#\" style=\"color:#9CA3AF;text-decoration:none;font-size:14px\">Central de Ajuda</a></li>\n<li><a href=\"#\" style=\"color:#9CA3AF;text-decoration:none;font-size:14px\">Documentação</a></li>\n<li><a href=\"#\" style=\"color:#9CA3AF;text-decoration:none;font-size:14px\">Contato</a></li>\n<li><a href=\"#\" style=\"color:#9CA3AF;text-decoration:none;font-size:14px\">FAQ</a></li>\n</ul>\n</div>\n\n<div>\n<h4 style=\"color:#FFF;font-size:18px;font-weight:600;margin:0 0 16px 0\">Contato</h4>\n<ul style=\"list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px\">\n<li><a href=\"mailto:contato@rclimpamais.com.br\" style=\"display:flex;align-items:center;gap:8px;color:#9CA3AF;text-decoration:none;font-size:14px\">📧 contato@rclimpamais.com.br</a></li>\n<li><a href=\"tel:+5531999999999\" style=\"display:flex;align-items:center;gap:8px;color:#9CA3AF;text-decoration:none;font-size:14px\">📞 (31) 99999-9999</a></li>\n</ul>\n<div style=\"display:flex;gap:12px;margin-top:24px\">\n<a href=\"#\" style=\"width:40px;height:40px;border-radius:50%;background:#1F2937;display:flex;align-items:center;justify-content:center;color:#FFF;text-decoration:none;font-size:18px\">f</a>\n<a href=\"#\" style=\"width:40px;height:40px;border-radius:50%;background:#1F2937;display:flex;align-items:center;justify-content:center;color:#FFF;text-decoration:none;font-size:18px\">📸</a>\n</div>\n</div>\n\n</div>\n\n<div style=\"border-top:1px solid rgba(255,255,255,0.1);padding-top:32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-family:Inter,sans-serif\">\n<p style=\"color:#9CA3AF;font-size:14px;margin:0\">© 2025 RC Limpa Mais. Todos os direitos reservados.</p>\n<div style=\"display:flex;gap:24px\">\n<a href=\"#\" style=\"color:#9CA3AF;font-size:14px;text-decoration:none\">Termos de Uso</a>\n<a href=\"#\" style=\"color:#9CA3AF;font-size:14px;text-decoration:none\">Política de Privacidade</a>\n</div>\n</div>\n\n<style>@media(max-width:767px){div[style*=\"grid-template-columns:repeat(4\"]{grid-template-columns:repeat(2,1fr) !important}}</style>"
+            },
+            "elements": []
+          }
+        ]
+      }
+    ]
+  }
+]

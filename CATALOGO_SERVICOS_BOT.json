@@ -1,0 +1,797 @@
+{
+  "meta": {
+    "exportado_em": "2025-01-27",
+    "total_servicos": 86,
+    "total_alugueis": 4,
+    "total_subcategorias": 32,
+    "projeto_origem": "RC Limpa Mais",
+    "versao_catalogo": "3.0"
+  },
+  "sinonimos": {
+    "aeronave": "Aeronave",
+    "aviao": "Aeronave",
+    "ar condicionado": "Ar Condicionado",
+    "ar": "Ar Condicionado",
+    "arcondicionado": "Ar Condicionado",
+    "auditorio": "Auditório",
+    "teatro": "Auditório",
+    "banco de igreja": "Banco de Igreja",
+    "igreja": "Banco de Igreja",
+    "banqueta": "BANQUETA",
+    "bebe conforto": "BEBE CONFORTO",
+    "bebê conforto": "BEBE CONFORTO",
+    "cadeira": "CADEIRA",
+    "cadeirinha": "CADEIRINHA",
+    "cadeira infantil": "CADEIRINHA",
+    "caminhao": "Caminhão",
+    "caminhão": "Caminhão",
+    "carpete": "Carpete",
+    "forracao": "Carpete",
+    "carrinho de bebe": "CARRINHO DE BEBE",
+    "carrinho de bebê": "CARRINHO DE BEBE",
+    "carrinho": "CARRINHO DE BEBE",
+    "carro": "CARRO",
+    "automovel": "CARRO",
+    "automóvel": "CARRO",
+    "veiculo": "CARRO",
+    "chaise": "CHAISE",
+    "cinema": "Cinema",
+    "poltrona cinema": "Cinema",
+    "colchao": "COLCHÃO",
+    "colchão": "COLCHÃO",
+    "diva": "Divã",
+    "divã": "Divã",
+    "embarcacao": "Embarcação",
+    "embarcação": "Embarcação",
+    "barco": "Embarcação",
+    "lancha": "Embarcação",
+    "espuma acustica": "Espuma Acustica",
+    "espuma acústica": "Espuma Acustica",
+    "fantasia": "Fantasia Estofada",
+    "fantasia estofada": "Fantasia Estofada",
+    "impermeabilizacao pedras": "Impermeabilização de Pedras",
+    "pedras": "Impermeabilização de Pedras",
+    "impermeabilizacao piso": "Impermeabilização de Piso",
+    "piso": "Impermeabilização de Piso",
+    "limpeza piso": "LIMPEZA DE PISO",
+    "longarina": "Longarina",
+    "moises": "Moisés",
+    "moisés": "Moisés",
+    "namoradeira": "Namoradeira",
+    "onibus": "Onibus",
+    "ônibus": "Onibus",
+    "poltrona": "POLTRONA",
+    "puff": "Puff",
+    "pufe": "Puff",
+    "recamier": "Recamier",
+    "sofa": "SOFÁ",
+    "sofá": "SOFÁ",
+    "estofado": "SOFÁ",
+    "tapete": "TAPETE",
+    "travesseiro": "Travesseiro",
+    "limpeza": "limpeza",
+    "limpar": "limpeza",
+    "lavar": "limpeza",
+    "impermeabilizacao": "impermeabilizacao",
+    "impermeabilização": "impermeabilizacao",
+    "impermeabilizar": "impermeabilizacao",
+    "ambos": "limpeza_impermeabilizacao",
+    "os dois": "limpeza_impermeabilizacao",
+    "completo": "limpeza_impermeabilizacao",
+    "bh": "Belo Horizonte",
+    "beaga": "Belo Horizonte",
+    "beagá": "Belo Horizonte",
+    "contagem": "Contagem",
+    "betim": "Betim",
+    "nova lima": "Nova Lima",
+    "sabara": "Sabará",
+    "ribeirão": "Ribeirão das Neves",
+    "ribeirao": "Ribeirão das Neves",
+    "santa luzia": "Santa Luzia",
+    "vespasiano": "Vespasiano",
+    "lagoa santa": "Lagoa Santa",
+    "ibirite": "Ibirité",
+    "ibirité": "Ibirité",
+    "brumadinho": "Brumadinho",
+    "sete lagoas": "Sete Lagoas"
+  },
+  "servicos": [
+    {
+      "subcategoria": "Aeronave",
+      "item": "Assento Aeronave",
+      "tamanho": "VALOR POR ASSENTO",
+      "preco_limpeza": 250,
+      "preco_impermeabilizacao": 350,
+      "preco_limpeza_impermeabilizacao": 600
+    },
+    {
+      "subcategoria": "Ar Condicionado",
+      "item": "Ar Condicionado",
+      "tamanho": "9.000BTUS",
+      "preco_limpeza": 280,
+      "preco_impermeabilizacao": null,
+      "preco_limpeza_impermeabilizacao": null
+    },
+    {
+      "subcategoria": "Ar Condicionado",
+      "item": "Ar Condicionado",
+      "tamanho": "12000BTUS",
+      "preco_limpeza": 320,
+      "preco_impermeabilizacao": null,
+      "preco_limpeza_impermeabilizacao": null
+    },
+    {
+      "subcategoria": "Ar Condicionado",
+      "item": "Ar Condicionado",
+      "tamanho": "18000BTUS",
+      "preco_limpeza": 400,
+      "preco_impermeabilizacao": null,
+      "preco_limpeza_impermeabilizacao": null
+    },
+    {
+      "subcategoria": "Ar Condicionado",
+      "item": "Ar Condicionado",
+      "tamanho": "Portátil",
+      "preco_limpeza": 300,
+      "preco_impermeabilizacao": null,
+      "preco_limpeza_impermeabilizacao": null
+    },
+    {
+      "subcategoria": "Ar Condicionado",
+      "item": "Ar Condicionado",
+      "tamanho": "Até 30.000 btus",
+      "preco_limpeza": 500,
+      "preco_impermeabilizacao": null,
+      "preco_limpeza_impermeabilizacao": null
+    },
+    {
+      "subcategoria": "Auditório",
+      "item": "Auditório",
+      "tamanho": "Assento individual",
+      "preco_limpeza": 50,
+      "preco_impermeabilizacao": 70,
+      "preco_limpeza_impermeabilizacao": 120
+    },
+    {
+      "subcategoria": "Banco de Igreja",
+      "item": "Banco de Igreja",
+      "tamanho": "Assento individual",
+      "preco_limpeza": 50,
+      "preco_impermeabilizacao": 70,
+      "preco_limpeza_impermeabilizacao": 120
+    },
+    {
+      "subcategoria": "Banco de Igreja",
+      "item": "Banco de Igreja",
+      "tamanho": "até 2m",
+      "preco_limpeza": 200,
+      "preco_impermeabilizacao": 280,
+      "preco_limpeza_impermeabilizacao": 480
+    },
+    {
+      "subcategoria": "Banco de Igreja",
+      "item": "Banco de Igreja",
+      "tamanho": "até 3m",
+      "preco_limpeza": 300,
+      "preco_impermeabilizacao": 420,
+      "preco_limpeza_impermeabilizacao": 720
+    },
+    {
+      "subcategoria": "Banco de Igreja",
+      "item": "Banco de Igreja",
+      "tamanho": "até 4m",
+      "preco_limpeza": 400,
+      "preco_impermeabilizacao": 560,
+      "preco_limpeza_impermeabilizacao": 960
+    },
+    {
+      "subcategoria": "BANQUETA",
+      "item": "Banqueta",
+      "tamanho": null,
+      "preco_limpeza": 25,
+      "preco_impermeabilizacao": 35,
+      "preco_limpeza_impermeabilizacao": 60
+    },
+    {
+      "subcategoria": "BEBE CONFORTO",
+      "item": "BEBE CONFORTO",
+      "tamanho": null,
+      "preco_limpeza": 130,
+      "preco_impermeabilizacao": 182,
+      "preco_limpeza_impermeabilizacao": 312
+    },
+    {
+      "subcategoria": "CADEIRA",
+      "item": "Banqueta",
+      "tamanho": null,
+      "preco_limpeza": 25,
+      "preco_impermeabilizacao": 35,
+      "preco_limpeza_impermeabilizacao": 60
+    },
+    {
+      "subcategoria": "CADEIRA",
+      "item": "Cadeira de Escritório",
+      "tamanho": null,
+      "preco_limpeza": 60,
+      "preco_impermeabilizacao": 84,
+      "preco_limpeza_impermeabilizacao": 144
+    },
+    {
+      "subcategoria": "CADEIRA",
+      "item": "Cadeira Estofado no Assento",
+      "tamanho": null,
+      "preco_limpeza": 25,
+      "preco_impermeabilizacao": 35,
+      "preco_limpeza_impermeabilizacao": 60
+    },
+    {
+      "subcategoria": "CADEIRA",
+      "item": "Cadeira Estofado no Assento e Encosto",
+      "tamanho": null,
+      "preco_limpeza": 35,
+      "preco_impermeabilizacao": 49,
+      "preco_limpeza_impermeabilizacao": 84
+    },
+    {
+      "subcategoria": "CADEIRA",
+      "item": "Cadeira Estofado no Encosto",
+      "tamanho": null,
+      "preco_limpeza": 25,
+      "preco_impermeabilizacao": 35,
+      "preco_limpeza_impermeabilizacao": 60
+    },
+    {
+      "subcategoria": "CADEIRA",
+      "item": "Cadeira Toda Estofada",
+      "tamanho": null,
+      "preco_limpeza": 40,
+      "preco_impermeabilizacao": 56,
+      "preco_limpeza_impermeabilizacao": 96
+    },
+    {
+      "subcategoria": "CADEIRA",
+      "item": "Luis XV",
+      "tamanho": null,
+      "preco_limpeza": 60,
+      "preco_impermeabilizacao": 84,
+      "preco_limpeza_impermeabilizacao": 144
+    },
+    {
+      "subcategoria": "CADEIRINHA",
+      "item": "CADEIRINHA",
+      "tamanho": null,
+      "preco_limpeza": 130,
+      "preco_impermeabilizacao": 182,
+      "preco_limpeza_impermeabilizacao": 312
+    },
+    {
+      "subcategoria": "Caminhão",
+      "item": "Caminhão",
+      "tamanho": "WhatsApp",
+      "preco_limpeza": null,
+      "preco_impermeabilizacao": null,
+      "preco_limpeza_impermeabilizacao": null
+    },
+    {
+      "subcategoria": "Carpete",
+      "item": "Carpete",
+      "tamanho": null,
+      "preco_limpeza": 19.9,
+      "preco_impermeabilizacao": 27.86,
+      "preco_limpeza_impermeabilizacao": 47.76
+    },
+    {
+      "subcategoria": "CARRINHO DE BEBE",
+      "item": "CARRINHO DE BEBE",
+      "tamanho": null,
+      "preco_limpeza": 150,
+      "preco_impermeabilizacao": 210,
+      "preco_limpeza_impermeabilizacao": 360
+    },
+    {
+      "subcategoria": "CARRO",
+      "item": "Bancos",
+      "tamanho": null,
+      "preco_limpeza": 220,
+      "preco_impermeabilizacao": 308,
+      "preco_limpeza_impermeabilizacao": 528
+    },
+    {
+      "subcategoria": "CARRO",
+      "item": "Bancos + Teto",
+      "tamanho": null,
+      "preco_limpeza": 280,
+      "preco_impermeabilizacao": 392,
+      "preco_limpeza_impermeabilizacao": 672
+    },
+    {
+      "subcategoria": "CARRO",
+      "item": "Bancos + Teto + Carpete",
+      "tamanho": null,
+      "preco_limpeza": 350,
+      "preco_impermeabilizacao": 490,
+      "preco_limpeza_impermeabilizacao": 840
+    },
+    {
+      "subcategoria": "CHAISE",
+      "item": "CHAISE G até 3m",
+      "tamanho": null,
+      "preco_limpeza": 300,
+      "preco_impermeabilizacao": 420,
+      "preco_limpeza_impermeabilizacao": 720
+    },
+    {
+      "subcategoria": "CHAISE",
+      "item": "CHAISE GG até 4m",
+      "tamanho": null,
+      "preco_limpeza": 400,
+      "preco_impermeabilizacao": 560,
+      "preco_limpeza_impermeabilizacao": 960
+    },
+    {
+      "subcategoria": "CHAISE",
+      "item": "CHAISE M até 2m",
+      "tamanho": null,
+      "preco_limpeza": 200,
+      "preco_impermeabilizacao": 280,
+      "preco_limpeza_impermeabilizacao": 480
+    },
+    {
+      "subcategoria": "Cinema",
+      "item": "Cinema",
+      "tamanho": "Assento individual",
+      "preco_limpeza": 50,
+      "preco_impermeabilizacao": 70,
+      "preco_limpeza_impermeabilizacao": 120
+    },
+    {
+      "subcategoria": "COLCHÃO",
+      "item": "Colchão",
+      "tamanho": "Casal",
+      "preco_limpeza": 115,
+      "preco_impermeabilizacao": 161,
+      "preco_limpeza_impermeabilizacao": 276
+    },
+    {
+      "subcategoria": "COLCHÃO",
+      "item": "Colchão",
+      "tamanho": "King",
+      "preco_limpeza": 161,
+      "preco_impermeabilizacao": 225,
+      "preco_limpeza_impermeabilizacao": 386
+    },
+    {
+      "subcategoria": "COLCHÃO",
+      "item": "Colchão",
+      "tamanho": "Queen",
+      "preco_limpeza": 138,
+      "preco_impermeabilizacao": 193,
+      "preco_limpeza_impermeabilizacao": 331
+    },
+    {
+      "subcategoria": "COLCHÃO",
+      "item": "Colchão",
+      "tamanho": "Solteiro",
+      "preco_limpeza": 92,
+      "preco_impermeabilizacao": 129,
+      "preco_limpeza_impermeabilizacao": 221
+    },
+    {
+      "subcategoria": "COLCHÃO",
+      "item": "Colchão Box/Conjugado",
+      "tamanho": "Casal",
+      "preco_limpeza": 184,
+      "preco_impermeabilizacao": 258,
+      "preco_limpeza_impermeabilizacao": 442
+    },
+    {
+      "subcategoria": "COLCHÃO",
+      "item": "Colchão Box/Conjugado",
+      "tamanho": "King",
+      "preco_limpeza": 276,
+      "preco_impermeabilizacao": 386,
+      "preco_limpeza_impermeabilizacao": 662
+    },
+    {
+      "subcategoria": "COLCHÃO",
+      "item": "Colchão Box/Conjugado",
+      "tamanho": "Queen",
+      "preco_limpeza": 230,
+      "preco_impermeabilizacao": 322,
+      "preco_limpeza_impermeabilizacao": 552
+    },
+    {
+      "subcategoria": "COLCHÃO",
+      "item": "Colchão Box/Conjugado",
+      "tamanho": "Solteiro",
+      "preco_limpeza": 138,
+      "preco_impermeabilizacao": 193,
+      "preco_limpeza_impermeabilizacao": 331
+    },
+    {
+      "subcategoria": "Divã",
+      "item": "Divã G até 3m",
+      "tamanho": null,
+      "preco_limpeza": 300,
+      "preco_impermeabilizacao": 420,
+      "preco_limpeza_impermeabilizacao": 720
+    },
+    {
+      "subcategoria": "Divã",
+      "item": "Divã GG até 4m",
+      "tamanho": null,
+      "preco_limpeza": 400,
+      "preco_impermeabilizacao": 560,
+      "preco_limpeza_impermeabilizacao": 960
+    },
+    {
+      "subcategoria": "Divã",
+      "item": "Divã M até 2m",
+      "tamanho": null,
+      "preco_limpeza": 200,
+      "preco_impermeabilizacao": 280,
+      "preco_limpeza_impermeabilizacao": 480
+    },
+    {
+      "subcategoria": "Embarcação",
+      "item": "Assento Embarcação",
+      "tamanho": "VALOR POR ASSENTO",
+      "preco_limpeza": 250,
+      "preco_impermeabilizacao": 350,
+      "preco_limpeza_impermeabilizacao": 600
+    },
+    {
+      "subcategoria": "Espuma Acustica",
+      "item": "Espuma Acustica",
+      "tamanho": null,
+      "preco_limpeza": 100,
+      "preco_impermeabilizacao": null,
+      "preco_limpeza_impermeabilizacao": null
+    },
+    {
+      "subcategoria": "Fantasia Estofada",
+      "item": "Fantasia Estofada",
+      "tamanho": null,
+      "preco_limpeza": 200,
+      "preco_impermeabilizacao": 280,
+      "preco_limpeza_impermeabilizacao": 480
+    },
+    {
+      "subcategoria": "Impermeabilização de Pedras",
+      "item": "Impermeabilização de Pedras",
+      "tamanho": "M2",
+      "preco_limpeza": null,
+      "preco_impermeabilizacao": 90,
+      "preco_limpeza_impermeabilizacao": null
+    },
+    {
+      "subcategoria": "Impermeabilização de Piso",
+      "item": "Impermeabilização de Piso",
+      "tamanho": "M2",
+      "preco_limpeza": null,
+      "preco_impermeabilizacao": 60,
+      "preco_limpeza_impermeabilizacao": null
+    },
+    {
+      "subcategoria": "LIMPEZA DE PISO",
+      "item": "LIMPEZA DE PISO",
+      "tamanho": "M2",
+      "preco_limpeza": 15,
+      "preco_impermeabilizacao": null,
+      "preco_limpeza_impermeabilizacao": null
+    },
+    {
+      "subcategoria": "Longarina",
+      "item": "Longarina",
+      "tamanho": "VALOR POR ASSENTO",
+      "preco_limpeza": 50,
+      "preco_impermeabilizacao": 70,
+      "preco_limpeza_impermeabilizacao": 120
+    },
+    {
+      "subcategoria": "Moisés",
+      "item": "Moisés",
+      "tamanho": null,
+      "preco_limpeza": 130,
+      "preco_impermeabilizacao": 182,
+      "preco_limpeza_impermeabilizacao": 312
+    },
+    {
+      "subcategoria": "Namoradeira",
+      "item": "Namoradeira",
+      "tamanho": null,
+      "preco_limpeza": 150,
+      "preco_impermeabilizacao": 210,
+      "preco_limpeza_impermeabilizacao": 360
+    },
+    {
+      "subcategoria": "Onibus",
+      "item": "Onibus",
+      "tamanho": "VALOR POR ASSENTO",
+      "preco_limpeza": 50,
+      "preco_impermeabilizacao": 70,
+      "preco_limpeza_impermeabilizacao": 120
+    },
+    {
+      "subcategoria": "POLTRONA",
+      "item": "Poltrona",
+      "tamanho": null,
+      "preco_limpeza": 75,
+      "preco_impermeabilizacao": 105,
+      "preco_limpeza_impermeabilizacao": 180
+    },
+    {
+      "subcategoria": "Puff",
+      "item": "Puff",
+      "tamanho": "Grande",
+      "preco_limpeza": 60,
+      "preco_impermeabilizacao": 84,
+      "preco_limpeza_impermeabilizacao": 144
+    },
+    {
+      "subcategoria": "Puff",
+      "item": "Puff",
+      "tamanho": "Medio",
+      "preco_limpeza": 50,
+      "preco_impermeabilizacao": 70,
+      "preco_limpeza_impermeabilizacao": 120
+    },
+    {
+      "subcategoria": "Puff",
+      "item": "Puff",
+      "tamanho": "Pequeno",
+      "preco_limpeza": 40,
+      "preco_impermeabilizacao": 56,
+      "preco_limpeza_impermeabilizacao": 96
+    },
+    {
+      "subcategoria": "Recamier",
+      "item": "Recamier G até 3m",
+      "tamanho": null,
+      "preco_limpeza": 300,
+      "preco_impermeabilizacao": 420,
+      "preco_limpeza_impermeabilizacao": 720
+    },
+    {
+      "subcategoria": "Recamier",
+      "item": "Recamier GG até 4m",
+      "tamanho": null,
+      "preco_limpeza": 400,
+      "preco_impermeabilizacao": 560,
+      "preco_limpeza_impermeabilizacao": 960
+    },
+    {
+      "subcategoria": "Recamier",
+      "item": "Recamier M até 2m",
+      "tamanho": null,
+      "preco_limpeza": 200,
+      "preco_impermeabilizacao": 280,
+      "preco_limpeza_impermeabilizacao": 480
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "L pequeno",
+      "tamanho": "até 4 lugares",
+      "preco_limpeza": 300,
+      "preco_impermeabilizacao": 420,
+      "preco_limpeza_impermeabilizacao": 720
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "L grande",
+      "tamanho": "5 a 7 lugares",
+      "preco_limpeza": 400,
+      "preco_impermeabilizacao": 560,
+      "preco_limpeza_impermeabilizacao": 960
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "L Super Grande",
+      "tamanho": "8 lugares ou mais",
+      "preco_limpeza": 500,
+      "preco_impermeabilizacao": 700,
+      "preco_limpeza_impermeabilizacao": 1200
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "RETO 1 lugar",
+      "tamanho": null,
+      "preco_limpeza": 100,
+      "preco_impermeabilizacao": 140,
+      "preco_limpeza_impermeabilizacao": 240
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "RETO 2 lugares",
+      "tamanho": null,
+      "preco_limpeza": 150,
+      "preco_impermeabilizacao": 210,
+      "preco_limpeza_impermeabilizacao": 360
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "RETO 3 lugares",
+      "tamanho": null,
+      "preco_limpeza": 200,
+      "preco_impermeabilizacao": 280,
+      "preco_limpeza_impermeabilizacao": 480
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "RETO 4 lugares",
+      "tamanho": null,
+      "preco_limpeza": 250,
+      "preco_impermeabilizacao": 350,
+      "preco_limpeza_impermeabilizacao": 600
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "RETO 5 lugares",
+      "tamanho": null,
+      "preco_limpeza": 300,
+      "preco_impermeabilizacao": 420,
+      "preco_limpeza_impermeabilizacao": 720
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "RETO 6 lugares",
+      "tamanho": null,
+      "preco_limpeza": 350,
+      "preco_impermeabilizacao": 490,
+      "preco_limpeza_impermeabilizacao": 840
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "RETO 7 lugares",
+      "tamanho": null,
+      "preco_limpeza": 400,
+      "preco_impermeabilizacao": 560,
+      "preco_limpeza_impermeabilizacao": 960
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "RETO 8 lugares",
+      "tamanho": null,
+      "preco_limpeza": 450,
+      "preco_impermeabilizacao": 630,
+      "preco_limpeza_impermeabilizacao": 1080
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "RETO 9 lugares",
+      "tamanho": null,
+      "preco_limpeza": 500,
+      "preco_impermeabilizacao": 700,
+      "preco_limpeza_impermeabilizacao": 1200
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "U",
+      "tamanho": "até 6 lugares",
+      "preco_limpeza": 400,
+      "preco_impermeabilizacao": 560,
+      "preco_limpeza_impermeabilizacao": 960
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "U",
+      "tamanho": "7 a 10 lugares",
+      "preco_limpeza": 500,
+      "preco_impermeabilizacao": 700,
+      "preco_limpeza_impermeabilizacao": 1200
+    },
+    {
+      "subcategoria": "SOFÁ",
+      "item": "U",
+      "tamanho": "11 lugares ou mais",
+      "preco_limpeza": 600,
+      "preco_impermeabilizacao": 840,
+      "preco_limpeza_impermeabilizacao": 1440
+    },
+    {
+      "subcategoria": "TAPETE",
+      "item": "TAPETE G",
+      "tamanho": "2,50 x 2,00 ou maior",
+      "preco_limpeza": 90,
+      "preco_impermeabilizacao": 126,
+      "preco_limpeza_impermeabilizacao": 216
+    },
+    {
+      "subcategoria": "TAPETE",
+      "item": "TAPETE GG",
+      "tamanho": "3,00 x 2,50 ou maior",
+      "preco_limpeza": 150,
+      "preco_impermeabilizacao": 210,
+      "preco_limpeza_impermeabilizacao": 360
+    },
+    {
+      "subcategoria": "TAPETE",
+      "item": "TAPETE M",
+      "tamanho": "2,00 x 1,50",
+      "preco_limpeza": 60,
+      "preco_impermeabilizacao": 84,
+      "preco_limpeza_impermeabilizacao": 144
+    },
+    {
+      "subcategoria": "TAPETE",
+      "item": "TAPETE P",
+      "tamanho": "1,50 x 1,00",
+      "preco_limpeza": 40,
+      "preco_impermeabilizacao": 56,
+      "preco_limpeza_impermeabilizacao": 96
+    },
+    {
+      "subcategoria": "Travesseiro",
+      "item": "Travesseiro",
+      "tamanho": null,
+      "preco_limpeza": 23,
+      "preco_impermeabilizacao": 32,
+      "preco_limpeza_impermeabilizacao": 55
+    }
+  ],
+  "alugueis": [
+    {
+      "equipamento": "Kit Básico",
+      "periodo_aluguel": "Diária",
+      "preco": 130
+    },
+    {
+      "equipamento": "Kit Básico",
+      "periodo_aluguel": "Final de Semana",
+      "preco": 150
+    },
+    {
+      "equipamento": "Kit Confort",
+      "periodo_aluguel": "Semanal",
+      "preco": 280
+    },
+    {
+      "equipamento": "Kit Econômico",
+      "periodo_aluguel": "Diária",
+      "preco": 89
+    }
+  ],
+  "categorias": [
+    "Aeronave",
+    "Ar Condicionado",
+    "Auditório",
+    "Banco de Igreja",
+    "BANQUETA",
+    "BEBE CONFORTO",
+    "CADEIRA",
+    "CADEIRINHA",
+    "Caminhão",
+    "Carpete",
+    "CARRINHO DE BEBE",
+    "CARRO",
+    "CHAISE",
+    "Cinema",
+    "COLCHÃO",
+    "Divã",
+    "Embarcação",
+    "Espuma Acustica",
+    "Fantasia Estofada",
+    "Impermeabilização de Pedras",
+    "Impermeabilização de Piso",
+    "LIMPEZA DE PISO",
+    "Longarina",
+    "Moisés",
+    "Namoradeira",
+    "Onibus",
+    "POLTRONA",
+    "Puff",
+    "Recamier",
+    "SOFÁ",
+    "TAPETE",
+    "Travesseiro"
+  ],
+  "instrucoes_uso": {
+    "descricao": "Este arquivo contém todos os serviços e preços cadastrados no banco de dados da RC Limpa Mais.",
+    "como_usar": [
+      "1. BUSCA DE PREÇOS: Use sinonimos para interpretar variações na escrita do cliente (ex: 'sofá'/'sofa'/'estofado' → 'SOFÁ')",
+      "2. CÁLCULO DE VALORES: Para cada item, verifique qual tipo de serviço o cliente quer (limpeza, impermeabilizacao ou ambos) e use o campo de preço correspondente",
+      "3. VALIDAÇÃO: Sempre confira se o tamanho informado pelo cliente corresponde aos tamanhos disponíveis (ex: colchão King, Queen, Casal, Solteiro)",
+      "4. VALORES NULL: Se preco_limpeza_impermeabilizacao for null, significa que esse item NÃO oferece o serviço combinado - venda os serviços separadamente"
+    ]
+  }
+}

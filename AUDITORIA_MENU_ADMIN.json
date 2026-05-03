@@ -1,0 +1,316 @@
+{
+  "metadata": {
+    "audit_date": "2025-11-25",
+    "total_menu_items": 28,
+    "total_routes": 45,
+    "sidebar_component": "src/components/admin/Sidebar.tsx",
+    "color_scheme": "#074FD5",
+    "layout": "src/components/admin/AdminLayout.tsx"
+  },
+  "menu_structure": {
+    "PRINCIPAL": {
+      "section_type": "direct_links",
+      "items": [
+        {
+          "label": "Visão Geral",
+          "route": "/admin",
+          "icon": "LayoutDashboard",
+          "type": "page",
+          "component": "src/pages/admin/Dashboard.tsx",
+          "exact_match": true,
+          "description": "Dashboard principal com KPIs, gráficos e agendamentos recentes"
+        },
+        {
+          "label": "Live View",
+          "route": "/admin/live-view",
+          "icon": "Eye",
+          "type": "page",
+          "component": "src/pages/admin/LiveView.tsx",
+          "description": "Monitoramento em tempo real de visitantes, sessões e comportamento"
+        },
+        {
+          "label": "Agendamentos",
+          "route": "/admin/agendamentos",
+          "icon": "Calendar",
+          "type": "page",
+          "component": "src/pages/admin/Agendamentos.tsx",
+          "description": "Gestão completa de agendamentos com filtros, bulk actions e exportação"
+        },
+        {
+          "label": "Técnicos",
+          "route": "/admin/tecnicos",
+          "icon": "Wrench",
+          "type": "page",
+          "component": "src/pages/admin/Tecnicos.tsx",
+          "description": "Gestão da equipe de técnicos e acompanhamento de produtividade"
+        }
+      ]
+    },
+    "MARKETING": {
+      "section_type": "direct_links",
+      "items": [
+        {
+          "label": "Marketing",
+          "route": "/admin/marketing",
+          "icon": "Megaphone",
+          "type": "page",
+          "component": "src/pages/admin/Marketing.tsx",
+          "description": "Análise de campanhas, leads e conversão com funil de vendas"
+        },
+        {
+          "label": "Bot WhatsApp",
+          "route": "/admin/bot-whatsapp/live-view",
+          "icon": "Bot",
+          "type": "page",
+          "component": "src/pages/admin/bot/LiveView.tsx",
+          "description": "Dashboard do bot com 11 subseções (Live View, KPIs, Auditoria, etc.)",
+          "sub_routes": [
+            "/admin/bot-whatsapp/kpis",
+            "/admin/bot-whatsapp/auditoria",
+            "/admin/bot-whatsapp/simulador",
+            "/admin/bot-whatsapp/historico",
+            "/admin/bot-whatsapp/analise",
+            "/admin/bot-whatsapp/financeiro",
+            "/admin/bot-whatsapp/config",
+            "/admin/bot-whatsapp/integracoes",
+            "/admin/bot-whatsapp/diagnostico",
+            "/admin/bot-whatsapp/versao"
+          ]
+        },
+        {
+          "label": "Carrinhos Abandonados",
+          "route": "/admin/carrinhos-abandonados",
+          "icon": "ShoppingCart",
+          "type": "page",
+          "component": "src/pages/admin/CarrinhosAbandonados.tsx",
+          "description": "Gestão de carrinhos abandonados com automação de recuperação via WhatsApp",
+          "highlighted": true,
+          "color": "#1FE785"
+        },
+        {
+          "label": "Cupons",
+          "route": "/admin/cupons",
+          "icon": "Ticket",
+          "type": "page",
+          "component": "src/pages/admin/Cupons.tsx",
+          "description": "Gestão de cupons de desconto com estatísticas de uso"
+        },
+        {
+          "label": "Templates WhatsApp",
+          "route": "/admin/templates",
+          "icon": "MessageSquare",
+          "type": "page",
+          "component": "src/pages/admin/Templates.tsx",
+          "description": "Gestão de templates de mensagens WhatsApp com variáveis dinâmicas"
+        },
+        {
+          "label": "Notificações Push",
+          "route": "/admin/push-notifications",
+          "icon": "Zap",
+          "type": "page",
+          "component": "src/pages/admin/PushNotifications.tsx",
+          "description": "Gestão de notificações push com estatísticas e preferências"
+        }
+      ]
+    },
+    "GESTÃO": {
+      "section_type": "mixed",
+      "items": [
+        {
+          "label": "Relatórios",
+          "route": "/admin/relatorios",
+          "icon": "BarChart3",
+          "type": "page",
+          "component": "src/pages/admin/Relatorios.tsx",
+          "description": "Relatórios analíticos de bairros, itens e análise por gênero"
+        },
+        {
+          "label": "Equipe",
+          "route": "/admin/equipe",
+          "icon": "UserPlus",
+          "type": "page",
+          "component": "src/pages/admin/Equipe.tsx",
+          "description": "Gestão de membros, técnicos e funcionários bot com roles e permissões"
+        },
+        {
+          "label": "Financeiro",
+          "route": null,
+          "icon": "DollarSign",
+          "type": "dropdown",
+          "expandable": true,
+          "default_expanded": true,
+          "sub_items": [
+            {
+              "label": "Dashboard",
+              "route": "/admin/financeiro",
+              "icon": "LayoutDashboard",
+              "type": "page",
+              "component": "src/pages/admin/financeiro/Dashboard.tsx",
+              "exact_match": true,
+              "description": "Dashboard financeiro com KPIs e análises"
+            },
+            {
+              "label": "Consolidado",
+              "route": "/admin/financeiro/consolidado",
+              "icon": "TrendingUp",
+              "type": "page",
+              "component": "src/pages/admin/financeiro/DashboardConsolidado.tsx",
+              "description": "Visão consolidada do desempenho financeiro"
+            },
+            {
+              "label": "Receitas",
+              "route": "/admin/financeiro/receitas",
+              "icon": "Wallet",
+              "type": "page",
+              "component": "src/pages/admin/financeiro/Receitas.tsx",
+              "description": "Gestão de receitas e entradas"
+            },
+            {
+              "label": "Despesas",
+              "route": "/admin/financeiro/despesas",
+              "icon": "Receipt",
+              "type": "page",
+              "component": "src/pages/admin/financeiro/Despesas.tsx",
+              "description": "Gestão de despesas com categorização e filtros"
+            },
+            {
+              "label": "Fluxo de Caixa",
+              "route": "/admin/financeiro/fluxo-caixa",
+              "icon": "LineChart",
+              "type": "page",
+              "component": "src/pages/admin/financeiro/FluxoCaixa.tsx",
+              "description": "Análise de fluxo de caixa com projeções"
+            },
+            {
+              "label": "Metas",
+              "route": "/admin/financeiro/metas",
+              "icon": "Target",
+              "type": "page",
+              "component": "src/pages/admin/financeiro/Metas.tsx",
+              "description": "Gestão de metas financeiras com progresso"
+            }
+          ]
+        },
+        {
+          "label": "Integrações",
+          "route": null,
+          "icon": "Plug",
+          "type": "dropdown",
+          "expandable": true,
+          "default_expanded": true,
+          "sub_items": [
+            {
+              "label": "Anúncios",
+              "route": "/admin/integracoes/anuncios",
+              "icon": "Megaphone",
+              "type": "page",
+              "component": "src/pages/admin/integracoes/Anuncios.tsx",
+              "description": "Integração com plataformas de anúncios"
+            },
+            {
+              "label": "Pixel",
+              "route": "/admin/integracoes/pixel",
+              "icon": "Eye",
+              "type": "page",
+              "component": "src/pages/admin/integracoes/Pixel.tsx",
+              "description": "Gestão de pixel de rastreamento e eventos"
+            },
+            {
+              "label": "WhatsApp",
+              "route": "/admin/integracoes/whatsapp",
+              "icon": "MessageSquare",
+              "type": "page",
+              "component": "src/pages/admin/integracoes/WhatsApp.tsx",
+              "description": "Dashboard WhatsApp com estatísticas de envios"
+            },
+            {
+              "label": "WhatsApp Config",
+              "route": "/admin/integracoes/whatsapp-config",
+              "icon": "MessageSquare",
+              "type": "page",
+              "component": "src/pages/admin/integracoes/WhatsAppConfig.tsx",
+              "description": "Configuração do WhatsApp (Ultramsg)"
+            },
+            {
+              "label": "WhatsApp Financeiro",
+              "route": "/admin/integracoes/whatsapp-financeiro",
+              "icon": "DollarSign",
+              "type": "page",
+              "component": "src/pages/admin/integracoes/WhatsAppFinanceiro.tsx",
+              "description": "WhatsApp dedicado a notificações financeiras"
+            },
+            {
+              "label": "WhatsApp Despesas",
+              "route": "/admin/integracoes/whatsapp-despesas",
+              "icon": "Receipt",
+              "type": "page",
+              "component": "src/pages/admin/integracoes/WhatsAppDespesas.tsx",
+              "description": "WhatsApp para gestão de despesas"
+            },
+            {
+              "label": "Webhook",
+              "route": "/admin/integracoes/webhook",
+              "icon": "Zap",
+              "type": "page",
+              "component": "src/pages/admin/integracoes/Webhook.tsx",
+              "description": "Gestão de webhooks e integrações externas"
+            }
+          ]
+        }
+      ]
+    },
+    "FOOTER": {
+      "section_type": "user_profile",
+      "items": [
+        {
+          "label": "Session Monitor",
+          "type": "component",
+          "component": "src/components/admin/SessionMonitor.tsx",
+          "description": "Monitor de sessão JWT com indicador visual de expiração"
+        },
+        {
+          "label": "Perfil",
+          "route": "/admin/perfil",
+          "type": "page",
+          "component": "src/pages/admin/Perfil.tsx",
+          "description": "Página de perfil do usuário com edição de dados",
+          "access": "popover_menu"
+        },
+        {
+          "label": "Sair",
+          "type": "action",
+          "action": "signOut",
+          "description": "Logout com redirecionamento para /auth",
+          "access": "popover_menu"
+        }
+      ]
+    }
+  },
+  "hidden_routes": {
+    "description": "Rotas acessíveis mas não visíveis no menu lateral",
+    "routes": [
+      {
+        "route": "/admin/whatsapp-dashboard",
+        "component": "src/pages/admin/WhatsAppDashboard.tsx",
+        "description": "Dashboard WhatsApp alternativo (legado)"
+      },
+      {
+        "route": "/admin/whatsapp-bot",
+        "component": "src/pages/admin/WhatsAppBot.tsx",
+        "description": "WhatsApp Bot alternativo (legado)"
+      },
+      {
+        "route": "/admin/instalar-app",
+        "component": "src/pages/admin/InstalarApp.tsx",
+        "description": "Página de instalação PWA"
+      }
+    ]
+  },
+  "permission_model": {
+    "roles": ["admin", "operador", "visualizador", "tecnico"],
+    "default_required_role": "admin",
+    "protection_component": "src/components/admin/ProtectedRoute.tsx",
+    "role_checking": "database_query (não localStorage)",
+    "rls_enabled": true
+  }
+}

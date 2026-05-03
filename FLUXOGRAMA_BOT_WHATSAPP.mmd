@@ -1,0 +1,138 @@
+graph TD
+    START[📱 Webhook Ultramsg] --> FILTER1{Filtro Anti-Loop}
+    FILTER1 -->|BOT_NUMBER 553194678382| IGNORE1[❌ Ignorar]
+    FILTER1 -->|Mensagem Interna| IGNORE2[❌ Ignorar]
+    FILTER1 -->|ID Duplicado| IGNORE3[❌ Idempotência]
+    FILTER1 -->|✅ Válido| CONV{Conversa Existe?}
+    
+    CONV -->|Não ou >24h| NEW[Criar Nova]
+    CONV -->|Sim Ativa| LOAD[Carregar]
+    NEW --> S01[inicial]
+    LOAD --> LOOP{>10 msgs/2min?}
+    
+    LOOP -->|Sim| STOP[❌ Finalizar Auto]
+    LOOP -->|Não| CMD{Comando /?}
+    
+    CMD -->|/inicio| S01
+    CMD -->|/ajuda /precos /servicos /status /contato| INFO[Informações]
+    CMD -->|/cancelar /encerrar /falar_humano| ACTION[Ações]
+    CMD -->|Não| TYPE{Tipo Mensagem}
+    
+    TYPE -->|🎤 Áudio| WHISPER[Whisper API]
+    TYPE -->|📸 Imagem| VISION[Vision API]
+    TYPE -->|📝 Texto| STATE{Estado?}
+    
+    WHISPER --> TEXT[Texto]
+    VISION --> TEXT
+    TEXT --> STATE
+    
+    STATE -->|inicial| S01
+    S01[🏁 inicial<br/>Saudação + Atendente] --> S02[escolhendo_tipo_servico_global]
+    
+    STATE -->|escolhendo_tipo_servico_global| S02
+    S02[🧽 Tipo Serviço Global<br/>limpeza/impermeab/ambos] -->|Saudação?| S02B[Responder Oi]
+    S02 -->|Válido| S03[verificando_cidade]
+    S02B --> S02
+    
+    STATE -->|verificando_cidade| S03
+    S03[📍 Verificar Cidade<br/>Lista 40+ cidades MG] -->|Cidade OK| S04[identificando_item]
+    S03 -->|Mencionou Item| S04
+    S03 -->|Inválida| S03
+    
+    STATE -->|identificando_item| S04
+    S04[🔍 Identificar Item<br/>sofá/colchão/poltrona/etc] -->|Múltiplos| S04A[Salvar Fila]
+    S04 -->|Único Sofá| S05[coletando_modelo_sofa]
+    S04 -->|Outro Item| S07[coletando_opcao_item]
+    S04 -->|Pedir Foto| S11[aguardando_imagem]
+    S04 -->|Confirma Fila| S04B[Pegar 1º Item]
+    S04A --> S04C[Perguntar Qual]
+    S04B --> S05
+    
+    STATE -->|coletando_modelo_sofa| S05
+    S05[🛋️ Modelo Sofá<br/>comum/retráril/canto/etc] --> S06[coletando_tamanho_sofa]
+    
+    STATE -->|coletando_tamanho_sofa| S06
+    S06[📏 Tamanho Sofá<br/>1.2-2m até 5-6m] --> S08[explicando_servico]
+    
+    STATE -->|coletando_opcao_item| S07
+    S07[📦 Opções Item<br/>busca DB por subcategoria] --> S08
+    
+    STATE -->|explicando_servico| S08
+    S08[📚 Explicação Serviço<br/>limpeza/impermeab/combo<br/>Auto-delay 2s] --> S09[apresentando_orcamento]
+    
+    STATE -->|apresentando_orcamento| S09
+    S09[💰 Orçamento<br/>Item + Serviço + Preço] -->|Mudar| S04
+    S09 -->|Sim| S10A[Adicionar Carrinho]
+    S09 -->|Não| S04
+    S10A --> S10[perguntando_mais_itens]
+    
+    STATE -->|perguntando_mais_itens| S10
+    S10[➕ Mais Itens?] -->|Sim + Fila| S04
+    S10 -->|Sim Vazio| S04
+    S10 -->|Não| S10B[Calcular Total]
+    S10B --> S12[informando_pagamento]
+    
+    STATE -->|aguardando_imagem| S11
+    S11[📸 Aguardando Foto] -->|Imagem OK| S11A[Vision Analysis]
+    S11 -->|Sem Imagem| S11
+    S11A -->|Confiança >70%| S11B[confirmando_item_imagem]
+    S11A -->|<70%| S04
+    
+    STATE -->|confirmando_item_imagem| S11B
+    S11B[✅ Confirmar Análise<br/>Item + Dimensões] -->|Sim| S05
+    S11B -->|Não| S04
+    
+    STATE -->|informando_pagamento| S12
+    S12[💳 Formas Pagamento<br/>Resumo Carrinho] -->|Adicionar Mais| S04
+    S12 -->|Continuar| S13[coletando_nome]
+    
+    STATE -->|coletando_nome| S13
+    S13[👤 Nome Completo] -->|Válido >2 palavras| S14[coletando_telefone]
+    S13 -->|Inválido| S13
+    
+    STATE -->|coletando_telefone| S14
+    S14[📱 Telefone<br/>Regex BR 10-11 dígitos] -->|Válido| S15[coletando_endereco]
+    S14 -->|Inválido| S14
+    
+    STATE -->|coletando_endereco| S15
+    S15[📍 Endereço Completo<br/>Rua, nº, bairro] -->|Válido >10 chars| S16[coletando_data]
+    S15 -->|Inválido| S15
+    
+    STATE -->|coletando_data| S16
+    S16[📅 Data Desejada<br/>Seg-Sáb futuro] -->|Válida| S17[coletando_horario]
+    S16 -->|Inválida| S16
+    
+    STATE -->|coletando_horario| S17
+    S17[⏰ Horário<br/>8h-18h] -->|Válido| S18[confirmacao_final]
+    S17 -->|Inválido| S17
+    
+    STATE -->|confirmacao_final| S18
+    S18[📋 Resumo Completo<br/>Cliente + Itens + Total] -->|Sim| S19[Criar Agendamento]
+    S18 -->|Não Mudar| S18A{O Que Mudar?}
+    S19 --> S20[🎉 Sucesso]
+    S20 --> FINAL[finalizado]
+    
+    S18A -->|Nome| S13
+    S18A -->|Telefone| S14
+    S18A -->|Endereço| S15
+    S18A -->|Data| S16
+    S18A -->|Horário| S17
+    S18A -->|Itens| S04
+    
+    FINAL --> PERSIST[💾 Persistir Contexto]
+    INFO --> PERSIST
+    ACTION --> PERSIST
+    PERSIST --> SEND[📤 Enviar Ultramsg]
+    SEND --> SAVE[💾 Salvar Mensagem]
+    SAVE --> END[✅ Concluído]
+    
+    style START fill:#e3f2fd
+    style S01 fill:#fff9c4
+    style S04 fill:#ffecb3
+    style S09 fill:#c8e6c9
+    style S18 fill:#b2dfdb
+    style FINAL fill:#a5d6a7
+    style IGNORE1 fill:#ffcdd2
+    style IGNORE2 fill:#ffcdd2
+    style IGNORE3 fill:#ffcdd2
+    style STOP fill:#ef5350

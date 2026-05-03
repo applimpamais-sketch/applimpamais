@@ -1,0 +1,28 @@
+--- a/supabase/functions/receive-whatsapp-bot-webhook/index.ts
++++ b/supabase/functions/receive-whatsapp-bot-webhook/index.ts
+@@ -1026,7 +1026,7 @@ async function processarComIA(
+       ];
+       
+       // Normalizar cidade (remover acentos)
+-      const cidadeNormalizada = removerAcentos(texto);
++      const cidadeNormalizada = removerAcentos(texto.toLowerCase().trim());
+       
+       // CORREÇÃO CRÍTICA #7: Detectar se usuário mencionou item em vez de cidade
+       const subcatDetectada = detectarSubcategoria(texto);
+@@ -1057,9 +1057,13 @@ async function processarComIA(
+         };
+       }
+       
+-      const cidadeEncontrada = cidadesAtendidas.find(c => 
+-        cidadeNormalizada.includes(removerAcentos(c))
+-      );
++      // HOTFIX #3: Melhorar matching de cidade com normalização completa
++      const cidadeEncontrada = cidadesAtendidas.find(c => {
++        const cidadeNorm = removerAcentos(c.toLowerCase().trim());
++        return cidadeNormalizada === cidadeNorm || 
++               cidadeNormalizada.includes(cidadeNorm) || 
++               cidadeNorm.includes(cidadeNormalizada);
++      });
+       
+       if (cidadeEncontrada) {
+         contexto.cidade = cidadeEncontrada;

@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "generated_at": "2025-11-25T00:15:00Z",
+    "reference_image": "user-uploads://image-205.png",
+    "bug_description": "Bot entra em loop 'não peguei' quando usuário responde 'sofá'",
+    "total_issues": 8,
+    "critical_issues": 3
+  },
+  "issues": [
+    {
+      "id": "ISSUE-001",
+      "severity": "CRITICAL",
+      "title": "Bot não reconhece 'sofá' quando vem de estado verificando_cidade após mensagem inválida",
+      "description": "Quando usuário digita cidade inválida (ex: 'contagem') e depois digita 'sofá', o bot falha em detectar o item e entra em loop de fallback. O problema ocorre porque após rejeitar cidade inválida, o bot mantém estado verificando_cidade, e na próxima mensagem ('sofá') não há detecção de item porque a função detectarMultiplosItens() na linha 1037 não está sendo chamada com texto normalizado.",
+      "repro_steps": [
+        "1. Usuário envia 'limpeza' (bot vai para escolhendo_tipo_servico_global)",
+        "2. Usuário envia 'contagem' (bot verifica cidade - cidade não encontrada porque falta normalização, permanece em verificando_cidade)",
+        "3. Usuário envia 'sofá' (bot deveria detectar item via detectarMultiplosItens mas falha)",
+        "4. Bot retorna mensagem de fallback genérica",
+        "5. Loop continua indefinidamente"
+      ],
+      "cause": "Linha 1037: detectarMultiplosItens() é chamada mas o texto não está normalizado. Além disso, se a cidade não for encontrada (linha 1060-1062), o bot mantém estado verificando_cidade e na próxima iteração o fluxo de detecção de itens pode falhar se contexto.itens_informados não foi salvo corretamente.",
+      "fix_snippet": "// Linha 1037-1038 - Normalizar texto antes de detectar itens\nconst textoNormalizado = removerAcentos(texto.toLowerCase().trim());\nconst itensDetectados = detectarMultiplosItens(textoNormalizado);\n\n// Linha 1060-1062 - Melhorar normalização de cidade\nconst cidadeEncontrada = cidadesAtendidas.find(c => {\n  const cidadeNorm = removerAcentos(c.toLowerCase());\n  return cidadeNormalizada.includes(cidadeNorm) || cidadeNorm.includes(cidadeNormalizada);\n});",
+      "file": "supabase/functions/receive-whatsapp-bot-webhook/index.ts",
+      "suggested_lines": "1037-1062",
+      "tests_to_run": "tests/repro-sofa-loop.js"
+    },
+    {
+      "id": "ISSUE-002",
+      "severity": "CRITICAL",
+      "title": "detectarSubcategoria() não é chamada em verificando_cidade quando cidade inválida",
+      "description": "Se usuário digita 'sofá' em resposta a prompt de cidade (após cidade inválida), o código linha 1037 tenta detectarMultiplosItens() mas não tenta detectarSubcategoria() primeiro. Isso causa falha silenciosa onde item válido não é reconhecido.",
+      "repro_steps": [
+        "1. Bot está em verificando_cidade após rejeitar cidade",
+        "2. Usuário digita 'sofá' (item válido)",
+        "3. detectarMultiplosItens('sofá') retorna ['Sofá']",
+        "4. Código entra no if da linha 1041 e salva itens_informados",
+        "5. Transita para identificando_item",
+        "6. Em identificando_item, linha 1112 verifica se há itens_informados",
+        "7. Mas como usuário digitou apenas 'sofá' e não confirmou com 'sim', cai no else da linha 1132",
+        "8. Matching falha e retorna erro linha 1178-1184"
+      ],
+      "cause": "O matching de item escolhido (linha 1134-1136) usa includes() simples que não lida bem com palavras isoladas. Quando itens_informados=['Sofá'] e usuário responde 'sofá' novamente, o match falha porque 'sofa'.includes('Sofá') é false devido à capitalização.",
+      "fix_snippet": "// Linha 1134-1136 - Melhorar matching com normalização\nconst itemEscolhido = contexto.itens_informados.find((item: string) => {\n  const textoNorm = removerAcentos(texto.toLowerCase());\n  const itemNorm = removerAcentos(item.toLowerCase());\n  // Match bidirecional: texto contém item OU item contém texto\n  return textoNorm === itemNorm || \n         textoNorm.includes(itemNorm) || \n         itemNorm.includes(textoNorm);\n});",
+      "file": "supabase/functions/receive-whatsapp-bot-webhook/index.ts",
+      "suggested_lines": "1134-1148",
+      "tests_to_run": "tests/repro-sofa-loop.js"
+    },
+    {
+      "id": "ISSUE-003",
+      "severity": "CRITICAL",
+      "title": "Normalização de cidade 'contagem' falha por word boundaries",
+      "description": "A busca de cidade na linha 1060-1062 usa includes() simples que pode falhar para match parciais. 'contagem' não é encontrada porque a lista cidadesAtendidas provavelmente tem 'Contagem' com maiúscula, e apesar de haver removerAcentos(), pode haver problema de case sensitivity.",
+      "repro_steps": [
+        "1. Usuário digita 'contagem' (minúsculo)",
+        "2. cidadeNormalizada = 'contagem'",
+        "3. cidadesAtendidas provavelmente = ['Belo Horizonte', 'Contagem', ...]",
+        "4. find() busca cidadeNormalizada.includes(removerAcentos('Contagem'))",
+        "5. 'contagem'.includes('contagem') deveria ser true, mas pode falhar se há espaços extras"
+      ],
+      "cause": "Falta de .toLowerCase() na comparação e falta de .trim() em cidadeNormalizada antes do includes().",
+      "fix_snippet": "// Linha 1029-1030 - Adicionar .toLowerCase()\nconst cidadeNormalizada = removerAcentos(texto.toLowerCase().trim());\n\n// Linha 1060-1062 - Melhorar matching de cidade\nconst cidadeEncontrada = cidadesAtendidas.find(c => {\n  const cidadeNorm = removerAcentos(c.toLowerCase().trim());\n  return cidadeNormalizada === cidadeNorm || \n         cidadeNormalizada.includes(cidadeNorm) || \n         cidadeNorm.includes(cidadeNormalizada);\n});",
+      "file": "supabase/functions/receive-whatsapp-bot-webhook/index.ts",
+      "suggested_lines": "1029-1062",
+      "tests_to_run": "tests/repro-sofa-loop.js"
+    },
+    {
+      "id": "ISSUE-004",
+      "severity": "HIGH",
+      "title": "Mensagens de fallback são repetitivas e não oferecem saída",
+      "description": "Quando bot entra em loop de erro (linhas 1346-1350), ele sempre retorna a mesma mensagem genérica sem oferecer opção de transferir para humano ou resetar conversa. Isso frustra usuário.",
+      "repro_steps": [
+        "1. Bot não reconhece input do usuário",
+        "2. Retorna 'Ops, não consegui entender'",
+        "3. Usuário tenta de novo, falha novamente",
+        "4. Não há contador de tentativas falhas nem opção de ajuda"
+      ],
+      "cause": "Falta de contador de erros consecutivos e falta de escalação para atendente humano.",
+      "fix_snippet": "// Adicionar contador de erros no contexto\ncontexto.erros_consecutivos = (contexto.erros_consecutivos || 0) + 1;\n\nif (contexto.erros_consecutivos >= 3) {\n  return {\n    novoEstado: 'aguardando_atendente',\n    contexto: { ...contexto, necessita_humano: true },\n    mensagem: 'Percebo que está com dificuldade 😕\\n\\nVou transferir você para um atendente humano que pode te ajudar melhor! Um momento...'\n  };\n}",
+      "file": "supabase/functions/receive-whatsapp-bot-webhook/index.ts",
+      "suggested_lines": "1346-1350",
+      "tests_to_run": "tests/repro-sofa-loop.js"
+    },
+    {
+      "id": "ISSUE-005",
+      "severity": "MEDIUM",
+      "title": "Logs insuficientes em verificando_cidade para debugging",
+      "description": "Quando cidade não é encontrada, não há log detalhado mostrando o que foi buscado vs. o que estava disponível. Isso dificulta debug em produção.",
+      "repro_steps": [
+        "1. Usuário digita cidade inválida ou com typo",
+        "2. Bot apenas retorna erro genérico",
+        "3. Logs não mostram: texto_original, texto_normalizado, cidades_disponiveis, comparações realizadas"
+      ],
+      "cause": "Falta de console.log() ou console.error() detalhado nas linhas 1060-1078.",
+      "fix_snippet": "// Linha 1060 - Adicionar antes do find()\nconsole.log('[verificando_cidade] Buscando cidade:', {\n  texto_original: texto,\n  texto_normalizado: cidadeNormalizada,\n  cidades_disponiveis: cidadesAtendidas\n});\n\n// Linha 1073 - Adicionar após não encontrar\nconsole.error('[verificando_cidade] Cidade não encontrada:', {\n  texto_usuario: texto,\n  texto_normalizado: cidadeNormalizada,\n  cidades_testadas: cidadesAtendidas.map(c => ({\n    cidade: c,\n    normalizada: removerAcentos(c.toLowerCase()),\n    match: cidadeNormalizada.includes(removerAcentos(c.toLowerCase()))\n  }))\n});",
+      "file": "supabase/functions/receive-whatsapp-bot-webhook/index.ts",
+      "suggested_lines": "1060-1078",
+      "tests_to_run": "N/A"
+    },
+    {
+      "id": "ISSUE-006",
+      "severity": "MEDIUM",
+      "title": "analisarContextoSofa() usa regex restritiva com word boundaries",
+      "description": "Linha 696 usa \\b(sofá|sofa|estofado)\\b que falha para inputs com caracteres especiais ou espaços extras. Ex: ' sofá ' ou 'sofá.' podem não dar match.",
+      "repro_steps": [
+        "1. Usuário digita ' sofá ' (com espaços)",
+        "2. Regex \\b(sofá)\\b pode não dar match dependendo de normalização Unicode",
+        "3. mencionouSofa retorna false incorretamente"
+      ],
+      "cause": "Word boundaries \\b não funcionam bem com caracteres Unicode acentuados.",
+      "fix_snippet": "// Linha 694-696 - Normalizar e remover word boundaries\nfunction analisarContextoSofa(texto: string) {\n  const textoNorm = removerAcentos(texto.toLowerCase().trim());\n  \n  // Usar includes() em vez de regex com \\b\n  const mencionouSofa = textoNorm.includes('sofa') || \n                        textoNorm.includes('estofado');\n  \n  // ...resto do código\n}",
+      "file": "supabase/functions/receive-whatsapp-bot-webhook/index.ts",
+      "suggested_lines": "689-716",
+      "tests_to_run": "tests/test-sofa-variants.js"
+    },
+    {
+      "id": "ISSUE-007",
+      "severity": "LOW",
+      "title": "Falta de teste E2E automatizado para fluxo multi-cidade-item",
+      "description": "Não há testes automatizados que reproduzam a sequência exata da imagem: limpeza → cidade inválida → sofá.",
+      "repro_steps": [
+        "N/A - Este é um problema de infraestrutura de testes"
+      ],
+      "cause": "Ausência de suite de testes E2E.",
+      "fix_snippet": "// Criar tests/repro-sofa-loop.js com a sequência completa",
+      "file": "N/A",
+      "suggested_lines": "N/A",
+      "tests_to_run": "tests/repro-sofa-loop.js"
+    },
+    {
+      "id": "ISSUE-008",
+      "severity": "LOW",
+      "title": "Falta de métricas/alertas para loops de fallback em produção",
+      "description": "Não há queries SQL ou alertas configurados para detectar quando bot entra em loop de erro repetido com mesmo usuário.",
+      "repro_steps": [
+        "N/A - Este é um problema de observabilidade"
+      ],
+      "cause": "Ausência de monitoramento proativo.",
+      "fix_snippet": "// Ver queries.sql para SQL de detecção de loops",
+      "file": "N/A",
+      "suggested_lines": "N/A",
+      "tests_to_run": "N/A"
+    }
+  ],
+  "recommended_order": [
+    "ISSUE-003 (Normalização cidade)",
+    "ISSUE-002 (Matching de item escolhido)",
+    "ISSUE-001 (Detecção em verificando_cidade)",
+    "ISSUE-004 (Contador de erros e escalação)",
+    "ISSUE-005 (Logs detalhados)",
+    "ISSUE-006 (analisarContextoSofa regex)",
+    "ISSUE-007 (Testes E2E)",
+    "ISSUE-008 (Monitoramento)"
+  ]
+}

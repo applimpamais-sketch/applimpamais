@@ -1,0 +1,127 @@
+project_id = "yyrnshankehiqvkndrwk"
+
+[functions.receive-whatsapp-webhook]
+verify_jwt = false
+
+[functions.create-initial-admin]
+verify_jwt = false
+
+[functions.create-public-agendamento]
+verify_jwt = false
+
+[functions.facebook-pixel-stats]
+verify_jwt = false
+
+[functions.get-vapid-public-key]
+verify_jwt = false
+
+[functions.notify-payment-received]
+verify_jwt = false
+
+[functions.process-abandoned-carts]
+verify_jwt = false
+
+[functions.send-push-notification]
+verify_jwt = false
+
+[functions.send-recovery-whatsapp]
+verify_jwt = false
+
+[functions.send-scheduled-reminders]
+verify_jwt = false
+
+[functions.send-test-push]
+verify_jwt = false
+
+[functions.send-welcome-bot]
+verify_jwt = false
+
+[functions.send-whatsapp]
+verify_jwt = false
+
+[functions.test-whatsapp-financeiro-connection]
+verify_jwt = false
+
+[functions.test-whatsapp-bot-connection]
+verify_jwt = false
+
+[functions.track-pixel-event]
+verify_jwt = false
+
+[functions.get-servicos-api]
+verify_jwt = false
+
+[functions.get-alugueis-api]
+verify_jwt = false
+
+[functions.get-disponibilidade-api]
+verify_jwt = false
+
+[functions.create-bot-agendamento]
+verify_jwt = false
+
+[functions.iniciar-avaliacao-pos-venda]
+verify_jwt = false
+
+[functions.track-parceiro-click]
+verify_jwt = false
+
+[functions.send-onesignal-notification]
+verify_jwt = false
+
+[functions.reset-admin-password]
+verify_jwt = false
+
+[functions.blog-seed-keywords]
+verify_jwt = false
+
+[functions.blog-generate-content]
+verify_jwt = false
+
+[functions.blog-publish-wordpress]
+verify_jwt = false
+
+[functions.blog-process-images]
+verify_jwt = false
+
+[functions.blog-import-planner]
+verify_jwt = false
+
+[functions.send-tecnico-notification]
+verify_jwt = false
+
+[functions.send-rota-diaria]
+verify_jwt = false
+
+[functions.process-avaliacao-queue]
+verify_jwt = false
+
+[functions.send-tracking-notification]
+verify_jwt = false
+
+[functions.send-password-reset]
+verify_jwt = false
+
+[functions.database-metrics]
+verify_jwt = false
+
+[functions.create-tenant-admin]
+verify_jwt = false
+
+[functions.resend-tenant-invite]
+verify_jwt = false
+
+[functions.iarc-generate-creative]
+verify_jwt = false
+
+[functions.iarc-generate-copy]
+verify_jwt = false
+
+[functions.iarc-generate-landing]
+verify_jwt = false
+
+[functions.receive-utmify-webhook]
+verify_jwt = false
+
+[functions.sync-google-calendar]
+verify_jwt = false

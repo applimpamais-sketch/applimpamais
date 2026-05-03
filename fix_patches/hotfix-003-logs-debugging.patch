@@ -1,0 +1,33 @@
+--- a/supabase/functions/receive-whatsapp-bot-webhook/index.ts
++++ b/supabase/functions/receive-whatsapp-bot-webhook/index.ts
+@@ -1057,6 +1057,13 @@ async function processarComIA(
+         };
+       }
+       
++      // HOTFIX #5: Adicionar logs detalhados para debugging
++      console.log('[verificando_cidade] Buscando cidade:', {
++        texto_original: texto,
++        texto_normalizado: cidadeNormalizada,
++        cidades_disponiveis: cidadesAtendidas
++      });
++      
+       const cidadeEncontrada = cidadesAtendidas.find(c => {
+         const cidadeNorm = removerAcentos(c.toLowerCase().trim());
+         return cidadeNormalizada === cidadeNorm || 
+@@ -1071,6 +1078,16 @@ async function processarComIA(
+           mensagem: `${conf2} Atendemos aí sim\n\nMe conta, que tipo de item você quer limpar?`
+         };
+       } else {
++        // HOTFIX #5: Log detalhado quando cidade não encontrada
++        console.error('[verificando_cidade] ❌ Cidade não encontrada:', {
++          texto_usuario: texto,
++          texto_normalizado: cidadeNormalizada,
++          cidades_testadas: cidadesAtendidas.map(c => ({
++            cidade: c,
++            normalizada: removerAcentos(c.toLowerCase().trim()),
++            match: cidadeNormalizada.includes(removerAcentos(c.toLowerCase().trim()))
++          }))
++        });
+         return {
+           novoEstado: 'verificando_cidade',
+           contexto,

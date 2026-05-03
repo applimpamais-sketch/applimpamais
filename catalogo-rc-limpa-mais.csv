@@ -1,0 +1,87 @@
+Categoria,Serviço/Equipamento,Tamanho/Período,Preço Limpeza,Preço Impermeabilização,Preço Limpeza + Impermeabilização
+Aeronave,Assento Aeronave,VALOR POR ASSENTO,R$ 250.00,R$ 350.00,R$ 600.00
+Ar Condicionado,Ar Condicionado,9.000BTUS,R$ 280.00,-,-
+Ar Condicionado,Ar Condicionado,12000BTUS,R$ 320.00,-,-
+Ar Condicionado,Ar Condicionado,18000BTUS,R$ 400.00,-,-
+Ar Condicionado,Ar Condicionado,Portátil,R$ 300.00,-,-
+Ar Condicionado,Ar Condicionado,Até 30.000 btus,R$ 500.00,-,-
+Auditório,Auditório,Assento individual,R$ 50.00,R$ 70.00,R$ 120.00
+Banco de Igreja,Banco de Igreja,Assento individual,R$ 50.00,R$ 70.00,R$ 120.00
+Banco de Igreja,Banco de Igreja,até 2m,R$ 200.00,R$ 280.00,R$ 480.00
+Banco de Igreja,Banco de Igreja,até 3m,R$ 300.00,R$ 420.00,R$ 720.00
+Banco de Igreja,Banco de Igreja,até 4m,R$ 400.00,R$ 560.00,R$ 960.00
+BANQUETA,Banqueta,-,R$ 25.00,R$ 35.00,R$ 60.00
+BEBE CONFORTO,BEBE CONFORTO,-,R$ 130.00,R$ 182.00,R$ 312.00
+CADEIRA,Banqueta,-,R$ 25.00,R$ 35.00,R$ 60.00
+CADEIRA,Cadeira de Escritório,-,R$ 60.00,R$ 84.00,R$ 144.00
+CADEIRA,Cadeira Estofado no Assento,-,R$ 25.00,R$ 35.00,R$ 60.00
+CADEIRA,Cadeira Estofado no Assento e Encosto,-,R$ 35.00,R$ 49.00,R$ 84.00
+CADEIRA,Cadeira Estofado no Encosto,-,R$ 25.00,R$ 35.00,R$ 60.00
+CADEIRA,Cadeira Toda Estofada,-,R$ 40.00,R$ 56.00,R$ 96.00
+CADEIRA,Luis XV,-,R$ 60.00,R$ 84.00,R$ 144.00
+CADEIRINHA,CADEIRINHA,-,R$ 130.00,R$ 182.00,R$ 312.00
+Caminhão,Caminhão,WhatsApp,-,-,-
+Carpete,Carpete,-,R$ 19.90,R$ 27.86,R$ 47.76
+CARRINHO DE BEBE,CARRINHO DE BEBE,-,R$ 150.00,R$ 210.00,R$ 360.00
+CARRO,Bancos,-,R$ 220.00,R$ 308.00,R$ 528.00
+CARRO,Bancos + Teto,-,R$ 280.00,R$ 392.00,R$ 672.00
+CARRO,Bancos + Teto + Carpete,-,R$ 350.00,R$ 490.00,R$ 840.00
+CHAISE,CHAISE G até 3m,-,R$ 300.00,R$ 420.00,R$ 720.00
+CHAISE,CHAISE GG até 4m,-,R$ 400.00,R$ 560.00,R$ 960.00
+CHAISE,CHAISE M até 2m,-,R$ 200.00,R$ 280.00,R$ 480.00
+Cinema,Cinema,Assento individual,R$ 50.00,R$ 70.00,R$ 120.00
+COLCHÃO,Colchão,Casal,R$ 115.00,R$ 161.00,R$ 276.00
+COLCHÃO,Colchão,King,R$ 161.00,R$ 225.00,R$ 386.00
+COLCHÃO,Colchão,Queen,R$ 138.00,R$ 193.00,R$ 331.00
+COLCHÃO,Colchão,Solteiro,R$ 92.00,R$ 129.00,R$ 221.00
+COLCHÃO,Colchão Box/Conjugado,Casal,R$ 184.00,R$ 258.00,R$ 442.00
+COLCHÃO,Colchão Box/Conjugado,King,R$ 276.00,R$ 386.00,R$ 662.00
+COLCHÃO,Colchão Box/Conjugado,Queen,R$ 230.00,R$ 322.00,R$ 552.00
+COLCHÃO,Colchão Box/Conjugado,Solteiro,R$ 138.00,R$ 193.00,R$ 331.00
+Divã,Divã G até 3m,-,R$ 300.00,R$ 420.00,R$ 720.00
+Divã,Divã GG até 4m,-,R$ 400.00,R$ 560.00,R$ 960.00
+Divã,Divã M até 2m,-,R$ 200.00,R$ 280.00,R$ 480.00
+Embarcação,Assento Embarcação,VALOR POR ASSENTO,R$ 250.00,R$ 350.00,R$ 600.00
+Espuma Acustica,Espuma Acustica,-,R$ 100.00,-,-
+Fantasia Estofada,Fantasia Estofada,-,R$ 200.00,R$ 280.00,R$ 480.00
+Impermeabilização de Pedras,Impermeabilização de Pedras,M2,-,R$ 90.00,-
+Impermeabilização de Piso,Impermeabilização de Piso,M2,-,R$ 60.00,-
+LIMPEZA DE PISO,LIMPEZA DE PISO,M2,R$ 15.00,-,-
+Longarina,Longarina,VALOR POR ASSENTO,R$ 50.00,R$ 70.00,R$ 120.00
+Moisés,Moisés,-,R$ 130.00,R$ 182.00,R$ 312.00
+Namoradeira,Namoradeira,-,R$ 150.00,R$ 210.00,R$ 360.00
+Onibus,Onibus,VALOR POR ASSENTO,R$ 50.00,R$ 70.00,R$ 120.00
+POLTRONA,Poltrona,-,R$ 75.00,R$ 105.00,R$ 180.00
+Puff,Puff,Grande,R$ 60.00,R$ 84.00,R$ 144.00
+Puff,Puff,Medio,R$ 50.00,R$ 70.00,R$ 120.00
+Puff,Puff,Pequeno,R$ 40.00,R$ 56.00,R$ 96.00
+Recamier,Recamier G até 3m,-,R$ 300.00,R$ 420.00,R$ 720.00
+Recamier,Recamier GG até 4m,-,R$ 400.00,R$ 560.00,R$ 960.00
+Recamier,Recamier M até 2m,-,R$ 200.00,R$ 280.00,R$ 480.00
+SOFÁ,L pequeno,até 4 lugares,R$ 300.00,R$ 420.00,R$ 720.00
+SOFÁ,L grande,5 a 7 lugares,R$ 400.00,R$ 560.00,R$ 960.00
+SOFÁ,L Super Grande,8 lugares ou mais,R$ 500.00,R$ 700.00,R$ 1200.00
+SOFÁ,RETO 1 lugar,-,R$ 100.00,R$ 140.00,R$ 240.00
+SOFÁ,RETO 2 lugares,-,R$ 150.00,R$ 210.00,R$ 360.00
+SOFÁ,RETO 3 lugares,-,R$ 200.00,R$ 280.00,R$ 480.00
+SOFÁ,RETO 4 lugares,-,R$ 250.00,R$ 350.00,R$ 600.00
+SOFÁ,RETO 5 lugares,-,R$ 300.00,R$ 420.00,R$ 720.00
+SOFÁ,RETO 6 lugares,-,R$ 350.00,R$ 490.00,R$ 840.00
+SOFÁ,RETO 7 lugares,-,R$ 400.00,R$ 560.00,R$ 960.00
+SOFÁ,RETO 8 lugares,-,R$ 450.00,R$ 630.00,R$ 1080.00
+SOFÁ,RETO 9 lugares,-,R$ 500.00,R$ 700.00,R$ 1200.00
+SOFÁ,U,até 6 lugares,R$ 400.00,R$ 560.00,R$ 960.00
+SOFÁ,U,7 a 10 lugares,R$ 500.00,R$ 700.00,R$ 1200.00
+SOFÁ,U,11 lugares ou mais,R$ 600.00,R$ 840.00,R$ 1440.00
+TAPETE,TAPETE G,"2,50 x 2,00 ou maior",R$ 90.00,R$ 126.00,R$ 216.00
+TAPETE,TAPETE GG,"3,00 x 2,50 ou maior",R$ 150.00,R$ 210.00,R$ 360.00
+TAPETE,TAPETE M,"2,00 x 1,50",R$ 60.00,R$ 84.00,R$ 144.00
+TAPETE,TAPETE P,"1,50 x 1,00",R$ 40.00,R$ 56.00,R$ 96.00
+Travesseiro,Travesseiro,-,R$ 23.00,R$ 32.00,R$ 55.00
+
+ALUGUÉIS
+Categoria,Equipamento,Período,Preço,,-
+Aluguel,Kit Básico,Diária,R$ 130.00,-,-
+Aluguel,Kit Básico,Final de Semana,R$ 150.00,-,-
+Aluguel,Kit Confort,Semanal,R$ 280.00,-,-
+Aluguel,Kit Econômico,Diária,R$ 89.00,-,-

@@ -1,0 +1,1 @@
+ALTER FUNCTION public.get_master_tenant_id() SET search_path = public;
