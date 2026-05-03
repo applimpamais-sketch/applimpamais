@@ -2,6 +2,10 @@
 import type { FuncionarioBot, TecnicoBot, ParceiroBot, AvaliacaoConfig, DadosAgendamentoExtraidos, DadosFinanceiros } from "./whatsappBotHelpers.ts";
 import { detectarLocacao } from "./whatsappBotHelpers.ts";
 
+function applyTenantFilter(query: any, tenantId?: string | null) {
+  return tenantId ? query.eq("tenant_id", tenantId) : query;
+}
+
 /**
  * Normaliza telefone brasileiro gerando TODAS as variantes possíveis para matching robusto.
  * Cobre 16+ formatos: com/sem +55, com/sem DDD, com/sem 9º dígito, com/sem formatação.
@@ -87,12 +91,16 @@ function phoneVariantsMatch(variants1: string[], variants2: string[]): boolean {
   return variants1.some(v => set2.has(v));
 }
 
-export async function verificarFuncionarioBot(sb: any, tel: string): Promise<FuncionarioBot | null> {
+export async function verificarFuncionarioBot(sb: any, tel: string, tenantId?: string | null): Promise<FuncionarioBot | null> {
   try {
     const incomingVariants = normalizeBrPhoneVariants(tel);
     console.log(`📱 [verificarFuncionarioBot] Incoming: ${tel} -> variants: ${JSON.stringify(incomingVariants)}`);
     
-    const { data, error } = await sb.from("funcionarios_bot").select("id, nome, telefone_whatsapp, ativo, tenant_id").eq("ativo", true);
+    const funcionariosQuery = applyTenantFilter(
+      sb.from("funcionarios_bot").select("id, nome, telefone_whatsapp, ativo, tenant_id").eq("ativo", true),
+      tenantId,
+    );
+    const { data, error } = await funcionariosQuery;
     if (error || !data) {
       console.log(`❌ [verificarFuncionarioBot] Erro ao buscar funcionários: ${error?.message || 'sem dados'}`);
       return null;
@@ -181,24 +189,32 @@ export async function buscarConversoesParceiro(sb: any, pId: string): Promise<an
 // ========== FASE 1: NOVOS COMANDOS ==========
 
 // FUNCIONÁRIOS
-export async function buscarAgendamentosHoje(sb: any): Promise<any[]> {
+export async function buscarAgendamentosHoje(sb: any, tenantId?: string | null): Promise<any[]> {
   const hoje = new Date().toISOString().split('T')[0];
-  const { data } = await sb.from("agendamentos").select("order_code, nome_cliente, telefone, horario, status, valor_total, bairro, cidade, tecnico_id").eq("data_agendamento", hoje).order("horario", { ascending: true });
+  const query = applyTenantFilter(
+    sb.from("agendamentos").select("order_code, nome_cliente, telefone, horario, status, valor_total, bairro, cidade, tecnico_id").eq("data_agendamento", hoje),
+    tenantId,
+  ).order("horario", { ascending: true });
+  const { data } = await query;
   return data || [];
 }
 
-export async function buscarAgendamentosPendentes(sb: any): Promise<any[]> {
-  const { data } = await sb.from("agendamentos").select("order_code, nome_cliente, telefone, data_agendamento, horario, status, valor_total, bairro, created_at").eq("status", "pendente").order("created_at", { ascending: false }).limit(20);
+export async function buscarAgendamentosPendentes(sb: any, tenantId?: string | null): Promise<any[]> {
+  const query = applyTenantFilter(
+    sb.from("agendamentos").select("order_code, nome_cliente, telefone, data_agendamento, horario, status, valor_total, bairro, created_at").eq("status", "pendente"),
+    tenantId,
+  ).order("created_at", { ascending: false }).limit(20);
+  const { data } = await query;
   return data || [];
 }
 
-export async function buscarResumoFinanceiro(sb: any): Promise<{ hoje: { total: number; qtd: number; pendentes: number; confirmados: number; concluidos: number }; ontem: { total: number; qtd: number }; despesasHoje: number }> {
+export async function buscarResumoFinanceiro(sb: any, tenantId?: string | null): Promise<{ hoje: { total: number; qtd: number; pendentes: number; confirmados: number; concluidos: number }; ontem: { total: number; qtd: number }; despesasHoje: number }> {
   const hoje = new Date().toISOString().split('T')[0];
   const ontem = new Date(Date.now() - 86400000).toISOString().split('T')[0];
   
-  const { data: agHoje } = await sb.from("agendamentos").select("status, valor_total").eq("data_agendamento", hoje);
-  const { data: agOntem } = await sb.from("agendamentos").select("valor_total").eq("data_agendamento", ontem);
-  const { data: despHoje } = await sb.from("despesas").select("valor").eq("data_despesa", hoje).eq("status", "paga");
+  const { data: agHoje } = await applyTenantFilter(sb.from("agendamentos").select("status, valor_total").eq("data_agendamento", hoje), tenantId);
+  const { data: agOntem } = await applyTenantFilter(sb.from("agendamentos").select("valor_total").eq("data_agendamento", ontem), tenantId);
+  const { data: despHoje } = await applyTenantFilter(sb.from("despesas").select("valor").eq("data_despesa", hoje).eq("status", "paga"), tenantId);
   
   const listaHoje = agHoje || [];
   return {
@@ -275,39 +291,50 @@ export async function buscarRankingParceiros(sb: any, parceiroId: string): Promi
 // ========== FASE 2: NOVOS COMANDOS ==========
 
 // FUNCIONÁRIOS - @buscar [termo]
-export async function buscarAgendamentoPorTermo(sb: any, termo: string): Promise<any[]> {
+export async function buscarAgendamentoPorTermo(sb: any, termo: string, tenantId?: string | null): Promise<any[]> {
   // Limpar termo para busca segura
   const termoNome = termo.trim();
   const termoTelefone = termo.replace(/\D/g, '');
   
   // Se termo parece ser telefone (só números e >= 8 dígitos), buscar por telefone
   if (termoTelefone.length >= 8) {
-    const { data } = await sb.from("agendamentos")
+    const query = applyTenantFilter(
+      sb.from("agendamentos")
       .select("order_code, nome_cliente, telefone, data_agendamento, horario, status, valor_total, bairro, cidade")
       .ilike("telefone", `%${termoTelefone}%`)
       .order("data_agendamento", { ascending: false })
-      .limit(15);
+      .limit(15),
+      tenantId,
+    );
+    const { data } = await query;
     return data || [];
   }
   
   // Caso contrário, buscar por nome ou order_code
-  const { data } = await sb.from("agendamentos")
+  const query = applyTenantFilter(
+    sb.from("agendamentos")
     .select("order_code, nome_cliente, telefone, data_agendamento, horario, status, valor_total, bairro, cidade")
     .or(`nome_cliente.ilike.%${termoNome}%,order_code.ilike.%${termoNome}%`)
     .order("data_agendamento", { ascending: false })
-    .limit(15);
+    .limit(15),
+    tenantId,
+  );
+  const { data } = await query;
   return data || [];
 }
 
 // FUNCIONÁRIOS - @status [código/nome]
-export async function buscarStatusAgendamento(sb: any, codigo: string): Promise<any | null> {
+export async function buscarStatusAgendamento(sb: any, codigo: string, tenantId?: string | null): Promise<any | null> {
   // Busca por order_code ou nome do cliente
-  const { data } = await sb.from("agendamentos")
+  const baseQuery = applyTenantFilter(
+    sb.from("agendamentos")
     .select("id, order_code, nome_cliente, telefone, endereco, bairro, cidade, cep, data_agendamento, horario, status, valor_total, valor_desconto, cupom_codigo, forma_pagamento, origem, itens_carrinho, tecnico_id, created_at")
     .or(`order_code.ilike.%${codigo}%,nome_cliente.ilike.%${codigo}%`)
     .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+    .limit(1),
+    tenantId,
+  );
+  const { data } = await baseQuery.maybeSingle();
   
   if (data && data.tecnico_id) {
     const { data: tec } = await sb.from("profiles").select("nome_completo").eq("id", data.tecnico_id).maybeSingle();
@@ -318,27 +345,35 @@ export async function buscarStatusAgendamento(sb: any, codigo: string): Promise<
 }
 
 // FUNCIONÁRIOS - @semana (próximos 7 dias - TODOS os agendamentos)
-export async function buscarAgendamentosSemanaFuncionario(sb: any): Promise<any[]> {
+export async function buscarAgendamentosSemanaFuncionario(sb: any, tenantId?: string | null): Promise<any[]> {
   const hoje = new Date().toISOString().split('T')[0];
   const fim = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
-  const { data } = await sb.from("agendamentos")
+  const query = applyTenantFilter(
+    sb.from("agendamentos")
     .select("order_code, nome_cliente, telefone, data_agendamento, horario, status, valor_total, bairro")
     .gte("data_agendamento", hoje)
     .lte("data_agendamento", fim)
     .order("data_agendamento", { ascending: true })
-    .order("horario", { ascending: true });
+    .order("horario", { ascending: true }),
+    tenantId,
+  );
+  const { data } = await query;
   return data || [];
 }
 
 // FUNCIONÁRIOS - @pagos (pagamentos recebidos hoje)
-export async function buscarPagamentosRecentes(sb: any): Promise<{ lista: any[]; total: number }> {
+export async function buscarPagamentosRecentes(sb: any, tenantId?: string | null): Promise<{ lista: any[]; total: number }> {
   const hoje = new Date().toISOString().split('T')[0];
-  const { data } = await sb.from("pagamentos_agendamentos")
+  const query = applyTenantFilter(
+    sb.from("pagamentos_agendamentos")
     .select("id, valor_pago, forma_pagamento, data_pagamento, agendamento_id, agendamentos(order_code, nome_cliente)")
     .eq("status", "pago")
     .gte("data_pagamento", `${hoje}T00:00:00`)
     .order("data_pagamento", { ascending: false })
-    .limit(20);
+    .limit(20),
+    tenantId,
+  );
+  const { data } = await query;
   
   const lista = data || [];
   const total = lista.reduce((s: number, p: any) => s + (p.valor_pago || 0), 0);
@@ -346,12 +381,16 @@ export async function buscarPagamentosRecentes(sb: any): Promise<{ lista: any[];
 }
 
 // FUNCIONÁRIOS - @despesas (despesas de hoje)
-export async function buscarDespesasHojeFuncionario(sb: any): Promise<{ lista: any[]; total: number }> {
+export async function buscarDespesasHojeFuncionario(sb: any, tenantId?: string | null): Promise<{ lista: any[]; total: number }> {
   const hoje = new Date().toISOString().split('T')[0];
-  const { data } = await sb.from("despesas")
+  const query = applyTenantFilter(
+    sb.from("despesas")
     .select("id, descricao, valor, categoria, forma_pagamento, data_despesa")
     .eq("data_despesa", hoje)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false }),
+    tenantId,
+  );
+  const { data } = await query;
   
   const lista = data || [];
   const total = lista.reduce((s: number, d: any) => s + (d.valor || 0), 0);
@@ -389,32 +428,66 @@ export async function buscarHistoricoSaques(sb: any, parceiroId: string): Promis
   return data || [];
 }
 
-export async function carregarConfigAvaliacoes(sb: any): Promise<AvaliacaoConfig | null> {
+export async function carregarConfigAvaliacoes(sb: any, tenantId?: string | null): Promise<AvaliacaoConfig | null> {
   try {
-    const { data, error } = await sb.from("integracoes").select("configuracao, status").eq("tipo", "avaliacoes").maybeSingle();
+    const query = applyTenantFilter(
+      sb.from("integracoes").select("configuracao, status").eq("tipo", "avaliacoes"),
+      tenantId,
+    );
+    const { data, error } = await query.maybeSingle();
     if (error || !data || data.status !== 'ativo') return null;
     const c = data.configuracao as Record<string, unknown>;
     return { google_reviews_url: (c?.google_reviews_url as string) || '', facebook_reviews_url: (c?.facebook_reviews_url as string) || '', nota_minima_review: (c?.nota_minima_review as number) || 8, mensagem_pedido_nota: (c?.mensagem_pedido_nota as string) || 'De 0 a 10?', mensagem_nota_alta: (c?.mensagem_nota_alta as string) || 'Obrigado! Avalie: {link}', mensagem_nota_baixa: (c?.mensagem_nota_baixa as string) || 'O que podemos melhorar?' };
   } catch { return null; }
 }
 
-export async function buscarLancamentoPendente(sb: any, tel: string): Promise<any | null> {
-  const { data } = await sb.from("whatsapp_financeiro_log").select("*").eq("telefone_remetente", tel).eq("processamento_status", "aguardando_confirmacao").order("created_at", { ascending: false }).limit(1).maybeSingle();
+export async function buscarLancamentoPendente(
+  sb: any,
+  tel: string,
+  _tenantId?: string | null,
+  funcionarioBotId?: string | null,
+): Promise<any | null> {
+  let query = sb.from("whatsapp_financeiro_log")
+    .select("*")
+    .eq("telefone_remetente", tel)
+    .eq("processamento_status", "aguardando_confirmacao")
+    .order("created_at", { ascending: false })
+    .limit(1);
+  if (funcionarioBotId) {
+    query = query.eq("funcionario_bot_id", funcionarioBotId);
+  }
+  const { data } = await query.maybeSingle();
   return data;
 }
 
-export async function confirmarLancamento(sb: any, lanc: any): Promise<{ sucesso: boolean; erro?: string }> {
+export async function confirmarLancamento(
+  sb: any,
+  lanc: any,
+  tenantId?: string | null,
+  funcionarioBotId?: string | null,
+): Promise<{ sucesso: boolean; erro?: string }> {
   try {
+    if (funcionarioBotId && lanc.funcionario_bot_id && lanc.funcionario_bot_id !== funcionarioBotId) {
+      return { sucesso: false, erro: "Lançamento não pertence ao funcionário autenticado" };
+    }
     const an = lanc.analise_ia as DadosFinanceiros;
     
     // Buscar o user_id (profile) vinculado ao funcionário pelo telefone
     let createdBy: string | null = null;
     if (lanc.funcionario_bot_id) {
       // Buscar telefone do funcionário
-      const { data: func } = await sb.from("funcionarios_bot").select("telefone_whatsapp").eq("id", lanc.funcionario_bot_id).single();
+      const funcQuery = applyTenantFilter(
+        sb.from("funcionarios_bot").select("telefone_whatsapp").eq("id", lanc.funcionario_bot_id),
+        tenantId,
+      );
+      const { data: func } = await funcQuery.single();
       if (func?.telefone_whatsapp) {
         // Buscar profile pelo telefone
-        const { data: profile } = await sb.from("profiles").select("id").eq("telefone_whatsapp", func.telefone_whatsapp).single();
+        const profileQuery = applyTenantFilter(
+          sb.from("profiles").select("id").eq("telefone_whatsapp", func.telefone_whatsapp),
+          tenantId,
+        );
+        const { data: profile } = await profileQuery.single();
         if (profile) createdBy = profile.id;
       }
     }
@@ -422,7 +495,11 @@ export async function confirmarLancamento(sb: any, lanc: any): Promise<{ sucesso
     if (!createdBy && lanc.telefone_remetente) {
       const tel = lanc.telefone_remetente.replace('@c.us', '');
       const variants = normalizeBrPhoneVariants(tel);
-      const { data: profiles } = await sb.from("profiles").select("id, telefone_whatsapp");
+      const profilesQuery = applyTenantFilter(
+        sb.from("profiles").select("id, telefone_whatsapp"),
+        tenantId,
+      );
+      const { data: profiles } = await profilesQuery;
       if (profiles) {
         for (const p of profiles) {
           if (p.telefone_whatsapp) {
@@ -439,12 +516,20 @@ export async function confirmarLancamento(sb: any, lanc: any): Promise<{ sucesso
     // Buscar tenant_id do funcionário
     let tenantId: string | null = null;
     if (lanc.funcionario_bot_id) {
-      const { data: funcData } = await sb.from("funcionarios_bot").select("tenant_id").eq("id", lanc.funcionario_bot_id).single();
+      const funcTenantQuery = applyTenantFilter(
+        sb.from("funcionarios_bot").select("tenant_id").eq("id", lanc.funcionario_bot_id),
+        tenantId,
+      );
+      const { data: funcData } = await funcTenantQuery.single();
       if (funcData?.tenant_id) tenantId = funcData.tenant_id;
     }
     // Fallback: buscar tenant do profile
     if (!tenantId && createdBy) {
-      const { data: profData } = await sb.from("profiles").select("tenant_id").eq("id", createdBy).single();
+      const profTenantQuery = applyTenantFilter(
+        sb.from("profiles").select("tenant_id").eq("id", createdBy),
+        tenantId,
+      );
+      const { data: profData } = await profTenantQuery.single();
       if (profData?.tenant_id) tenantId = profData.tenant_id;
     }
     
@@ -467,22 +552,43 @@ export async function confirmarLancamento(sb: any, lanc: any): Promise<{ sucesso
       
       // Vincular despesa ao log
       if (despesa?.id) {
-        await sb.from("whatsapp_financeiro_log").update({ 
+        let logUpdateQuery = sb.from("whatsapp_financeiro_log").update({ 
           despesa_id: despesa.id,
           processamento_status: "sucesso", 
           updated_at: new Date().toISOString() 
-        }).eq("id", lanc.id);
+          }).eq("id", lanc.id);
+        if (funcionarioBotId) {
+          logUpdateQuery = logUpdateQuery.eq("funcionario_bot_id", funcionarioBotId);
+        }
+        await logUpdateQuery;
       }
     } else {
-      await sb.from("whatsapp_financeiro_log").update({ processamento_status: "sucesso", updated_at: new Date().toISOString() }).eq("id", lanc.id);
+      let logUpdateQuery = sb.from("whatsapp_financeiro_log")
+        .update({ processamento_status: "sucesso", updated_at: new Date().toISOString() })
+        .eq("id", lanc.id);
+      if (funcionarioBotId) {
+        logUpdateQuery = logUpdateQuery.eq("funcionario_bot_id", funcionarioBotId);
+      }
+      await logUpdateQuery;
     }
     
     return { sucesso: true };
   } catch (e) { return { sucesso: false, erro: "Erro interno" }; }
 }
 
-export async function cancelarLancamento(sb: any, id: string): Promise<boolean> {
-  const { error } = await sb.from("whatsapp_financeiro_log").update({ processamento_status: "cancelado", updated_at: new Date().toISOString() }).eq("id", id);
+export async function cancelarLancamento(
+  sb: any,
+  id: string,
+  _tenantId?: string | null,
+  funcionarioBotId?: string | null,
+): Promise<boolean> {
+  let query = sb.from("whatsapp_financeiro_log")
+    .update({ processamento_status: "cancelado", updated_at: new Date().toISOString() })
+    .eq("id", id);
+  if (funcionarioBotId) {
+    query = query.eq("funcionario_bot_id", funcionarioBotId);
+  }
+  const { error } = await query;
   return !error;
 }
 

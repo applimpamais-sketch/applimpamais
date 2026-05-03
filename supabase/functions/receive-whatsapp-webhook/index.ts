@@ -134,27 +134,28 @@ Deno.serve(async (req) => {
     const func = await verificarFuncionarioBot(supabase, msg.from);
     if (func) {
       console.log(`👔 Funcionário: ${func.nome}`);
+      const funcTenantId = func.tenant_id || null;
       
       // @ajuda
       if (lower === "@ajuda") { await sendMsg(ultramsgUrl, ultramsgToken, msg.from, formatarMensagemAjuda()); return new Response(JSON.stringify({ status: "success", tipo: "func_ajuda" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } }); }
       
       // @hoje - Agenda do dia
       if (lower === "@hoje") { 
-        const lista = await buscarAgendamentosHoje(supabase); 
+        const lista = await buscarAgendamentosHoje(supabase, funcTenantId); 
         await sendMsg(ultramsgUrl, ultramsgToken, msg.from, formatarAgendamentosHoje(lista)); 
         return new Response(JSON.stringify({ status: "success", tipo: "func_hoje", total: lista.length }), { headers: { ...corsHeaders, "Content-Type": "application/json" } }); 
       }
       
       // @pendentes - Serviços pendentes de confirmação
       if (lower === "@pendentes") { 
-        const lista = await buscarAgendamentosPendentes(supabase); 
+        const lista = await buscarAgendamentosPendentes(supabase, funcTenantId); 
         await sendMsg(ultramsgUrl, ultramsgToken, msg.from, formatarAgendamentosPendentes(lista)); 
         return new Response(JSON.stringify({ status: "success", tipo: "func_pendentes", total: lista.length }), { headers: { ...corsHeaders, "Content-Type": "application/json" } }); 
       }
       
       // @resumo - Dashboard rápido
       if (lower === "@resumo") { 
-        const resumo = await buscarResumoFinanceiro(supabase); 
+        const resumo = await buscarResumoFinanceiro(supabase, funcTenantId); 
         await sendMsg(ultramsgUrl, ultramsgToken, msg.from, formatarResumoFinanceiro(resumo)); 
         return new Response(JSON.stringify({ status: "success", tipo: "func_resumo" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } }); 
       }
@@ -163,7 +164,7 @@ Deno.serve(async (req) => {
       if (lower.startsWith("@buscar")) {
         const termo = texto.substring(7).trim();
         if (!termo) { await sendMsg(ultramsgUrl, ultramsgToken, msg.from, "⚠️ *Uso:* @buscar [nome/tel/código]\n\nExemplo: @buscar Maria\nExemplo: @buscar 31999887766"); return new Response(JSON.stringify({ status: "error", tipo: "func_buscar_sem_termo" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } }); }
-        const lista = await buscarAgendamentoPorTermo(supabase, termo);
+        const lista = await buscarAgendamentoPorTermo(supabase, termo, funcTenantId);
         await sendMsg(ultramsgUrl, ultramsgToken, msg.from, formatarResultadoBusca(lista, termo));
         return new Response(JSON.stringify({ status: "success", tipo: "func_buscar", total: lista.length }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
@@ -172,28 +173,28 @@ Deno.serve(async (req) => {
       if (lower.startsWith("@status")) {
         const codigo = texto.substring(7).trim();
         if (!codigo) { await sendMsg(ultramsgUrl, ultramsgToken, msg.from, "⚠️ *Uso:* @status [código/nome]\n\nExemplo: @status BOT-ABC123\nExemplo: @status Maria"); return new Response(JSON.stringify({ status: "error", tipo: "func_status_sem_cod" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } }); }
-        const ag = await buscarStatusAgendamento(supabase, codigo);
+        const ag = await buscarStatusAgendamento(supabase, codigo, funcTenantId);
         await sendMsg(ultramsgUrl, ultramsgToken, msg.from, formatarStatusAgendamento(ag));
         return new Response(JSON.stringify({ status: ag ? "success" : "not_found", tipo: "func_status" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       
       // @semana - Próximos 7 dias (visão funcionário)
       if (lower === "@semana") {
-        const lista = await buscarAgendamentosSemanaFuncionario(supabase);
+        const lista = await buscarAgendamentosSemanaFuncionario(supabase, funcTenantId);
         await sendMsg(ultramsgUrl, ultramsgToken, msg.from, formatarAgendamentosSemanaFuncionario(lista));
         return new Response(JSON.stringify({ status: "success", tipo: "func_semana", total: lista.length }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       
       // @pagos - Pagamentos recebidos hoje
       if (lower === "@pagos") {
-        const dados = await buscarPagamentosRecentes(supabase);
+        const dados = await buscarPagamentosRecentes(supabase, funcTenantId);
         await sendMsg(ultramsgUrl, ultramsgToken, msg.from, formatarPagamentosRecentes(dados));
         return new Response(JSON.stringify({ status: "success", tipo: "func_pagos", total: dados.lista.length }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       
       // @despesas ou @gastos - Despesas de hoje
       if (lower === "@despesas" || lower === "@gastos") {
-        const dados = await buscarDespesasHojeFuncionario(supabase);
+        const dados = await buscarDespesasHojeFuncionario(supabase, funcTenantId);
         await sendMsg(ultramsgUrl, ultramsgToken, msg.from, formatarDespesasHojeFuncionario(dados));
         return new Response(JSON.stringify({ status: "success", tipo: "func_despesas", total: dados.lista.length }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
@@ -319,25 +320,25 @@ Deno.serve(async (req) => {
       if (lower === "sim") {
         const { data: ap } = await supabase.from("agendamentos_pendentes_confirmacao").select("*, agendamentos(*)").eq("funcionario_telefone", msg.from).eq("status", "aguardando").order("created_at", { ascending: false }).limit(1).maybeSingle();
         if (ap) { const ag = ap.agendamentos; await supabase.from("agendamentos").update({ status: "confirmado", updated_at: new Date().toISOString() }).eq("id", ap.agendamento_id); await supabase.from("agendamentos_pendentes_confirmacao").update({ status: "confirmado", respondido_em: new Date().toISOString() }).eq("id", ap.id); await sendMsg(ultramsgUrl, ultramsgToken, msg.from, `✅ *CONFIRMADO!*\n📋 ${ag?.order_code}\n👤 ${ag?.nome_cliente}\n📅 ${ag?.data_agendamento}`); return new Response(JSON.stringify({ status: "success", tipo: "func_agend_ok" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } }); }
-        const lp = await buscarLancamentoPendente(supabase, msg.from);
+        const lp = await buscarLancamentoPendente(supabase, msg.from, funcTenantId, func.id);
         if (!lp) { await sendMsg(ultramsgUrl, ultramsgToken, msg.from, "⚠️ Nada pendente para confirmar."); return new Response(JSON.stringify({ status: "success", tipo: "func_sem_pendente" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } }); }
         lp.funcionario_nome = func.nome; lp.funcionario_bot_id = lp.funcionario_bot_id || func.id;
-        const res = await confirmarLancamento(supabase, lp); const an = lp.analise_ia as DadosFinanceiros;
+        const res = await confirmarLancamento(supabase, lp, funcTenantId, func.id); const an = lp.analise_ia as DadosFinanceiros;
         await sendMsg(ultramsgUrl, ultramsgToken, msg.from, res.sucesso ? `✅ *${an.tipo.toUpperCase()} REGISTRADA!*\n💰 R$ ${an.valor.toFixed(2).replace('.', ',')}` : `❌ Erro: ${res.erro}`);
         return new Response(JSON.stringify({ status: res.sucesso ? "success" : "error", tipo: "func_confirm" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       if (lower === "cancelar" || lower === "não" || lower === "nao") {
         const { data: ap } = await supabase.from("agendamentos_pendentes_confirmacao").select("*, agendamentos(*)").eq("funcionario_telefone", msg.from).eq("status", "aguardando").order("created_at", { ascending: false }).limit(1).maybeSingle();
         if (ap) { await supabase.from("agendamentos_pendentes_confirmacao").update({ status: "manual", respondido_em: new Date().toISOString() }).eq("id", ap.id); await sendMsg(ultramsgUrl, ultramsgToken, msg.from, `📝 Agendamento permanece PENDENTE para lançamento manual.`); return new Response(JSON.stringify({ status: "success", tipo: "func_agend_manual" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } }); }
-        const lp = await buscarLancamentoPendente(supabase, msg.from);
+        const lp = await buscarLancamentoPendente(supabase, msg.from, funcTenantId, func.id);
         if (!lp) { await sendMsg(ultramsgUrl, ultramsgToken, msg.from, "⚠️ Nada pendente."); return new Response(JSON.stringify({ status: "success" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } }); }
-        await cancelarLancamento(supabase, lp.id); await sendMsg(ultramsgUrl, ultramsgToken, msg.from, "✅ Lançamento cancelado.");
+        await cancelarLancamento(supabase, lp.id, funcTenantId, func.id); await sendMsg(ultramsgUrl, ultramsgToken, msg.from, "✅ Lançamento cancelado.");
         return new Response(JSON.stringify({ status: "success", tipo: "func_cancel" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       if (lower === "editar") {
-        const lp = await buscarLancamentoPendente(supabase, msg.from);
+        const lp = await buscarLancamentoPendente(supabase, msg.from, funcTenantId, func.id);
         if (!lp) { await sendMsg(ultramsgUrl, ultramsgToken, msg.from, "⚠️ Nada para editar."); return new Response(JSON.stringify({ status: "success" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } }); }
-        await cancelarLancamento(supabase, lp.id); await sendMsg(ultramsgUrl, ultramsgToken, msg.from, "✏️ Lançamento descartado. Envie a versão correta.");
+        await cancelarLancamento(supabase, lp.id, funcTenantId, func.id); await sendMsg(ultramsgUrl, ultramsgToken, msg.from, "✏️ Lançamento descartado. Envie a versão correta.");
         return new Response(JSON.stringify({ status: "success", tipo: "func_edit" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       let tipoMsg: 'texto' | 'imagem' | 'audio' = 'texto'; let conteudo = texto; let arquivoUrl: string | undefined; let transcricao: string | undefined;

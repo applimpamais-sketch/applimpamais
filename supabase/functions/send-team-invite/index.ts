@@ -72,7 +72,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     let tenantBranding: TenantBranding | null = null;
 
-    if (tenantId && tenantId !== '00000000-0000-0000-0000-000000000001') {
+    if (tenantId) {
       const supabaseUrl = Deno.env.get("SUPABASE_URL");
       const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 

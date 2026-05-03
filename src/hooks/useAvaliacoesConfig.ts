@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useTenantContext } from './useTenantContext';
 
 export interface AvaliacoesConfig {
   google_reviews_url: string;
@@ -48,13 +49,17 @@ export function useAvaliacoesConfig() {
   const [isSaving, setIsSaving] = useState(false);
   const [integracaoId, setIntegracaoId] = useState<string | null>(null);
   const { toast } = useToast();
+  const { tenantId } = useTenantContext();
 
   const loadConfig = useCallback(async () => {
+    if (!tenantId) return;
+
     try {
       const { data, error } = await supabase
-        .from('integracoes')
+        .from('integracoes' as any)
         .select('*')
         .eq('tipo', 'avaliacoes')
+        .eq('tenant_id', tenantId)
         .maybeSingle();
 
       if (error) throw error;
@@ -80,13 +85,16 @@ export function useAvaliacoesConfig() {
         variant: 'destructive'
       });
     }
-  }, [toast]);
+  }, [tenantId, toast]);
 
   const loadFeedbacks = useCallback(async () => {
+    if (!tenantId) return;
+
     try {
       const { data, error } = await supabase
         .from('soft_launch_feedback')
-        .select('*')
+        .select('*, agendamentos!inner(tenant_id)')
+        .eq('agendamentos.tenant_id', tenantId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -110,9 +118,18 @@ export function useAvaliacoesConfig() {
         variant: 'destructive'
       });
     }
-  }, [config.nota_minima_review, toast]);
+  }, [config.nota_minima_review, tenantId, toast]);
 
   const saveConfig = useCallback(async (newConfig: AvaliacoesConfig, ativo: boolean) => {
+    if (!tenantId) {
+      toast({
+        title: 'Tenant não identificado',
+        description: 'Não foi possível salvar sem tenant ativo.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
     setIsSaving(true);
     try {
       const configJson = {
@@ -126,22 +143,24 @@ export function useAvaliacoesConfig() {
 
       if (integracaoId) {
         const { error } = await supabase
-          .from('integracoes')
+          .from('integracoes' as any)
           .update({
             configuracao: configJson,
             status: ativo ? 'ativo' : 'inativo',
             atualizado_em: new Date().toISOString()
           })
-          .eq('id', integracaoId);
+          .eq('id', integracaoId)
+          .eq('tenant_id', tenantId);
 
         if (error) throw error;
       } else {
         const { data, error } = await supabase
-          .from('integracoes')
+          .from('integracoes' as any)
           .insert({
+            tenant_id: tenantId,
             tipo: 'avaliacoes',
             nome: 'Configuração de Avaliações',
-            configuracao: configJson,
+            configuracao: { ...configJson, tenant_id: tenantId },
             status: ativo ? 'ativo' : 'inativo'
           })
           .select()
@@ -168,7 +187,7 @@ export function useAvaliacoesConfig() {
     } finally {
       setIsSaving(false);
     }
-  }, [integracaoId, toast]);
+  }, [integracaoId, tenantId, toast]);
 
   useEffect(() => {
     const load = async () => {
@@ -177,8 +196,12 @@ export function useAvaliacoesConfig() {
       await loadFeedbacks();
       setIsLoading(false);
     };
+    if (!tenantId) {
+      setIsLoading(false);
+      return;
+    }
     load();
-  }, [loadConfig, loadFeedbacks]);
+  }, [loadConfig, loadFeedbacks, tenantId]);
 
   // Recalcular stats quando threshold mudar
   useEffect(() => {

@@ -30,7 +30,7 @@ Deno.serve(async (req) => {
     // Validate token against integracoes table
     const { data: integracao, error: integracaoError } = await supabase
       .from("integracoes")
-      .select("id, configuracao, status")
+      .select("id, tenant_id, configuracao, status")
       .eq("tipo", "utmify")
       .eq("status", "ativo")
       .limit(10);
@@ -54,7 +54,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    const tenantId = (validIntegration.configuracao as any)?.tenant_id || null;
+    const tenantId = validIntegration.tenant_id || (validIntegration.configuracao as any)?.tenant_id || null;
 
     // Parse body
     let body: any;
@@ -94,12 +94,14 @@ Deno.serve(async (req) => {
 
     // Check for existing event with same order_id to prevent status regression
     if (orderId) {
-      const { data: existing } = await supabase
+      const existingQuery = supabase
         .from("utmify_events")
         .select("id, status")
         .eq("order_id", orderId)
-        .limit(1)
-        .maybeSingle();
+        .limit(1);
+      const { data: existing } = tenantId
+        ? await existingQuery.eq("tenant_id", tenantId).maybeSingle()
+        : await existingQuery.maybeSingle();
 
       if (existing) {
         const statusPriority: Record<string, number> = {
@@ -149,10 +151,12 @@ Deno.serve(async (req) => {
         if (updateError) console.error("Erro update:", updateError);
 
         // Update integração último uso
-        await supabase
+        let integrationUpdateQuery = supabase
           .from("integracoes")
           .update({ ultimo_uso: new Date().toISOString() })
           .eq("id", validIntegration.id);
+        if (tenantId) integrationUpdateQuery = integrationUpdateQuery.eq("tenant_id", tenantId);
+        await integrationUpdateQuery;
 
         return new Response(
           JSON.stringify({ success: true, action: "updated", id: existing.id }),
@@ -193,10 +197,12 @@ Deno.serve(async (req) => {
     }
 
     // Update integração último uso
-    await supabase
+    let integrationUpdateQuery = supabase
       .from("integracoes")
       .update({ ultimo_uso: new Date().toISOString() })
       .eq("id", validIntegration.id);
+    if (tenantId) integrationUpdateQuery = integrationUpdateQuery.eq("tenant_id", tenantId);
+    await integrationUpdateQuery;
 
     // Update campaign summary (upsert)
     if (campanha || utmCampaign) {
@@ -294,4 +300,3 @@ function mapStatus(raw: string): string {
   };
   return map[normalized] || "pendente";
 }
-

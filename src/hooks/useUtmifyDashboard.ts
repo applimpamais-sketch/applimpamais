@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import type { PeriodType } from '@/components/admin/PeriodFilter';
 import { usePeriodDateRange } from './usePeriodDateRange';
 import { startOfDay, endOfDay, getHours } from 'date-fns';
+import { useTenantContext } from './useTenantContext';
 
 export interface HourlySales {
   hour: string;
@@ -53,18 +54,11 @@ export function useUtmifyDashboard(
   customRange?: { start: Date; end: Date }
 ) {
   const dateRange = usePeriodDateRange(period, customRange);
+  const { tenantId } = useTenantContext();
 
   return useQuery({
-    queryKey: ['utmify-dashboard', period, customRange?.start?.toISOString()],
+    queryKey: ['utmify-dashboard', tenantId, period, customRange?.start?.toISOString()],
     queryFn: async (): Promise<UtmifyDashboardData> => {
-      // Check if UTMify is active
-      const { data: integracao } = await supabase
-        .from('integracoes' as any)
-        .select('status')
-        .eq('tipo', 'utmify')
-        .eq('status', 'ativo')
-        .maybeSingle();
-
       const empty: UtmifyDashboardData = {
         faturamentoLiquido: 0, gastosAnuncios: 0, lucro: 0, roas: 0, margem: 0,
         arpu: 0, vendasPendentes: 0, cpa: 0, impostoMeta: 0,
@@ -72,6 +66,17 @@ export function useUtmifyDashboard(
         vendasPorHora: [], vendasPorPlataforma: [], campanhas: [],
         isActive: false,
       };
+
+      if (!tenantId) return empty;
+
+      // Check if UTMify is active
+      const { data: integracao } = await supabase
+        .from('integracoes' as any)
+        .select('status')
+        .eq('tenant_id', tenantId)
+        .eq('tipo', 'utmify')
+        .eq('status', 'ativo')
+        .maybeSingle();
 
       if (!integracao) return empty;
 
@@ -85,12 +90,14 @@ export function useUtmifyDashboard(
         supabase
           .from('utmify_events' as any)
           .select('*')
+          .eq('tenant_id', tenantId)
           .gte('created_at', start)
           .lte('created_at', end)
           .order('created_at', { ascending: true }),
         supabase
           .from('utmify_campanhas_resumo' as any)
           .select('*')
+          .eq('tenant_id', tenantId)
           .gte('periodo', startDate)
           .lte('periodo', endDate),
       ]);
@@ -181,5 +188,6 @@ export function useUtmifyDashboard(
       };
     },
     refetchInterval: 60000,
+    enabled: !!tenantId,
   });
 }

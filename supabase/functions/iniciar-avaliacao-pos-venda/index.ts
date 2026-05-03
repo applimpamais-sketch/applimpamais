@@ -14,6 +14,7 @@ interface IniciarAvaliacaoRequest {
   telefone: string;
   nome_cliente: string;
   agendamento_id?: string;
+  tenant_id?: string;
 }
 
 interface AvaliacaoConfig {
@@ -43,6 +44,7 @@ serve(async (req) => {
 
     const body: IniciarAvaliacaoRequest = await req.json();
     const { telefone, nome_cliente, agendamento_id } = body;
+    let tenantId = body.tenant_id || null;
 
     if (!telefone) {
       return new Response(
@@ -51,13 +53,30 @@ serve(async (req) => {
       );
     }
 
-    console.log(`📊 Iniciando avaliação pós-venda para ${telefone}`);
+    if (!tenantId && agendamento_id) {
+      const { data: agendamento } = await supabase
+        .from("agendamentos")
+        .select("tenant_id")
+        .eq("id", agendamento_id)
+        .maybeSingle();
+      tenantId = agendamento?.tenant_id || null;
+    }
+
+    if (!tenantId) {
+      return new Response(
+        JSON.stringify({ error: "tenant_id obrigatório para iniciar avaliação" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    console.log(`📊 Iniciando avaliação pós-venda para ${telefone} (tenant=${tenantId})`);
 
     // 1. Carregar configuração de avaliações
     const { data: integracaoData } = await supabase
       .from("integracoes")
       .select("configuracao, status")
       .eq("tipo", "avaliacoes")
+      .eq("tenant_id", tenantId)
       .maybeSingle();
 
     if (!integracaoData || integracaoData.status !== 'ativo') {
@@ -86,6 +105,7 @@ serve(async (req) => {
       .from("whatsapp_conversas")
       .select("*")
       .eq("telefone", telefone)
+      .eq("tenant_id", tenantId)
       .eq("finalizado", false)
       .order("criado_em", { ascending: false })
       .limit(1)
@@ -95,6 +115,7 @@ serve(async (req) => {
       const { data: novaConversa, error: erroConversa } = await supabase
         .from("whatsapp_conversas")
         .insert({
+          tenant_id: tenantId,
           telefone: telefone,
           nome_cliente: nome_cliente || "Cliente",
           estado_atual: "avaliacao_pos_venda",
@@ -140,6 +161,7 @@ serve(async (req) => {
 
     // 4. Salvar mensagem no banco
     await supabase.from("whatsapp_mensagens").insert({
+      tenant_id: tenantId,
       conversa_id: conversa.id,
       tipo: "chat",
       conteudo: mensagemAvaliacao,

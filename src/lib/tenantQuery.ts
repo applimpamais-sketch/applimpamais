@@ -38,7 +38,6 @@ export const GLOBAL_TABLES = [
   'data_retention_log',
   'security_alerts',
   'role_access_log',
-  'integracoes',
   'admin_onboarding_progress',
 ] as const;
 

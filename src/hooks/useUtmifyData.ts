@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import type { PeriodType } from '@/components/admin/PeriodFilter';
 import { usePeriodDateRange } from './usePeriodDateRange';
 import { startOfDay, endOfDay } from 'date-fns';
+import { useTenantContext } from './useTenantContext';
 
 export interface UtmifyCampaignData {
   campanha: string;
@@ -31,14 +32,29 @@ export function useUtmifyData(
   customRange?: { start: Date; end: Date }
 ) {
   const dateRange = usePeriodDateRange(period, customRange);
+  const { tenantId } = useTenantContext();
 
   return useQuery({
-    queryKey: ['utmify-data', period, customRange?.start?.toISOString()],
+    queryKey: ['utmify-data', tenantId, period, customRange?.start?.toISOString()],
     queryFn: async (): Promise<UtmifySummary> => {
+      if (!tenantId) {
+        return {
+          investimentoTotal: 0,
+          faturamentoTotal: 0,
+          reembolsoTotal: 0,
+          roas: 0,
+          cpa: 0,
+          totalVendas: 0,
+          campanhas: [],
+          isActive: false,
+        };
+      }
+
       // Check if UTMify is active
       const { data: integracao } = await supabase
         .from('integracoes' as any)
         .select('status')
+        .eq('tenant_id', tenantId)
         .eq('tipo', 'utmify')
         .eq('status', 'ativo')
         .maybeSingle();
@@ -63,6 +79,7 @@ export function useUtmifyData(
       const { data: resumos } = await supabase
         .from('utmify_campanhas_resumo' as any)
         .select('*')
+        .eq('tenant_id', tenantId)
         .gte('periodo', start)
         .lte('periodo', end)
         .order('total_valor', { ascending: false });
@@ -126,5 +143,6 @@ export function useUtmifyData(
       };
     },
     refetchInterval: 60000,
+    enabled: !!tenantId,
   });
 }

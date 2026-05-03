@@ -37,6 +37,7 @@ serve(async (req) => {
         *,
         agendamentos:agendamento_id (
           id,
+          tenant_id,
           nome_cliente,
           telefone,
           data_agendamento,
@@ -71,6 +72,7 @@ serve(async (req) => {
     for (const avaliacao of avaliacoes) {
       try {
         const agendamento = avaliacao.agendamentos;
+        const tenantId = avaliacao.tenant_id || agendamento?.tenant_id || null;
 
         if (!agendamento) {
           console.warn(`⚠️ Agendamento não encontrado para avaliação ${avaliacao.id}`);
@@ -81,6 +83,13 @@ serve(async (req) => {
 
         if (!avaliacao.telefone) {
           console.warn(`⚠️ Telefone não encontrado para avaliação ${avaliacao.id}`);
+          await marcarErro(supabase, avaliacao.id);
+          erros++;
+          continue;
+        }
+
+        if (!tenantId) {
+          console.warn(`⚠️ tenant_id ausente para avaliação ${avaliacao.id}`);
           await marcarErro(supabase, avaliacao.id);
           erros++;
           continue;
@@ -165,21 +174,46 @@ Seu feedback é muito importante para nós! 😊
           .eq('id', avaliacao.id);
 
         // Atualizar contexto da conversa para modo avaliação
-        await supabase
+        const telefoneNormalizado = avaliacao.telefone.replace(/\D/g, '');
+        const { data: conversaExistente } = await supabase
           .from('whatsapp_conversas')
-          .upsert({
-            telefone: avaliacao.telefone.replace(/\D/g, ''),
-            estado_atual: 'avaliacao_pendente',
-            contexto: {
-              agendamento_id: agendamento.id,
-              avaliacao_id: avaliacao.id,
-              aguardando_nota: true
-            },
-            finalizado: false,
-            ultima_mensagem: new Date().toISOString()
-          }, {
-            onConflict: 'telefone'
-          });
+          .select('id, contexto')
+          .eq('tenant_id', tenantId)
+          .eq('telefone', telefoneNormalizado)
+          .order('criado_em', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        const contextoAtualizado = {
+          ...((conversaExistente?.contexto as Record<string, unknown>) || {}),
+          agendamento_id: agendamento.id,
+          avaliacao_id: avaliacao.id,
+          aguardando_nota: true,
+        };
+
+        if (conversaExistente?.id) {
+          await supabase
+            .from('whatsapp_conversas')
+            .update({
+              estado_atual: 'avaliacao_pendente',
+              contexto: contextoAtualizado,
+              finalizado: false,
+              ultima_mensagem: new Date().toISOString(),
+            })
+            .eq('id', conversaExistente.id)
+            .eq('tenant_id', tenantId);
+        } else {
+          await supabase
+            .from('whatsapp_conversas')
+            .insert({
+              tenant_id: tenantId,
+              telefone: telefoneNormalizado,
+              estado_atual: 'avaliacao_pendente',
+              contexto: contextoAtualizado,
+              finalizado: false,
+              ultima_mensagem: new Date().toISOString(),
+            });
+        }
 
         enviados++;
         console.log(`✅ Avaliação enviada: ${avaliacao.nome_cliente}`);
