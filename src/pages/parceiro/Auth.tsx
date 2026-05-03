@@ -229,7 +229,7 @@ export default function ParceiroAuth() {
             {isMasterBranding ? (
               <img
                 src="/logo-rc-limpa-mais.png"
-                alt="RC Limpa Mais"
+                alt={companyName || 'Limpamais'}
                 className="h-16 mx-auto mb-4"
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
               />

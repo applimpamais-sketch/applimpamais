@@ -187,7 +187,7 @@ export default function ResetPassword() {
             {isMasterBranding ? (
               <img 
                 src="/logo-rc-limpa-mais.png" 
-                alt="RC Limpa Mais" 
+                alt={companyName || 'Limpamais'} 
                 className="h-16 w-auto"
               />
             ) : (

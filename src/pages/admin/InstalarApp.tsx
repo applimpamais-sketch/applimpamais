@@ -12,6 +12,7 @@ import {
   CheckCircle 
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { PLATFORM_NAME } from '@/lib/constants';
 
 export default function InstalarApp() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -55,7 +56,7 @@ export default function InstalarApp() {
         <CardHeader>
           <CardTitle className="flex items-center gap-3 text-xl md:text-2xl">
             <Smartphone className="w-8 h-8 text-primary" />
-            Instalar Aplicativo RC Limpa Mais
+            Instalar Aplicativo {PLATFORM_NAME}
           </CardTitle>
         </CardHeader>
         
@@ -82,7 +83,7 @@ export default function InstalarApp() {
               <li>Toque no menu <strong>(⋮)</strong> no canto superior direito</li>
               <li>Selecione <strong>"Adicionar à tela inicial"</strong> ou <strong>"Instalar app"</strong></li>
               <li>Confirme tocando em <strong>"Adicionar"</strong> ou <strong>"Instalar"</strong></li>
-              <li>O ícone da RC Limpa Mais aparecerá na sua tela inicial 🎉</li>
+              <li>O ícone da {PLATFORM_NAME} aparecerá na sua tela inicial 🎉</li>
             </ol>
           </div>
           
@@ -99,7 +100,7 @@ export default function InstalarApp() {
               <li>Toque no botão de compartilhar <strong>(□↑)</strong> na parte inferior</li>
               <li>Role para baixo e toque em <strong>"Adicionar à Tela de Início"</strong></li>
               <li>Toque em <strong>"Adicionar"</strong> no canto superior direito</li>
-              <li>O ícone da RC Limpa Mais aparecerá na sua tela inicial 🎉</li>
+              <li>O ícone da {PLATFORM_NAME} aparecerá na sua tela inicial 🎉</li>
             </ol>
           </div>
           
