@@ -21,35 +21,26 @@ export function useAuth(): UseAuthReturn {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (import.meta.env.DEV) {
           console.log('Auth event:', event, session ? 'Session active' : 'No session');
         }
-        
-        if (event === 'SIGNED_OUT') {
-          // Não redirecionar automaticamente - deixar a página gerenciar
+
+        if (event === 'TOKEN_REFRESHED' && import.meta.env.DEV) {
+          console.log('Token renovado com sucesso');
         }
-        
-        if (event === 'TOKEN_REFRESHED') {
-          if (import.meta.env.DEV) {
-            console.log('Token renovado com sucesso');
-          }
-        }
-        
+
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
 
-        // 🔒 SECURITY: Limpar tokens da URL após autenticação
         if (event === 'SIGNED_IN' && window.location.hash) {
           window.history.replaceState(null, '', window.location.pathname + window.location.search);
         }
       }
     );
 
-    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -59,18 +50,17 @@ export function useAuth(): UseAuthReturn {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  // Verificação periódica da sessão (heartbeat)
   useEffect(() => {
     if (!user) return;
 
     const interval = setInterval(async () => {
       const { data: { session }, error } = await supabase.auth.getSession();
-      
+
       if (error || !session) {
-        console.error('Sessão expirou, fazendo logout automático');
+        console.error('Sess�o expirou, fazendo logout autom�tico');
         await signOut();
       }
-    }, 5 * 60 * 1000); // Verifica a cada 5 minutos
+    }, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [user]);
@@ -81,11 +71,11 @@ export function useAuth(): UseAuthReturn {
         email,
         password,
       });
-      
+
       if (error) {
         return { error };
       }
-      
+
       return { error: null };
     } catch (error) {
       return { error: error as Error };
@@ -103,19 +93,32 @@ export function useAuth(): UseAuthReturn {
     }
 
     try {
-      const { data, error } = await (supabase as any).rpc('has_role', {
+      const tenantAware = await (supabase as any).rpc('has_role_for_tenant', {
         _user_id: user.id,
-        _role: role
+        _role: role,
       });
 
-      if (error) {
+      if (!tenantAware.error) {
+        return tenantAware.data || false;
+      }
+
+      if (import.meta.env.DEV) {
+        console.warn('has_role_for_tenant indispon�vel, usando fallback legado:', tenantAware.error);
+      }
+
+      const legacy = await (supabase as any).rpc('has_role', {
+        _user_id: user.id,
+        _role: role,
+      });
+
+      if (legacy.error) {
         if (import.meta.env.DEV) {
-          console.error('Error checking role:', error);
+          console.error('Error checking role:', legacy.error);
         }
         return false;
       }
 
-      return data || false;
+      return legacy.data || false;
     } catch (error) {
       if (import.meta.env.DEV) {
         console.error('Exception checking role:', error);

@@ -201,7 +201,11 @@ const AppRoutes = () => {
        <Route path="/reset-password" element={<ResetPassword />} />
       
       {/* Rotas Super Admin */}
-      <Route path="/super-admin" element={<SuperAdminLayout />}>
+      <Route path="/super-admin" element={
+        <ProtectedRoute requiredRole="admin">
+          <SuperAdminLayout />
+        </ProtectedRoute>
+      }>
         <Route index element={<SuperAdminDashboard />} />
         <Route path="tenants" element={<SuperAdminTenants />} />
         <Route path="tenants/:id" element={<SuperAdminTenantDetails />} />
@@ -372,3 +376,4 @@ const App = () => (
 );
 
 export default App;
+
