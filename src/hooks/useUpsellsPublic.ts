@@ -1,5 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { createClient } from '@supabase/supabase-js';
+import { useMemo } from 'react';
+import type { Database } from '@/integrations/supabase/types';
+import { usePublicTenantId } from '@/hooks/usePublicTenantId';
 
 export interface UpsellPublic {
   id: string;
@@ -9,13 +12,37 @@ export interface UpsellPublic {
 }
 
 export function useUpsellsPublic(aplicavelA?: 'servicos' | 'locacoes') {
+  const { data: tenantId } = usePublicTenantId();
+
+  const supabaseForPublicUpsells = useMemo(() => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+    return createClient<Database>(supabaseUrl, supabaseKey, {
+      global: {
+        headers: {
+          'x-tenant-id': tenantId || '',
+        },
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  }, [tenantId]);
+
   return useQuery({
-    queryKey: ['upsells-public', aplicavelA],
+    queryKey: ['upsells-public', aplicavelA, tenantId],
     queryFn: async () => {
-      let query = supabase
+      if (!tenantId) {
+        return [] as UpsellPublic[];
+      }
+
+      let query = supabaseForPublicUpsells
         .from('upsells')
         .select('id, nome, preco, descricao')
-        .eq('ativo', true);
+        .eq('ativo', true)
+        .eq('tenant_id', tenantId);
       
       if (aplicavelA) {
         query = query.contains('aplicavel_a', [aplicavelA]);
@@ -30,6 +57,7 @@ export function useUpsellsPublic(aplicavelA?: 'servicos' | 'locacoes') {
       
       return data as UpsellPublic[];
     },
+    enabled: !!tenantId,
     staleTime: 1000 * 60 * 5, // 5 minutos
   });
 }
