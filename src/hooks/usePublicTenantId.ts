@@ -12,7 +12,11 @@ function getConfiguredHostname() {
   }
 }
 
-export function usePublicTenantId() {
+interface UsePublicTenantIdOptions {
+  enabled?: boolean;
+}
+
+export function usePublicTenantId(options?: UsePublicTenantIdOptions) {
   const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
 
   return useQuery({
@@ -44,8 +48,8 @@ export function usePublicTenantId() {
 
       return data?.id ?? null;
     },
+    enabled: options?.enabled ?? true,
     staleTime: Infinity,
     retry: 1,
   });
 }
-
