@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { createClient } from '@supabase/supabase-js';
+import type { Database } from '@/integrations/supabase/types';
 import { useQuery } from '@tanstack/react-query';
 import TrackingMap from '@/components/tracking/TrackingMap';
 import TrackingAddressCard from '@/components/tracking/TrackingAddressCard';
@@ -32,13 +34,6 @@ interface TrackingSession {
   tecnico_nome: string | null;
 }
 
-interface TrackingPosition {
-  id: string;
-  latitude: number;
-  longitude: number;
-  created_at: string;
-}
-
 interface Agendamento {
   id: string;
   nome_cliente: string;
@@ -64,6 +59,23 @@ export default function Tracking() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const trackingClient = useMemo(() => {
+    if (!token) return supabase;
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    return createClient<Database>(supabaseUrl, supabaseKey, {
+      global: {
+        headers: {
+          'x-tracking-token': token,
+        },
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  }, [token]);
+
   // Buscar sessão e agendamento
   const fetchData = useCallback(async () => {
     if (!token) {
@@ -74,7 +86,7 @@ export default function Tracking() {
 
     try {
       // Buscar sessão
-      const { data: sessionData, error: sessionError } = await supabase
+      const { data: sessionData, error: sessionError } = await trackingClient
         .from('tracking_sessions')
         .select('*')
         .eq('token_publico', token)
@@ -91,7 +103,7 @@ export default function Tracking() {
       setSession(sessionData as TrackingSession);
 
       // Buscar agendamento
-      const { data: agendamentoData, error: agendamentoError } = await supabase
+      const { data: agendamentoData, error: agendamentoError } = await trackingClient
         .from('agendamentos')
         .select('id, nome_cliente, telefone, endereco, bairro, cidade, data_agendamento, horario, valor_total, itens_carrinho, latitude, longitude, tenant_id')
         .eq('id', sessionData.agendamento_id)
@@ -102,7 +114,7 @@ export default function Tracking() {
       setAgendamento(agendamentoData as Agendamento);
 
       // Buscar última posição
-      const { data: positionData } = await supabase
+      const { data: positionData } = await trackingClient
         .from('tracking_positions')
         .select('*')
         .eq('tracking_session_id', sessionData.id)
@@ -129,61 +141,25 @@ export default function Tracking() {
     } finally {
       setIsLoading(false);
     }
-  }, [token]);
+  }, [token, trackingClient]);
 
   // Carregar dados iniciais
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  // Configurar Realtime para atualizações
+  // Atualizar periodicamente para manter o rastreamento com RLS seguro por token
   useEffect(() => {
     if (!session?.id) return;
 
-    // Canal para posições
-    const positionsChannel = supabase
-      .channel(`tracking-positions-${session.id}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'tracking_positions',
-          filter: `tracking_session_id=eq.${session.id}`,
-        },
-        (payload: any) => {
-          const newPos = payload.new as TrackingPosition;
-          setCurrentPosition({
-            latitude: newPos.latitude,
-            longitude: newPos.longitude,
-          });
-          setLastUpdate(new Date(newPos.created_at));
-        }
-      )
-      .subscribe();
-
-    // Canal para status da sessão
-    const sessionChannel = supabase
-      .channel(`tracking-session-${session.id}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'tracking_sessions',
-          filter: `id=eq.${session.id}`,
-        },
-        (payload: any) => {
-          setSession(payload.new as TrackingSession);
-        }
-      )
-      .subscribe();
+    const intervalId = window.setInterval(() => {
+      fetchData();
+    }, 10000);
 
     return () => {
-      supabase.removeChannel(positionsChannel);
-      supabase.removeChannel(sessionChannel);
+      window.clearInterval(intervalId);
     };
-  }, [session?.id]);
+  }, [session?.id, fetchData]);
 
   // Detectar tipo de serviço (deve vir ANTES dos early returns para respeitar Rules of Hooks)
   const isLocacao = useMemo(() => {
@@ -201,7 +177,7 @@ export default function Tracking() {
     queryFn: async () => {
       if (!agendamento?.tenant_id) return null;
       
-      const { data } = await supabase
+      const { data } = await trackingClient
         .from('saas_tenants')
         .select('id, nome_fantasia, nome_empresa, logo_url')
         .eq('id', agendamento.tenant_id)

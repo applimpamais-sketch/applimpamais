@@ -106,6 +106,8 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    // Keep symlink/junction paths stable in Windows worktrees to avoid build path normalization issues.
+    preserveSymlinks: true,
     // Prevent duplicate React instances (fixes react-leaflet compatibility)
     dedupe: ["react", "react-dom", "react/jsx-runtime"],
   },
