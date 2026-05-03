@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTenants } from '@/hooks/useTenants';
-import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -31,15 +30,14 @@ export default function NovoTenant() {
   });
 
   const [modulosSelecionados, setModulosSelecionados] = useState<ModuloSelecionado[]>([]);
-
   const [step, setStep] = useState(1);
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const valorMensal = modulosSelecionados.reduce((sum, m) => {
-    return sum + (m.preco_negociado ?? 0);
+  const valorMensal = modulosSelecionados.reduce((sum, modulo) => {
+    return sum + (modulo.preco_negociado ?? 0);
   }, 0);
 
   const validateStep1 = () => {
@@ -78,8 +76,7 @@ export default function NovoTenant() {
     if (!validateStep3()) return;
 
     try {
-      // Criar tenant
-      const tenant = await createTenant.mutateAsync({
+      await createTenant.mutateAsync({
         nome_empresa: formData.nome_empresa,
         nome_fantasia: formData.nome_fantasia || undefined,
         cnpj: formData.cnpj || undefined,
@@ -87,22 +84,13 @@ export default function NovoTenant() {
         telefone: formData.telefone || undefined,
         responsavel_nome: formData.responsavel_nome,
         responsavel_email: formData.responsavel_email,
-        plano: 'starter', // Plano base, módulos definem funcionalidades
+        plano: 'starter',
         valor_mensal: valorMensal,
+        modulos: modulosSelecionados,
       });
 
-      // Ativar módulos selecionados
-      for (const modulo of modulosSelecionados) {
-        await supabase.from('tenant_modulos').insert({
-          tenant_id: tenant.id,
-          modulo_id: modulo.modulo_id,
-          preco_negociado: modulo.preco_negociado,
-          status: 'ativo',
-        });
-      }
-
       navigate('/super-admin/tenants');
-    } catch (error) {
+    } catch {
       // Erro já tratado no hook
     }
   };
@@ -116,7 +104,6 @@ export default function NovoTenant() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* Header */}
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
           <ArrowLeft className="h-5 w-5" />
@@ -127,7 +114,6 @@ export default function NovoTenant() {
         </div>
       </div>
 
-      {/* Progress */}
       <div className="flex items-center gap-2">
         {[1, 2, 3, 4].map((s) => (
           <div
@@ -139,7 +125,6 @@ export default function NovoTenant() {
         ))}
       </div>
 
-      {/* Step 1: Dados da Empresa */}
       {step === 1 && (
         <Card>
           <CardHeader>
@@ -212,15 +197,12 @@ export default function NovoTenant() {
             </div>
 
             <div className="flex justify-end pt-4">
-              <Button onClick={() => validateStep1() && setStep(2)}>
-                Próximo
-              </Button>
+              <Button onClick={() => validateStep1() && setStep(2)}>Próximo</Button>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* Step 2: Responsável */}
       {step === 2 && (
         <Card>
           <CardHeader>
@@ -263,15 +245,12 @@ export default function NovoTenant() {
               <Button variant="outline" onClick={() => setStep(1)}>
                 Voltar
               </Button>
-              <Button onClick={() => validateStep2() && setStep(3)}>
-                Próximo
-              </Button>
+              <Button onClick={() => validateStep2() && setStep(3)}>Próximo</Button>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* Step 3: Módulos */}
       {step === 3 && (
         <Card>
           <CardHeader>
@@ -282,24 +261,18 @@ export default function NovoTenant() {
             <CardDescription>Selecione quais funcionalidades o cliente terá acesso</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <ModuloSelector
-              selected={modulosSelecionados}
-              onChange={setModulosSelecionados}
-            />
+            <ModuloSelector selected={modulosSelecionados} onChange={setModulosSelecionados} />
 
             <div className="flex justify-between pt-4">
               <Button variant="outline" onClick={() => setStep(2)}>
                 Voltar
               </Button>
-              <Button onClick={() => validateStep3() && setStep(4)}>
-                Próximo
-              </Button>
+              <Button onClick={() => validateStep3() && setStep(4)}>Próximo</Button>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* Step 4: Resumo */}
       {step === 4 && (
         <Card>
           <CardHeader>
@@ -307,7 +280,6 @@ export default function NovoTenant() {
             <CardDescription>Confira os dados antes de criar o cliente</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Resumo */}
             <div className="p-4 bg-muted rounded-lg space-y-3">
               <div className="text-sm space-y-2">
                 <div className="flex justify-between">
@@ -325,10 +297,10 @@ export default function NovoTenant() {
                 <div className="border-t pt-2 mt-2">
                   <p className="text-muted-foreground mb-1">Módulos contratados:</p>
                   <div className="space-y-1">
-                    {modulosSelecionados.map(m => (
-                      <div key={m.modulo_id} className="flex justify-between text-sm">
-                        <span>{m.codigo}</span>
-                        <span>{formatCurrency(m.preco_negociado ?? 0)}/mês</span>
+                    {modulosSelecionados.map((modulo) => (
+                      <div key={modulo.modulo_id} className="flex justify-between text-sm">
+                        <span>{modulo.codigo}</span>
+                        <span>{formatCurrency(modulo.preco_negociado ?? 0)}/mês</span>
                       </div>
                     ))}
                   </div>
@@ -344,10 +316,7 @@ export default function NovoTenant() {
               <Button variant="outline" onClick={() => setStep(3)}>
                 Voltar
               </Button>
-              <Button 
-                onClick={handleSubmit} 
-                disabled={createTenant.isPending}
-              >
+              <Button onClick={handleSubmit} disabled={createTenant.isPending}>
                 {createTenant.isPending ? (
                   <>
                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />

@@ -43,6 +43,11 @@ export interface CreateTenantInput {
   plano?: SaasPlano;
   valor_mensal?: number;
   trial_termina_em?: string;
+  modulos?: Array<{
+    modulo_id: string;
+    codigo?: string;
+    preco_negociado: number | null;
+  }>;
 }
 
 export interface UpdateTenantInput {
@@ -65,7 +70,6 @@ export interface UpdateTenantInput {
 export function useTenants() {
   const queryClient = useQueryClient();
 
-  // Listar todos os tenants
   const { data: tenants, isLoading, refetch } = useQuery({
     queryKey: ['saas-tenants'],
     queryFn: async (): Promise<SaasTenant[]> => {
@@ -73,84 +77,44 @@ export function useTenants() {
         .from('saas_tenants')
         .select('*')
         .order('criado_em', { ascending: false });
-      
+
       if (error) throw error;
       return data as SaasTenant[];
     },
   });
 
-  // Buscar tenant por ID
   const getTenantById = async (id: string): Promise<SaasTenant | null> => {
     const { data, error } = await supabase
       .from('saas_tenants')
       .select('*')
       .eq('id', id)
       .single();
-    
+
     if (error) {
       console.error('Erro ao buscar tenant:', error);
       return null;
     }
+
     return data as SaasTenant;
   };
 
-  // Criar novo tenant com admin
   const createTenant = useMutation({
     mutationFn: async (input: CreateTenantInput): Promise<SaasTenant> => {
-      const trialEnd = input.trial_termina_em || 
-        new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
-
-      // 1. Criar o tenant
-      const { data: tenantData, error: tenantError } = await supabase
-        .from('saas_tenants')
-        .insert({
-          nome_empresa: input.nome_empresa,
-          nome_fantasia: input.nome_fantasia,
-          cnpj: input.cnpj,
-          email_contato: input.email_contato,
-          telefone: input.telefone,
-          responsavel_nome: input.responsavel_nome,
-          responsavel_email: input.responsavel_email,
+      const { data, error } = await supabase.functions.invoke('create-saas-tenant', {
+        body: {
+          ...input,
           plano: input.plano || 'starter',
-          status: 'trial',
           valor_mensal: input.valor_mensal || 297,
-          trial_termina_em: trialEnd,
-        })
-        .select()
-        .single();
-      
-      if (tenantError) throw tenantError;
+          modulos: input.modulos || [],
+        },
+      });
 
-      const tenant = tenantData as SaasTenant;
-
-      // 2. Criar admin do tenant via Edge Function
-      try {
-        const { data: adminData, error: adminError } = await supabase.functions.invoke(
-          'create-tenant-admin',
-          {
-            body: {
-              tenant_id: tenant.id,
-              email: input.responsavel_email,
-              nome: input.responsavel_nome,
-              nome_empresa: input.nome_empresa,
-              plano: input.plano || 'starter',
-            },
-          }
-        );
-
-        if (adminError) {
-          console.error('Erro ao criar admin:', adminError);
-          toast.warning('Tenant criado, mas houve erro ao enviar convite. Tente reenviar.');
-        } else if (!adminData?.success) {
-          console.error('Falha ao criar admin:', adminData?.error);
-          toast.warning('Tenant criado, mas email não foi enviado.');
-        }
-      } catch (fnError) {
-        console.error('Erro na Edge Function:', fnError);
-        toast.warning('Tenant criado, mas houve erro ao criar usuário admin.');
+      if (error) throw error;
+      if (!data?.success || !data?.tenant) {
+        throw new Error(data?.error || 'Erro ao criar cliente');
       }
 
-      return tenant;
+      return data.tenant as SaasTenant;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['saas-tenants'] });
@@ -162,18 +126,17 @@ export function useTenants() {
     },
   });
 
-  // Atualizar tenant
   const updateTenant = useMutation({
     mutationFn: async (input: UpdateTenantInput): Promise<SaasTenant> => {
       const { id, ...updateData } = input;
-      
+
       const { data, error } = await supabase
         .from('saas_tenants')
         .update(updateData)
         .eq('id', id)
         .select()
         .single();
-      
+
       if (error) throw error;
       return data as SaasTenant;
     },
@@ -187,7 +150,6 @@ export function useTenants() {
     },
   });
 
-  // Ativar tenant (fim do trial)
   const activateTenant = useMutation({
     mutationFn: async (tenantId: string): Promise<SaasTenant> => {
       const { data, error } = await supabase
@@ -199,7 +161,7 @@ export function useTenants() {
         .eq('id', tenantId)
         .select()
         .single();
-      
+
       if (error) throw error;
       return data as SaasTenant;
     },
@@ -213,7 +175,6 @@ export function useTenants() {
     },
   });
 
-  // Pausar tenant
   const pauseTenant = useMutation({
     mutationFn: async (tenantId: string): Promise<SaasTenant> => {
       const { data, error } = await supabase
@@ -222,7 +183,7 @@ export function useTenants() {
         .eq('id', tenantId)
         .select()
         .single();
-      
+
       if (error) throw error;
       return data as SaasTenant;
     },
@@ -236,7 +197,6 @@ export function useTenants() {
     },
   });
 
-  // Cancelar tenant
   const cancelTenant = useMutation({
     mutationFn: async (tenantId: string): Promise<SaasTenant> => {
       const { data, error } = await supabase
@@ -248,7 +208,7 @@ export function useTenants() {
         .eq('id', tenantId)
         .select()
         .single();
-      
+
       if (error) throw error;
       return data as SaasTenant;
     },
@@ -262,16 +222,15 @@ export function useTenants() {
     },
   });
 
-  // Reenviar convite para tenant
   const resendInvite = useMutation({
     mutationFn: async (tenantId: string): Promise<{ success: boolean; email: string }> => {
       const { data, error } = await supabase.functions.invoke('resend-tenant-invite', {
         body: { tenant_id: tenantId },
       });
-      
+
       if (error) throw error;
       if (!data?.success) throw new Error(data?.error || 'Erro ao reenviar convite');
-      
+
       return data;
     },
     onSuccess: (data) => {

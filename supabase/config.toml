@@ -70,7 +70,7 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.reset-admin-password]
-verify_jwt = false
+verify_jwt = true
 
 [functions.blog-seed-keywords]
 verify_jwt = false
@@ -105,6 +105,9 @@ verify_jwt = false
 [functions.database-metrics]
 verify_jwt = true
 
+[functions.create-saas-tenant]
+verify_jwt = true
+
 [functions.create-tenant-admin]
 verify_jwt = true
 
@@ -112,6 +115,9 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.create-team-member]
+verify_jwt = true
+
+[functions.delete-team-member]
 verify_jwt = true
 
 [functions.iarc-generate-creative]
