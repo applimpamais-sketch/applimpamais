@@ -356,6 +356,7 @@ Deno.serve(async (req) => {
     const tec = await verificarTecnicoBot(supabase, msg.from);
     if (tec) {
       console.log(`🔧 Técnico: ${tec.nome}`);
+      const tecTenantId = tec.tenant_id || null;
       
       // @ajuda
       if (lower === "@ajuda") { await sendMsg(ultramsgUrl, ultramsgToken, msg.from, formatarMensagemAjudaTecnico()); return new Response(JSON.stringify({ status: "success", tipo: "tec_ajuda" }), { headers: { ...corsHeaders, "Content-Type": "application/json" } }); }
@@ -408,13 +409,16 @@ Deno.serve(async (req) => {
         }
         
         // Buscar agendamento
-        const { data: ag } = await supabase
+        let agendamentoQuery = supabase
           .from("agendamentos")
-          .select("id, nome_cliente, telefone, endereco, bairro, cidade, latitude, longitude")
+          .select("id, tenant_id, nome_cliente, telefone, endereco, bairro, cidade, latitude, longitude")
           .eq("tecnico_id", tec.id)
           .or(`order_code.ilike.%${codigo}%,id.eq.${codigo.length === 36 ? codigo : '00000000-0000-0000-0000-000000000000'}`)
-          .in("status", ["confirmado", "pendente"])
-          .maybeSingle();
+          .in("status", ["confirmado", "pendente"]);
+        if (tecTenantId) {
+          agendamentoQuery = agendamentoQuery.eq("tenant_id", tecTenantId);
+        }
+        const { data: ag } = await agendamentoQuery.maybeSingle();
         
         if (!ag) {
           await sendMsg(ultramsgUrl, ultramsgToken, msg.from, `❌ Agendamento *${codigo}* não encontrado ou não está confirmado/pendente.`);
@@ -460,14 +464,17 @@ Deno.serve(async (req) => {
       // @cheguei - Marcar chegada
       if (lower === "@cheguei") {
         // Buscar sessão ativa
-        const { data: sessao } = await supabase
+        let sessaoQuery = supabase
           .from("tracking_sessions")
-          .select("id, agendamento_id")
+          .select("id, agendamento_id, agendamentos!inner(tenant_id)")
           .eq("tecnico_id", tec.id)
           .eq("status", "em_rota")
           .order("created_at", { ascending: false })
-          .limit(1)
-          .maybeSingle();
+          .limit(1);
+        if (tecTenantId) {
+          sessaoQuery = sessaoQuery.eq("agendamentos.tenant_id", tecTenantId);
+        }
+        const { data: sessao } = await sessaoQuery.maybeSingle();
         
         if (!sessao) {
           await sendMsg(ultramsgUrl, ultramsgToken, msg.from, "⚠️ Nenhum trajeto ativo. Use *@iniciar [código]* primeiro.");

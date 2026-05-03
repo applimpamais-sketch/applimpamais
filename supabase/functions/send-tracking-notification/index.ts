@@ -7,8 +7,10 @@
 import { getCorsHeaders, handleCorsPreflightResponse } from '../_shared/corsConfig.ts';
 import { enviarWhatsApp } from '../_shared/whatsappSender.ts';
 import { SITE_DOMAIN } from '../_shared/siteConfig.ts';
+import { HttpError, getRequestAuthContext } from '../_shared/auth.ts';
 
 interface TrackingNotificationRequest {
+  agendamentoId: string;
   telefone: string;
   nomeCliente: string;
   tecnicoNome: string;
@@ -28,8 +30,10 @@ Deno.serve(async (req: Request) => {
 
   try {
     const body: TrackingNotificationRequest = await req.json();
+    const { adminClient, tenantId: requesterTenantId, roles, isSuperAdmin } = await getRequestAuthContext(req);
     
     const { 
+      agendamentoId,
       telefone, 
       nomeCliente, 
       tecnicoNome, 
@@ -39,12 +43,44 @@ Deno.serve(async (req: Request) => {
     } = body;
 
     // Validação
-    if (!telefone || !nomeCliente || !trackingUrl) {
-      console.error('[send-tracking-notification] Dados obrigatórios faltando:', { telefone, nomeCliente, trackingUrl });
+    if (!agendamentoId || !telefone || !nomeCliente || !trackingUrl) {
+      console.error('[send-tracking-notification] Dados obrigatórios faltando:', { agendamentoId, telefone, nomeCliente, trackingUrl });
       return new Response(
-        JSON.stringify({ error: 'Dados obrigatórios faltando: telefone, nomeCliente, trackingUrl' }),
+        JSON.stringify({ error: 'Dados obrigatórios faltando: agendamentoId, telefone, nomeCliente, trackingUrl' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
+    }
+
+    if (!requesterTenantId && !isSuperAdmin) {
+      throw new HttpError(403, 'Usuário sem tenant associado');
+    }
+
+    const hasAllowedRole = roles.some((entry) =>
+      ['admin', 'operador', 'tecnico'].includes(entry.role) &&
+      (isSuperAdmin || entry.tenant_id === requesterTenantId),
+    );
+    if (!hasAllowedRole && !isSuperAdmin) {
+      throw new HttpError(403, 'Permissão insuficiente');
+    }
+
+    // Valida que o agendamento é do mesmo tenant do solicitante
+    let agendamentoQuery = adminClient
+      .from('agendamentos')
+      .select('id, tenant_id, nome_cliente, telefone')
+      .eq('id', agendamentoId)
+      .limit(1);
+    if (!isSuperAdmin) {
+      agendamentoQuery = agendamentoQuery.eq('tenant_id', requesterTenantId);
+    }
+    const { data: agendamentoData, error: agendamentoError } = await agendamentoQuery.maybeSingle();
+    if (agendamentoError || !agendamentoData) {
+      throw new HttpError(403, 'Agendamento não pertence ao tenant autenticado');
+    }
+
+    const telefoneNormalizadoPayload = telefone.replace(/\D/g, '');
+    const telefoneNormalizadoAgendamento = (agendamentoData.telefone || '').replace(/\D/g, '');
+    if (telefoneNormalizadoAgendamento && telefoneNormalizadoPayload && telefoneNormalizadoAgendamento !== telefoneNormalizadoPayload) {
+      throw new HttpError(400, 'Telefone não corresponde ao agendamento informado');
     }
 
     // Extrair primeiro nome
@@ -156,12 +192,13 @@ _Equipe de Atendimento_`;
 
   } catch (error) {
     console.error('[send-tracking-notification] Erro:', error);
+    const status = error instanceof HttpError ? error.status : 500;
     return new Response(
       JSON.stringify({ 
         success: false, 
         error: error instanceof Error ? error.message : 'Erro interno' 
       }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });

@@ -211,6 +211,7 @@ export default function IniciarTrajetoButton({
 
         await supabase.functions.invoke('send-tracking-notification', {
           body: {
+            agendamentoId: agendamentoId,
             telefone: telefoneCliente,
             nomeCliente: nomeCliente,
             tecnicoNome: tecnicoNome,

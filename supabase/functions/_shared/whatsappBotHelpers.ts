@@ -2,7 +2,7 @@
 import { SITE_DOMAIN, PARTNER_PORTAL_URL, ADMIN_URL, getPartnerLink, getAdminAgendamentoLink } from "./siteConfig.ts";
 
 export interface FuncionarioBot { id: string; nome: string; telefone_whatsapp: string; ativo: boolean; tenant_id?: string; }
-export interface TecnicoBot { id: string; nome: string; telefone: string; }
+export interface TecnicoBot { id: string; nome: string; telefone: string; tenant_id?: string | null; }
 export interface ParceiroBot { id: string; nome: string; codigo: string; telefone: string; saldo_disponivel: number; total_ganhos: number; }
 export interface DadosAgendamentoExtraidos { nome_cliente: string; telefone: string; endereco: string; bairro: string; cidade: string; cep?: string; data_agendamento: string; periodo?: string; itens: { name: string; details: string; price: number; quantity: number }[]; valor_total: number; observacoes?: string; is_locacao?: boolean; }
 export interface DadosFinanceiros { tipo: 'despesa' | 'receita'; valor: number; descricao: string; categoria: string; data: string; forma_pagamento?: string; observacoes?: string; confianca: number; }

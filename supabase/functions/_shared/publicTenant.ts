@@ -4,6 +4,12 @@ interface TenantLookupClient {
   from: (table: string) => any;
 }
 
+function getPlatformHostname(): string | null {
+  const siteDomain = Deno.env.get("SITE_DOMAIN") ?? Deno.env.get("PUBLIC_SITE_URL");
+  if (!siteDomain) return null;
+  return normalizeHostname(siteDomain);
+}
+
 function normalizeHostname(value: string | null): string | null {
   if (!value) return null;
 
@@ -31,6 +37,11 @@ function isLocalHost(hostname: string | null): boolean {
   return hostname === "localhost" || hostname === "127.0.0.1";
 }
 
+function isPlatformHost(hostname: string | null, platformHost: string | null): boolean {
+  if (!hostname || !platformHost) return false;
+  return hostname === platformHost || hostname.endsWith(`.${platformHost}`);
+}
+
 export async function resolvePublicTenant(
   supabase: TenantLookupClient,
   req: Request,
@@ -45,6 +56,31 @@ export async function resolvePublicTenant(
     (typeof body?.tenantId === "string" ? body.tenantId : null);
 
   const hostname = extractHostname(req);
+  const platformHost = getPlatformHostname();
+  const customDomainRequest = !!hostname && !isLocalHost(hostname) && !isPlatformHost(hostname, platformHost);
+
+  if (customDomainRequest) {
+    const { data: tenantByDomain, error: tenantByDomainError } = await supabase
+      .from("saas_tenants")
+      .select("id, nome_empresa, nome_fantasia, dominio_customizado, status")
+      .eq("dominio_customizado", hostname)
+      .in("status", ["ativo", "trial"])
+      .maybeSingle();
+
+    if (tenantByDomainError) {
+      throw new HttpError(500, "Failed to resolve tenant by domain");
+    }
+
+    if (!tenantByDomain) {
+      throw new HttpError(404, "Tenant not found for custom domain");
+    }
+
+    if (requestedTenantId && requestedTenantId !== tenantByDomain.id) {
+      throw new HttpError(400, "tenant_id does not match the custom domain tenant");
+    }
+
+    return tenantByDomain;
+  }
 
   let query = supabase
     .from("saas_tenants")

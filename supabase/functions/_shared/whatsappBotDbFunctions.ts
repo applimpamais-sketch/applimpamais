@@ -126,19 +126,34 @@ export async function verificarFuncionarioBot(sb: any, tel: string, tenantId?: s
   }
 }
 
-export async function verificarTecnicoBot(sb: any, tel: string): Promise<TecnicoBot | null> {
+export async function verificarTecnicoBot(sb: any, tel: string, tenantId?: string | null): Promise<TecnicoBot | null> {
   try {
     const incomingVariants = normalizeBrPhoneVariants(tel);
-    const { data: tecs, error } = await sb.from("profiles").select("id, nome_completo, telefone").not("telefone", "is", null);
+    const tecsQuery = applyTenantFilter(
+      sb.from("profiles").select("id, nome_completo, telefone, tenant_id").not("telefone", "is", null),
+      tenantId,
+    );
+    const { data: tecs, error } = await tecsQuery;
     if (error || !tecs) return null;
+    const matches: TecnicoBot[] = [];
     for (const t of tecs) {
       const dbVariants = normalizeBrPhoneVariants(t.telefone || "");
       if (phoneVariantsMatch(incomingVariants, dbVariants)) {
-        const { data: rd } = await sb.from("user_roles").select("role").eq("user_id", t.id).eq("role", "tecnico").maybeSingle();
-        if (rd) return { id: t.id, nome: t.nome_completo || "Técnico", telefone: t.telefone };
+        let roleQuery = sb.from("user_roles").select("role").eq("user_id", t.id).eq("role", "tecnico");
+        if (t.tenant_id) {
+          roleQuery = roleQuery.eq("tenant_id", t.tenant_id);
+        }
+        const { data: rd } = await roleQuery.maybeSingle();
+        if (rd) {
+          matches.push({ id: t.id, nome: t.nome_completo || "Técnico", telefone: t.telefone, tenant_id: t.tenant_id || null });
+        }
       }
     }
-    return null;
+    if (matches.length > 1) {
+      console.warn(`⚠️ [verificarTecnicoBot] Múltiplos técnicos para telefone ${tel}; operação abortada por segurança`);
+      return null;
+    }
+    return matches[0] || null;
   } catch { return null; }
 }
 
