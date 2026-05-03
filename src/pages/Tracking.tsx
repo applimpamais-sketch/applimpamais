@@ -192,6 +192,11 @@ export default function Tracking() {
   // Verificar se é tenant master
   const isMasterTenant = !tenantData;
   const companyName = tenantData?.nome_fantasia || tenantData?.nome_empresa || 'Serviço';
+  const platformInitials = useMemo(() => {
+    const parts = PLATFORM_NAME.trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return 'LM';
+    return parts.slice(0, 2).map((part) => part[0]).join('').toUpperCase();
+  }, []);
 
   // Loading state
   if (isLoading) {
@@ -258,7 +263,7 @@ export default function Tracking() {
             <div className="max-w-lg mx-auto flex items-center gap-3">
               {isMasterTenant ? (
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg">
-                  RC
+                  {platformInitials}
                 </div>
               ) : tenantData?.logo_url ? (
                 <TenantLogo 

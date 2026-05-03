@@ -1,12 +1,18 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  const platformName = env.VITE_PUBLIC_PLATFORM_NAME || 'Limpamais';
+  const pwaShortName = env.VITE_PUBLIC_PWA_SHORT_NAME || 'Limpamais';
+  const pwaDescription = env.VITE_PUBLIC_PWA_DESCRIPTION || `Painel administrativo ${platformName}`;
+
+  return {
+    server: {
     host: "::",
     port: 8080,
     headers: mode === 'production' ? {
@@ -36,11 +42,11 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: 'prompt',
-      includeAssets: ['icon-512x512.png', 'icon-192x192.png', 'logo-rc-limpa-mais.png'],
+      includeAssets: ['icon-512x512.png', 'icon-192x192.png'],
       manifest: {
-        name: 'RC Limpa Mais - Admin',
-        short_name: 'RC Admin',
-        description: 'Painel administrativo da RC Limpa Mais',
+        name: `${platformName} - Admin`,
+        short_name: pwaShortName,
+        description: pwaDescription,
         theme_color: '#0EA5E9',
         background_color: '#ffffff',
         display: 'standalone',
@@ -111,4 +117,5 @@ export default defineConfig(({ mode }) => ({
     // Prevent duplicate React instances (fixes react-leaflet compatibility)
     dedupe: ["react", "react-dom", "react/jsx-runtime"],
   },
-}));
+  };
+});
