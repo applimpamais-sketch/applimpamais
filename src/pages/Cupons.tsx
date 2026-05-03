@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { createClient } from '@supabase/supabase-js';
+import type { Database } from '@/integrations/supabase/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -8,17 +9,38 @@ import CupomCard from '@/components/ui/cupom-card';
 import { CupomLeadCaptureModal } from '@/components/modals/CupomLeadCaptureModal';
 import { Sparkles, Gift, TrendingUp, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { usePublicTenantId } from '@/hooks/usePublicTenantId';
 
 const Cupons = () => {
   const navigate = useNavigate();
   const [selectedCupom, setSelectedCupom] = useState<string | null>(null);
+  const { data: tenantId } = usePublicTenantId();
 
   const { data: cupons, isLoading } = useQuery({
-    queryKey: ['cupons-publicos'],
+    queryKey: ['cupons-publicos', tenantId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      if (!tenantId) return [];
+
+      const supabaseForPublicCupons = createClient<Database>(
+        import.meta.env.VITE_SUPABASE_URL,
+        import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+        {
+          global: {
+            headers: {
+              'x-tenant-id': tenantId,
+            },
+          },
+          auth: {
+            persistSession: false,
+            autoRefreshToken: false,
+          },
+        }
+      );
+
+      const { data, error } = await supabaseForPublicCupons
         .from('cupons_desconto')
         .select('*')
+        .eq('tenant_id', tenantId)
         .eq('status', 'ativo')
         .contains('categorias_aplicaveis', ['home'])
         .order('desconto_percentual', { ascending: false });
@@ -41,7 +63,8 @@ const Cupons = () => {
 
         return true;
       }) || [];
-    }
+    },
+    enabled: !!tenantId,
   });
 
   const handleCopiarCupom = (codigo: string) => {

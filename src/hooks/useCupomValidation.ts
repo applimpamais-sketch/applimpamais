@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { createClient } from '@supabase/supabase-js';
+import { useMemo } from 'react';
+import type { Database } from '@/integrations/supabase/types';
 import { toast } from '@/hooks/use-toast';
 import { getValidParceiroCupom } from '@/utils/parceiroRef';
 import type { Cupom } from './useCupons';
+import { usePublicTenantId } from './usePublicTenantId';
 
 interface CartItem {
   id: string;
@@ -19,27 +22,52 @@ export function useCupomValidation(cartItems: CartItem[]) {
   const [erro, setErro] = useState<string | null>(null);
   const [origemCupom, setOrigemCupom] = useState<'parceiro' | 'auto' | 'manual' | null>(null);
   const cupomParceiroVerificado = useRef(false);
+  const { data: tenantId } = usePublicTenantId();
+
+  const supabaseForPublicCupons = useMemo(() => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+    return createClient<Database>(supabaseUrl, supabaseKey, {
+      global: {
+        headers: {
+          'x-tenant-id': tenantId || '',
+        },
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  }, [tenantId]);
 
   // Buscar cupons auto-aplicáveis
   const { data: cuponsAutoApply } = useQuery({
-    queryKey: ['cupons-auto-apply'],
+    queryKey: ['cupons-auto-apply', tenantId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      if (!tenantId) return [];
+
+      const { data, error } = await supabaseForPublicCupons
         .from('cupons_desconto')
         .select('*')
+        .eq('tenant_id', tenantId)
         .eq('auto_aplicar', true)
         .eq('status', 'ativo');
       
       if (error) throw error;
       return data as Cupom[];
-    }
+    },
+    enabled: !!tenantId,
   });
 
   // Função para aplicar cupom do parceiro
   const aplicarCupomParceiro = async (codigo: string) => {
-    const { data: cupom, error } = await supabase
+    if (!tenantId) return false;
+
+    const { data: cupom, error } = await supabaseForPublicCupons
       .from('cupons_desconto')
       .select('*')
+      .eq('tenant_id', tenantId)
       .eq('codigo', codigo.toUpperCase())
       .eq('status', 'ativo')
       .maybeSingle();
@@ -136,14 +164,20 @@ export function useCupomValidation(cartItems: CartItem[]) {
   const validarCupom = async (codigo: string) => {
     setErro(null);
     
+    if (!tenantId) {
+      setErro('Loja não identificada para validar cupom');
+      return false;
+    }
+    
     if (!codigo.trim()) {
       setErro('Digite um código de cupom');
       return false;
     }
 
-    const { data: cupom, error } = await supabase
+    const { data: cupom, error } = await supabaseForPublicCupons
       .from('cupons_desconto')
       .select('*')
+      .eq('tenant_id', tenantId)
       .eq('codigo', codigo.toUpperCase())
       .eq('status', 'ativo')
       .single();

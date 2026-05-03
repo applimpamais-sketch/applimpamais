@@ -13,6 +13,8 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { cn } from "@/lib/utils";
 import { cidadesMG } from "@/data/cidades-mg";
 import { supabase } from "@/integrations/supabase/client";
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
 import { useToast } from "@/hooks/use-toast";
 import { createAgendamento } from "@/services/api";
 import { useCarrinhoAbandonado } from "@/hooks/useCarrinhoAbandonado";
@@ -23,6 +25,7 @@ import { clearLiveSessionId } from "@/utils/liveSession";
 import { getValidParceiroRef, clearParceiroRef } from "@/utils/parceiroRef";
 import { getValidCanalRef, clearCanalRef } from "@/utils/canalRef";
 import { PaymentMethodCard } from "@/components/booking/PaymentMethodCard";
+import { usePublicTenantId } from "@/hooks/usePublicTenantId";
 
 interface CartItem {
   id: string;
@@ -37,7 +40,24 @@ const Agendamento = () => {
   const location = useLocation();
   const { toast } = useToast();
   const { updateSession } = useSessionTracking();
+  const { data: publicTenantId } = usePublicTenantId();
   const hasTrackedCheckout = useRef(false);
+  const supabaseForPublicCoupons = useMemo(() => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+    return createClient<Database>(supabaseUrl, supabaseKey, {
+      global: {
+        headers: {
+          "x-tenant-id": publicTenantId || "",
+        },
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  }, [publicTenantId]);
   
   // Correção #1: Cart Persistence - Salvar/recuperar do localStorage
   const getCartFromStorage = (): CartItem[] => {
@@ -448,9 +468,21 @@ const Agendamento = () => {
 
     // Revalidar cupom antes de processar
     if (cupomAplicado) {
-      const { data: cupomAtual, error: cupomError } = await supabase
+      if (!publicTenantId) {
+        toast({
+          title: 'Loja não identificada',
+          description: 'Não foi possível validar o cupom para este domínio.',
+          variant: 'destructive',
+        });
+        setIsSubmitting(false);
+        setSubmitProgress('');
+        return;
+      }
+
+      const { data: cupomAtual, error: cupomError } = await supabaseForPublicCoupons
         .from('cupons_desconto')
         .select('*')
+        .eq('tenant_id', publicTenantId)
         .eq('codigo', cupomAplicado.codigo)
         .eq('status', 'ativo')
         .single();

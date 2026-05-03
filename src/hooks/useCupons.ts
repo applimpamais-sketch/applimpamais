@@ -6,6 +6,7 @@ import { useTenantContext } from '@/hooks/useTenantContext';
 
 export interface Cupom {
   id: string;
+  tenant_id?: string | null;
   codigo: string;
   desconto_percentual: number;
   categorias_aplicaveis: string[];
