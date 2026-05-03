@@ -57,7 +57,7 @@ export function useAuth(): UseAuthReturn {
       const { data: { session }, error } = await supabase.auth.getSession();
 
       if (error || !session) {
-        console.error('Sessão expirou, fazendo logout automático');
+        console.error('Sessao expirou, fazendo logout automatico');
         await signOut();
       }
     }, 5 * 60 * 1000);
@@ -98,27 +98,14 @@ export function useAuth(): UseAuthReturn {
         _role: role,
       });
 
-      if (!tenantAware.error) {
-        return tenantAware.data || false;
-      }
-
-      if (import.meta.env.DEV) {
-        console.warn('has_role_for_tenant indisponível, usando fallback legado:', tenantAware.error);
-      }
-
-      const legacy = await (supabase as any).rpc('has_role', {
-        _user_id: user.id,
-        _role: role,
-      });
-
-      if (legacy.error) {
+      if (tenantAware.error) {
         if (import.meta.env.DEV) {
-          console.error('Error checking role:', legacy.error);
+          console.error('Error checking tenant role:', tenantAware.error);
         }
         return false;
       }
 
-      return legacy.data || false;
+      return tenantAware.data || false;
     } catch (error) {
       if (import.meta.env.DEV) {
         console.error('Exception checking role:', error);
@@ -136,3 +123,4 @@ export function useAuth(): UseAuthReturn {
     hasRole,
   };
 }
+

@@ -19,9 +19,9 @@ function getConfiguredHostname() {
 }
 
 /**
- * Hook para detectar branding do tenant na tela de login (sem sessão).
+ * Hook para detectar branding do tenant na tela de login (sem sessao).
  * Detecta pelo hostname e aplica um branding neutro quando estiver no
- * domínio principal da plataforma ou em ambiente local.
+ * dominio principal da plataforma ou em ambiente local.
  */
 export function useLoginBranding() {
   const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
@@ -30,10 +30,11 @@ export function useLoginBranding() {
     queryKey: ['login-branding', hostname],
     queryFn: async (): Promise<{ branding: TenantBranding | null; isMaster: boolean }> => {
       const configuredHostname = getConfiguredHostname();
-      const masterDomains = ['localhost', '127.0.0.1', configuredHostname];
-
       const isPreviewDomain = hostname.includes('.lovable.app') || hostname.includes('.lovableproject.com');
-      const isMasterDomain = masterDomains.some((domain) => hostname === domain || hostname.endsWith(`.${domain}`));
+      const isMasterDomain =
+        hostname === 'localhost' ||
+        hostname === '127.0.0.1' ||
+        hostname === configuredHostname;
 
       if (isMasterDomain || isPreviewDomain) {
         return {
@@ -83,3 +84,4 @@ export function useLoginBranding() {
 }
 
 export default useLoginBranding;
+

@@ -37,9 +37,9 @@ function isLocalHost(hostname: string | null): boolean {
   return hostname === "localhost" || hostname === "127.0.0.1";
 }
 
-function isPlatformHost(hostname: string | null, platformHost: string | null): boolean {
+function isPlatformRootHost(hostname: string | null, platformHost: string | null): boolean {
   if (!hostname || !platformHost) return false;
-  return hostname === platformHost || hostname.endsWith(`.${platformHost}`);
+  return hostname === platformHost;
 }
 
 export async function resolvePublicTenant(
@@ -57,9 +57,10 @@ export async function resolvePublicTenant(
 
   const hostname = extractHostname(req);
   const platformHost = getPlatformHostname();
-  const customDomainRequest = !!hostname && !isLocalHost(hostname) && !isPlatformHost(hostname, platformHost);
+  const isLocalRequest = isLocalHost(hostname);
+  const isPlatformRootRequest = isPlatformRootHost(hostname, platformHost);
 
-  if (customDomainRequest) {
+  if (hostname && !isLocalRequest) {
     const { data: tenantByDomain, error: tenantByDomainError } = await supabase
       .from("saas_tenants")
       .select("id, nome_empresa, nome_fantasia, dominio_customizado, status")
@@ -71,40 +72,39 @@ export async function resolvePublicTenant(
       throw new HttpError(500, "Failed to resolve tenant by domain");
     }
 
-    if (!tenantByDomain) {
-      throw new HttpError(404, "Tenant not found for custom domain");
+    if (tenantByDomain) {
+      if (requestedTenantId && requestedTenantId !== tenantByDomain.id) {
+        throw new HttpError(400, "tenant_id does not match hostname tenant");
+      }
+
+      return tenantByDomain;
     }
 
-    if (requestedTenantId && requestedTenantId !== tenantByDomain.id) {
-      throw new HttpError(400, "tenant_id does not match the custom domain tenant");
+    if (!isPlatformRootRequest) {
+      throw new HttpError(404, "Tenant not found for hostname");
     }
-
-    return tenantByDomain;
   }
 
-  let query = supabase
-    .from("saas_tenants")
-    .select("id, nome_empresa, nome_fantasia, dominio_customizado, status");
-
-  if (requestedTenantId) {
-    query = query.eq("id", requestedTenantId);
-  } else if (hostname && !isLocalHost(hostname)) {
-    query = query.eq("dominio_customizado", hostname);
-  } else {
+  if (!requestedTenantId) {
     throw new HttpError(
       400,
-      "Tenant could not be resolved. Provide tenant_id in local/dev environments.",
+      "Tenant could not be resolved. Provide tenant_id in local/dev or platform root domain requests.",
     );
   }
 
-  const { data: tenant, error } = await query.in("status", ["ativo", "trial"]).maybeSingle();
+  const { data: tenant, error } = await supabase
+    .from("saas_tenants")
+    .select("id, nome_empresa, nome_fantasia, dominio_customizado, status")
+    .eq("id", requestedTenantId)
+    .in("status", ["ativo", "trial"])
+    .maybeSingle();
 
   if (error) {
-    throw new HttpError(500, "Failed to resolve tenant");
+    throw new HttpError(500, "Failed to resolve tenant by id");
   }
 
   if (!tenant) {
-    throw new HttpError(404, "Tenant not found");
+    throw new HttpError(404, "Tenant not found for tenant_id");
   }
 
   return tenant;

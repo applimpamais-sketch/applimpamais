@@ -27,8 +27,7 @@ export function usePublicTenantId(options?: UsePublicTenantIdOptions) {
       const isMainDomain =
         hostname === 'localhost' ||
         hostname === '127.0.0.1' ||
-        hostname === configuredHostname ||
-        hostname.endsWith(`.${configuredHostname}`);
+        hostname === configuredHostname;
 
       if (isMainDomain || isPreviewDomain) {
         return DEFAULT_PUBLIC_TENANT_ID;
@@ -42,8 +41,12 @@ export function usePublicTenantId(options?: UsePublicTenantIdOptions) {
         .maybeSingle();
 
       if (error) {
-        console.error('[usePublicTenantId] Erro ao resolver tenant por domínio:', error);
+        console.error('[usePublicTenantId] Erro ao resolver tenant por dominio:', error);
         return null;
+      }
+
+      if (!data && hostname.endsWith(`.${configuredHostname}`)) {
+        console.warn('[usePublicTenantId] Subdominio sem tenant ativo associado:', hostname);
       }
 
       return data?.id ?? null;
@@ -53,3 +56,4 @@ export function usePublicTenantId(options?: UsePublicTenantIdOptions) {
     retry: 1,
   });
 }
+
