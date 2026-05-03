@@ -7,78 +7,72 @@ interface TenantBranding {
   logo_url: string | null;
 }
 
+const DEFAULT_PLATFORM_NAME = 'Limpamais';
+const DEFAULT_SITE_URL = import.meta.env.VITE_PUBLIC_SITE_URL || 'https://app.limpamais.com';
+
+function getConfiguredHostname() {
+  try {
+    return new URL(DEFAULT_SITE_URL).hostname;
+  } catch {
+    return 'app.limpamais.com';
+  }
+}
+
 /**
- * Hook para detectar branding do tenant na tela de login (sem sessão).
- * Detecta pelo hostname (domínio customizado).
- * 
- * Regras:
- * - Se for domínio principal (rclimpamais.com.br, lovable.app, localhost) → branding RC Limpa Mais
- * - Se for domínio customizado (app.empresa.com) → buscar tenant
- * - Fallback: branding neutro/genérico
+ * Hook para detectar branding do tenant na tela de login (sem sess�o).
+ * Detecta pelo hostname e aplica um branding neutro quando estiver no
+ * dom�nio principal da plataforma ou em ambiente local.
  */
 export function useLoginBranding() {
   const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
-  
+
   const { data, isLoading } = useQuery({
     queryKey: ['login-branding', hostname],
     queryFn: async (): Promise<{ branding: TenantBranding | null; isMaster: boolean }> => {
-      // Domínios que indicam ambiente master (RC Limpa Mais ou desenvolvimento)
-      const masterDomains = [
-        'localhost',
-        'rclimpamais.com.br',
-        'www.rclimpamais.com.br',
-        'rclimpamais.lovable.app',
-      ];
-      
+      const configuredHostname = getConfiguredHostname();
+      const masterDomains = ['localhost', '127.0.0.1', configuredHostname];
+
       const isPreviewDomain = hostname.includes('.lovable.app') || hostname.includes('.lovableproject.com');
-      const isMasterDomain = masterDomains.some(d => hostname === d || hostname.endsWith(`.${d}`));
-      
-      // Se for domínio master ou preview do Lovable, retornar branding RC Limpa Mais
+      const isMasterDomain = masterDomains.some((domain) => hostname === domain || hostname.endsWith(`.${domain}`));
+
       if (isMasterDomain || isPreviewDomain) {
-        console.log('[useLoginBranding] Domínio master/preview, usando branding RC Limpa Mais');
         return {
           branding: {
-            nome_fantasia: 'RC Limpa Mais',
-            nome_empresa: 'RC Limpa Mais',
-            logo_url: '/logo-rc-limpa-mais.png', // Logo estático da RC
+            nome_fantasia: DEFAULT_PLATFORM_NAME,
+            nome_empresa: DEFAULT_PLATFORM_NAME,
+            logo_url: null,
           },
           isMaster: true,
         };
       }
-      
-      // Tentar buscar tenant pelo domínio customizado
-      console.log('[useLoginBranding] Buscando tenant por domínio:', hostname);
-      
+
       const { data, error } = await supabase
         .from('saas_tenants')
         .select('nome_fantasia, nome_empresa, logo_url')
         .eq('dominio_customizado', hostname)
         .eq('status', 'ativo')
         .maybeSingle();
-      
+
       if (error) {
         console.error('[useLoginBranding] Erro ao buscar tenant:', error);
         return { branding: null, isMaster: false };
       }
-      
+
       if (data) {
-        console.log('[useLoginBranding] Tenant encontrado:', data.nome_fantasia || data.nome_empresa);
         return { branding: data as TenantBranding, isMaster: false };
       }
-      
-      console.log('[useLoginBranding] Nenhum tenant encontrado para domínio:', hostname);
+
       return { branding: null, isMaster: false };
     },
-    staleTime: Infinity, // Branding não muda durante a sessão
+    staleTime: Infinity,
     retry: 1,
   });
-  
-  // Valores derivados para uso fácil
+
   const isMasterBranding = data?.isMaster ?? false;
   const tenantBranding = data?.branding ?? null;
   const companyName = tenantBranding?.nome_fantasia || tenantBranding?.nome_empresa || null;
   const logoUrl = tenantBranding?.logo_url || null;
-  
+
   return {
     tenantBranding,
     isLoading,
