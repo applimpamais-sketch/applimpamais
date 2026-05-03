@@ -1,4 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { checkRateLimit, getClientIp, createRateLimitResponse } from '../_shared/rateLimiter.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -9,6 +10,12 @@ Deno.serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
+  }
+
+  const clientIp = getClientIp(req);
+  const rateLimit = checkRateLimit(clientIp, { maxRequests: 120, windowMs: 60000 });
+  if (!rateLimit.allowed) {
+    return createRateLimitResponse(rateLimit.resetAt);
   }
 
   try {
