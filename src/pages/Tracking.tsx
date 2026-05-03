@@ -214,7 +214,7 @@ export default function Tracking() {
   });
   
   // Verificar se é tenant master
-  const isMasterTenant = !tenantData || tenantData.id === '00000000-0000-0000-0000-000000000001';
+  const isMasterTenant = !tenantData;
   const companyName = tenantData?.nome_fantasia || tenantData?.nome_empresa || 'Serviço';
 
   // Loading state
