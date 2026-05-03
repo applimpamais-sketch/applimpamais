@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { RefreshCw, ExternalLink, AlertCircle } from 'lucide-react';
+import { RefreshCw, AlertCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTenantContext } from '@/hooks/useTenantContext';
 
 interface GoogleAgendaTabProps {
   calendarId?: string;
@@ -15,23 +16,26 @@ export default function GoogleAgendaTab({ calendarId }: GoogleAgendaTabProps) {
   const [lastSync, setLastSync] = useState<string | null>(null);
   const [syncResult, setSyncResult] = useState<any>(null);
   const queryClient = useQueryClient();
+  const { tenant } = useTenantContext();
 
-  const effectiveCalendarId = calendarId || import.meta.env.VITE_GOOGLE_CALENDAR_ID || 'rclimpamais@gmail.com';
+  const effectiveCalendarId = calendarId || import.meta.env.VITE_GOOGLE_CALENDAR_ID;
 
   const handleSync = async () => {
     setSyncing(true);
     try {
-      const { data, error } = await supabase.functions.invoke('sync-google-calendar');
+      const { data, error } = await supabase.functions.invoke('sync-google-calendar', {
+        body: {
+          tenant_id: tenant?.id,
+          calendarId: effectiveCalendarId,
+        },
+      });
 
       if (error) throw error;
 
       if (data?.success) {
         setSyncResult(data);
         setLastSync(data.synced_at);
-        toast.success(
-          `Sincronização concluída! ${data.imported} importados, ${data.updated} atualizados.`
-        );
-        // Refresh agendamentos data
+        toast.success(`Sincronização concluída! ${data.imported} importados, ${data.updated} atualizados.`);
         queryClient.invalidateQueries({ queryKey: ['agendamentos'] });
       } else {
         throw new Error(data?.error || 'Erro desconhecido');
@@ -50,14 +54,13 @@ export default function GoogleAgendaTab({ calendarId }: GoogleAgendaTabProps) {
 
   return (
     <div className="space-y-4">
-      {/* Sync Controls */}
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <CardTitle className="text-base flex items-center gap-2">
-              <img 
-                src="https://www.gstatic.com/calendar/images/dynamiclogo_2020q4/calendar_31_2x.png" 
-                alt="Google Calendar" 
+              <img
+                src="https://www.gstatic.com/calendar/images/dynamiclogo_2020q4/calendar_31_2x.png"
+                alt="Google Calendar"
                 className="h-5 w-5"
               />
               Google Agenda
@@ -68,12 +71,7 @@ export default function GoogleAgendaTab({ calendarId }: GoogleAgendaTabProps) {
                   Última sync: {new Date(lastSync).toLocaleString('pt-BR')}
                 </span>
               )}
-              <Button
-                onClick={handleSync}
-                disabled={syncing}
-                size="sm"
-                className="gap-2"
-              >
+              <Button onClick={handleSync} disabled={syncing} size="sm" className="gap-2">
                 <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
                 {syncing ? 'Sincronizando...' : 'Sincronizar Agora'}
               </Button>
@@ -106,7 +104,6 @@ export default function GoogleAgendaTab({ calendarId }: GoogleAgendaTabProps) {
         )}
       </Card>
 
-      {/* Iframe or placeholder */}
       <Card className="overflow-hidden">
         {iframeUrl ? (
           <div className="relative w-full" style={{ paddingBottom: '75%' }}>
@@ -126,15 +123,10 @@ export default function GoogleAgendaTab({ calendarId }: GoogleAgendaTabProps) {
                 Configure a variável <code className="bg-muted px-1 rounded">VITE_GOOGLE_CALENDAR_ID</code> com o ID do seu calendário para visualizar o iframe.
               </p>
               <p className="text-sm text-muted-foreground mt-2">
-                A sincronização via API ainda pode funcionar se os secrets estiverem configurados.
+                A sincronização via API continua disponível se as credenciais estiverem configuradas.
               </p>
             </div>
-            <Button
-              onClick={handleSync}
-              disabled={syncing}
-              variant="outline"
-              className="gap-2"
-            >
+            <Button onClick={handleSync} disabled={syncing} variant="outline" className="gap-2">
               <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
               Tentar Sincronizar via API
             </Button>

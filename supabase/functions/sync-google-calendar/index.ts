@@ -1,17 +1,18 @@
 import { createClient } from "npm:@supabase/supabase-js@2.77.0";
+import { requireTenantAdmin } from "../_shared/auth.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
-const RC_LIMPA_MAIS_TENANT_ID = '2046cf1c-af8c-4e5e-b992-092ec922c35c';
 const GOOGLE_CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
 
 type SyncMode = 'discover' | 'inspect' | 'sync';
 
 type RequestOptions = {
   mode: SyncMode;
+  tenantId: string | null;
   calendarIds: string[];
   dryRun: boolean;
   includeCancelled: boolean;
@@ -337,7 +338,7 @@ function inferTipoFromDescription(itens: string[], observacoes: string[]): 'loca
 }
 
 // ── Event → Agendamento ─────────────────────────────────────
-function eventToAgendamento(event: any): any | null {
+function eventToAgendamento(event: any, tenantId: string): any | null {
   const summary = event.summary || 'Sem título';
   const title = parseTitle(summary);
   const desc = parseDescription(event.description);
@@ -419,7 +420,7 @@ function eventToAgendamento(event: any): any | null {
     status,
     is_locacao: tipoServico === 'locacao',
     origem: 'google_calendar',
-    tenant_id: RC_LIMPA_MAIS_TENANT_ID,
+    tenant_id: tenantId,
   };
 }
 
@@ -557,6 +558,11 @@ async function buildRequestOptions(req: Request): Promise<RequestOptions> {
 
   return {
     mode,
+    tenantId:
+      (typeof body.tenant_id === 'string' ? body.tenant_id : null) ||
+      (typeof body.tenantId === 'string' ? body.tenantId : null) ||
+      url.searchParams.get('tenant_id') ||
+      url.searchParams.get('tenantId'),
     calendarIds: dedupeCalendarIds([
       ...normalizeCalendarIds(url.searchParams.get('calendarIds')),
       ...normalizeCalendarIds(url.searchParams.get('calendarId')),
@@ -584,6 +590,7 @@ Deno.serve(async (req) => {
 
     const serviceAccount = JSON.parse(serviceAccountJson);
     const options = await buildRequestOptions(req);
+    const { effectiveTenantId } = await requireTenantAdmin(req, options.tenantId);
 
     console.log('🔑 Getting Google access token...');
     const accessToken = await getAccessToken(serviceAccount);
@@ -730,7 +737,7 @@ Deno.serve(async (req) => {
 
     for (const event of allEvents) {
       try {
-        const agendamento = eventToAgendamento(event);
+        const agendamento = eventToAgendamento(event, effectiveTenantId);
         if (!agendamento) {
           skipped++;
           continue;
@@ -740,6 +747,7 @@ Deno.serve(async (req) => {
           .from('agendamentos')
           .select('id')
           .eq('google_event_id', event.id)
+          .eq('tenant_id', effectiveTenantId)
           .maybeSingle();
 
         if (existing) {
@@ -757,7 +765,7 @@ Deno.serve(async (req) => {
               telefone: agendamento.telefone,
               status: agendamento.status,
               is_locacao: agendamento.is_locacao,
-              tenant_id: RC_LIMPA_MAIS_TENANT_ID,
+              tenant_id: effectiveTenantId,
             })
             .eq('id', existing.id);
 
