@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { getRequestAuthContext, HttpError } from "../_shared/auth.ts";
 
 const ULTRAMSG_INSTANCE_ID = Deno.env.get('ULTRAMSG_INSTANCE_ID');
 const ULTRAMSG_TOKEN = Deno.env.get('ULTRAMSG_TOKEN');
@@ -21,6 +22,15 @@ serve(async (req) => {
   }
 
   try {
+    const authContext = await getRequestAuthContext(req);
+    const hasRecoveryPermission = authContext.isSuperAdmin || authContext.roles.some((entry) =>
+      entry.role === 'admin' || entry.role === 'operador'
+    );
+
+    if (!hasRecoveryPermission) {
+      throw new HttpError(403, 'Forbidden');
+    }
+
     const { telefone, mensagem, carrinhoId }: RequestBody = await req.json();
 
     console.log('📱 Enviando WhatsApp de recuperação para:', telefone);
@@ -87,6 +97,7 @@ serve(async (req) => {
     console.error('❌ Erro:', error);
     
     const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+    const statusCode = error instanceof HttpError ? error.status : 500;
     
     return new Response(
       JSON.stringify({
@@ -95,7 +106,7 @@ serve(async (req) => {
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500,
+        status: statusCode,
       }
     );
   }

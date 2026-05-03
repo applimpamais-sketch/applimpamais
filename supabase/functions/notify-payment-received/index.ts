@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { checkRateLimit, getClientIp, createRateLimitResponse } from '../_shared/rateLimiter.ts';
+import { getRequestAuthContext, HttpError } from '../_shared/auth.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -21,6 +22,15 @@ serve(async (req) => {
   }
 
   try {
+    const authContext = await getRequestAuthContext(req);
+    const hasPaymentNotifyPermission = authContext.isSuperAdmin || authContext.roles.some((entry) =>
+      entry.role === 'admin' || entry.role === 'operador'
+    );
+
+    if (!hasPaymentNotifyPermission) {
+      throw new HttpError(403, 'Forbidden');
+    }
+
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -153,9 +163,10 @@ ${observacoes ? `📝 *Observações:* ${observacoes}` : ''}
     );
   } catch (error: any) {
     console.error('Erro na função:', error);
+    const status = error instanceof HttpError ? error.status : 500;
     return new Response(
       JSON.stringify({ error: error.message }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status }
     );
   }
 });
